@@ -1,0 +1,13 @@
+[package]
+name = "replay_parser"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "replay_parser"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.36"
+replay-core = { git = "https://github.com/broodwar-live/bw-engine.git", branch = "main" }

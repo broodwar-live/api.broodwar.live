@@ -1,0 +1,10 @@
+/_build/
+/deps/
+*.db
+*.db-shm
+*.db-wal
+/native/replay_parser/target/
+.DS_Store
+*.ez
+*.beam
+/tmp/

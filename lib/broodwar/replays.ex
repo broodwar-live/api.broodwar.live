@@ -53,6 +53,8 @@ defmodule Broodwar.Replays do
             {:ok, replay} ->
               # Update Elo ratings from this replay's result.
               Broodwar.Elo.update_from_replay(parsed)
+              # Invalidate cached stats.
+              Broodwar.Cache.invalidate_all()
               {:ok, replay}
 
             error ->

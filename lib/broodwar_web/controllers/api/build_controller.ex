@@ -44,7 +44,10 @@ defmodule BroodwarWeb.Api.BuildController do
       |> maybe_put(:race, params["race"])
       |> maybe_put(:matchup, params["matchup"])
 
-    openings = BuildsContext.list_openings(opts)
+    cache_key = "openings:#{params["race"] || "all"}:#{params["matchup"] || "all"}"
+    openings = Broodwar.Cache.fetch(cache_key, 300, fn ->
+      BuildsContext.list_openings(opts)
+    end)
     json(conn, %{data: openings})
   end
 

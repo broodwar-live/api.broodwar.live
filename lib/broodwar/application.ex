@@ -15,6 +15,7 @@ defmodule Broodwar.Application do
       {DNSCluster, query: Application.get_env(:broodwar, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Broodwar.PubSub},
       {Oban, Application.fetch_env!(:broodwar, Oban)},
+      Broodwar.Cache,
       # Start to serve requests, typically the last entry
       BroodwarWeb.Endpoint
     ]

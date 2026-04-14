@@ -26,4 +26,10 @@ config :broodwar, Oban,
   peer: false,
   queues: [default: 10, ingestion: 2]
 
+# Twitch Helix API credentials (override in runtime.exs or env vars).
+config :broodwar, :twitch,
+  client_id: System.get_env("TWITCH_CLIENT_ID", ""),
+  client_secret: System.get_env("TWITCH_CLIENT_SECRET", ""),
+  bw_game_id: "1466"
+
 import_config "#{config_env()}.exs"

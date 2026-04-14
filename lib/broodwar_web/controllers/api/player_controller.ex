@@ -46,8 +46,15 @@ defmodule BroodwarWeb.Api.PlayerController do
   def stats(conn, %{"player_id" => id}) do
     player = Players.get_player!(id)
     tournament_matches = Players.get_tournament_matches(player.name)
-    stats = Players.compute_stats(tournament_matches)
-    json(conn, %{data: stats})
+    tournament_stats = Players.compute_stats(tournament_matches)
+    replay_stats = Players.compute_replay_stats(player.name)
+
+    json(conn, %{
+      data: %{
+        tournament: tournament_stats,
+        replays: replay_stats
+      }
+    })
   rescue
     Ecto.NoResultsError ->
       {:error, :not_found}

@@ -17,6 +17,7 @@ defmodule BroodwarWeb.Router do
     resources "/matches", MatchController, only: [:index, :show]
     resources "/replays", ReplayController, only: [:index, :show, :create]
     resources "/builds", BuildController, only: [:index, :show]
+    get "/openings", BuildController, :openings
     resources "/maps", MapController, only: [:index, :show]
     resources "/streams", StreamController, only: [:index, :show]
 

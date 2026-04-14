@@ -33,6 +33,21 @@ defmodule BroodwarWeb.Api.BuildController do
       {:error, :not_found}
   end
 
+  @doc """
+  GET /api/openings — aggregated opening classifications from replay data.
+
+  Query params: ?race=T&matchup=TvZ
+  """
+  def openings(conn, params) do
+    opts =
+      []
+      |> maybe_put(:race, params["race"])
+      |> maybe_put(:matchup, params["matchup"])
+
+    openings = BuildsContext.list_openings(opts)
+    json(conn, %{data: openings})
+  end
+
   defp maybe_put(opts, _key, nil), do: opts
   defp maybe_put(opts, _key, ""), do: opts
   defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)

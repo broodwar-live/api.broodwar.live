@@ -108,6 +108,101 @@ defmodule Broodwar.Players do
     %{wins: wins, losses: losses, total: total, winrate: winrate, vs_stats: vs_stats, titles: titles}
   end
 
+  @doc """
+  Compute replay-based stats for a player: opening frequencies, matchup
+  winrates from replay data, and skill profile from the most recent replay.
+  """
+  def compute_replay_stats(player_name) do
+    alias Broodwar.Replays.Replay
+
+    replays =
+      Repo.all(
+        from(r in Replay,
+          where: not is_nil(r.parsed_data),
+          order_by: [desc: :inserted_at],
+          limit: 200
+        )
+      )
+
+    # Filter to replays involving this player.
+    player_replays =
+      Enum.filter(replays, fn r ->
+        players = get_in(r.parsed_data, ["header", "players"]) || []
+        Enum.any?(players, fn p -> p["name"] == player_name end)
+      end)
+
+    if player_replays == [] do
+      %{replay_count: 0, openings: [], matchup_winrates: [], skill_profile: nil}
+    else
+      # Opening frequencies.
+      openings =
+        player_replays
+        |> Enum.flat_map(fn r ->
+          players = get_in(r.parsed_data, ["header", "players"]) || []
+          classifications = r.parsed_data["classifications"] || []
+
+          players
+          |> Enum.with_index()
+          |> Enum.filter(fn {p, _i} -> p["name"] == player_name end)
+          |> Enum.map(fn {_p, i} -> Enum.at(classifications, i) end)
+          |> Enum.reject(&is_nil/1)
+        end)
+        |> Enum.group_by(fn c -> c["tag"] end)
+        |> Enum.map(fn {tag, list} ->
+          sample = List.first(list)
+          %{tag: tag, name: sample["name"], count: length(list)}
+        end)
+        |> Enum.sort_by(& &1.count, :desc)
+
+      # Matchup winrates from replay metadata.
+      matchup_stats =
+        player_replays
+        |> Enum.filter(fn r -> r.parsed_data["metadata"] != nil end)
+        |> Enum.group_by(fn r ->
+          get_in(r.parsed_data, ["metadata", "matchup", "code"])
+        end)
+        |> Enum.reject(fn {k, _} -> is_nil(k) end)
+        |> Enum.map(fn {matchup, replays_in_mu} ->
+          wins =
+            Enum.count(replays_in_mu, fn r ->
+              get_in(r.parsed_data, ["metadata", "result", "player_name"]) == player_name
+            end)
+
+          total = length(replays_in_mu)
+
+          %{
+            matchup: matchup,
+            wins: wins,
+            losses: total - wins,
+            total: total,
+            winrate: if(total > 0, do: Float.round(wins / total * 100, 1), else: 0.0)
+          }
+        end)
+        |> Enum.sort_by(& &1.total, :desc)
+
+      # Skill profile from most recent replay.
+      skill_profile =
+        player_replays
+        |> List.first()
+        |> then(fn r ->
+          profiles = r.parsed_data["skill_profiles"] || []
+          players = get_in(r.parsed_data, ["header", "players"]) || []
+
+          idx =
+            Enum.find_index(players, fn p -> p["name"] == player_name end)
+
+          if idx, do: Enum.at(profiles, idx), else: nil
+        end)
+
+      %{
+        replay_count: length(player_replays),
+        openings: openings,
+        matchup_winrates: matchup_stats,
+        skill_profile: skill_profile
+      }
+    end
+  end
+
   defp maybe_search(query, nil), do: query
   defp maybe_search(query, ""), do: query
 

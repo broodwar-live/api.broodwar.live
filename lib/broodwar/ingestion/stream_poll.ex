@@ -1,73 +1,130 @@
 defmodule Broodwar.Ingestion.StreamPoll do
   @moduledoc """
-  Oban worker that polls Korean BW streams on Twitch and AfreecaTV.
+  Oban worker that polls live BW streams from Twitch via Helix API.
 
-  Runs periodically (default: every 5 minutes) on the `:ingestion` queue.
-  Updates the `streams` table with live status, viewer count, and title.
+  Runs every 5 minutes on the `:ingestion` queue. Fetches all live streams
+  for StarCraft: Brood War (game_id 1466), upserts stream records, and
+  marks stale streams as offline.
+
+  ## Configuration
+
+  Set in config or environment variables:
+
+      config :broodwar, :twitch,
+        client_id: "your_client_id",
+        client_secret: "your_client_secret"
 
   ## Scheduling
 
-  Add to your application supervisor or runtime config:
-
-      Oban.insert(Broodwar.Ingestion.StreamPoll.new(%{}, schedule_in: 0))
-
-  The worker reschedules itself after each run.
+      Oban.insert(Broodwar.Ingestion.StreamPoll.new(%{}))
   """
   use Oban.Worker,
     queue: :ingestion,
     max_attempts: 3,
     unique: [period: 120]
 
+  require Logger
   import Ecto.Query
   alias Broodwar.Repo
   alias Broodwar.Streams.Stream
 
   @poll_interval_seconds 300
-
-  # Known BW streamer channels to poll.
-  # In production, this would come from the database or config.
-  @twitch_channels [
-    "starcraft",
-    "broodwar",
-    "asl_en",
-    "asl_kr",
-    "bsl_en"
-  ]
+  @stale_threshold_seconds 600
+  @twitch_token_url "https://id.twitch.tv/oauth2/token"
+  @twitch_streams_url "https://api.twitch.tv/helix/streams"
 
   @impl Oban.Worker
   def perform(%Oban.Job{}) do
-    poll_twitch()
-    mark_stale_offline()
-    reschedule()
-    :ok
-  end
+    config = Application.get_env(:broodwar, :twitch, [])
+    client_id = config[:client_id] || ""
+    client_secret = config[:client_secret] || ""
 
-  defp poll_twitch do
-    # In production, this would use the Twitch Helix API with OAuth.
-    # For now, we update known channels from the database.
-    #
-    # GET https://api.twitch.tv/helix/streams?game_id=1466&first=50
-    # (game_id 1466 = StarCraft: Brood War)
-    #
-    # Headers: Authorization: Bearer {token}, Client-Id: {client_id}
-    #
-    # For each live stream, upsert into the streams table.
-    #
-    # This is a placeholder that demonstrates the pattern.
-    # Actual HTTP calls require :req or :httpoison dependency.
+    if client_id == "" or client_secret == "" do
+      Logger.warning("[StreamPoll] Twitch credentials not configured, skipping poll")
+      reschedule()
+      :ok
+    else
+      case get_access_token(client_id, client_secret) do
+        {:ok, token} ->
+          poll_streams(client_id, token, config[:bw_game_id] || "1466")
+          mark_stale_offline()
+          reschedule()
+          :ok
 
-    for channel_id <- @twitch_channels do
-      upsert_stream(%{
-        platform: "twitch",
-        channel_id: channel_id,
-        # These would come from API response:
-        is_live: false,
-        viewer_count: 0,
-        title: nil,
-        last_seen_at: DateTime.utc_now()
-      })
+        {:error, reason} ->
+          Logger.error("[StreamPoll] Failed to get Twitch token: #{inspect(reason)}")
+          reschedule()
+          {:error, reason}
+      end
     end
   end
+
+  # -- Twitch OAuth --
+
+  defp get_access_token(client_id, client_secret) do
+    case Req.post(@twitch_token_url,
+           form: [
+             client_id: client_id,
+             client_secret: client_secret,
+             grant_type: "client_credentials"
+           ]
+         ) do
+      {:ok, %{status: 200, body: %{"access_token" => token}}} ->
+        {:ok, token}
+
+      {:ok, %{status: status, body: body}} ->
+        {:error, "HTTP #{status}: #{inspect(body)}"}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  # -- Stream polling --
+
+  defp poll_streams(client_id, token, game_id) do
+    case fetch_live_streams(client_id, token, game_id) do
+      {:ok, streams} ->
+        now = DateTime.utc_now()
+
+        for stream <- streams do
+          upsert_stream(%{
+            platform: "twitch",
+            channel_id: stream["user_login"],
+            title: stream["title"],
+            is_live: true,
+            viewer_count: stream["viewer_count"] || 0,
+            last_seen_at: now
+          })
+        end
+
+        Logger.info("[StreamPoll] Found #{length(streams)} live BW streams")
+
+      {:error, reason} ->
+        Logger.error("[StreamPoll] Failed to fetch streams: #{inspect(reason)}")
+    end
+  end
+
+  defp fetch_live_streams(client_id, token, game_id) do
+    case Req.get(@twitch_streams_url,
+           params: [game_id: game_id, first: 100],
+           headers: [
+             {"Authorization", "Bearer #{token}"},
+             {"Client-Id", client_id}
+           ]
+         ) do
+      {:ok, %{status: 200, body: %{"data" => data}}} ->
+        {:ok, data}
+
+      {:ok, %{status: status, body: body}} ->
+        {:error, "HTTP #{status}: #{inspect(body)}"}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  # -- Database operations --
 
   defp upsert_stream(attrs) do
     case Repo.one(
@@ -88,14 +145,16 @@ defmodule Broodwar.Ingestion.StreamPoll do
     end
   end
 
-  # Mark streams as offline if they haven't been seen in 10 minutes.
   defp mark_stale_offline do
-    cutoff = DateTime.add(DateTime.utc_now(), -600, :second)
+    cutoff = DateTime.add(DateTime.utc_now(), -@stale_threshold_seconds, :second)
 
-    from(s in Stream,
-      where: s.is_live == true and s.last_seen_at < ^cutoff
-    )
-    |> Repo.update_all(set: [is_live: false, viewer_count: 0])
+    {count, _} =
+      from(s in Stream,
+        where: s.is_live == true and s.last_seen_at < ^cutoff
+      )
+      |> Repo.update_all(set: [is_live: false, viewer_count: 0])
+
+    if count > 0, do: Logger.info("[StreamPoll] Marked #{count} stale streams offline")
   end
 
   defp reschedule do

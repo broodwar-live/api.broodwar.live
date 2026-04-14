@@ -48,8 +48,19 @@ defmodule Broodwar.Replays do
         |> maybe_put_player_ids(parsed["header"]["players"])
 
       case Repo.get_by(Replay, file_hash: file_hash) do
-        nil -> Repo.insert(Replay.changeset(%Replay{}, attrs))
-        existing -> {:ok, existing}
+        nil ->
+          case Repo.insert(Replay.changeset(%Replay{}, attrs)) do
+            {:ok, replay} ->
+              # Update Elo ratings from this replay's result.
+              Broodwar.Elo.update_from_replay(parsed)
+              {:ok, replay}
+
+            error ->
+              error
+          end
+
+        existing ->
+          {:ok, existing}
       end
     end
   end

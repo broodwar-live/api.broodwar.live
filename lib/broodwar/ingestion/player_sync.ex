@@ -106,18 +106,27 @@ defmodule Broodwar.Ingestion.PlayerSync do
       {:ok, wikitext} ->
         fields = parse_player_infobox(wikitext)
         image_filename = extract_image(wikitext)
+        team_history = extract_team_history(wikitext)
+
+        # Extract aliases from infobox (|id2=, |id3=, etc.)
+        aliases =
+          1..5
+          |> Enum.map(fn i -> fields["id#{i}"] end)
+          |> Enum.reject(&is_nil/1)
+          |> Enum.reject(&(&1 == ""))
 
         attrs = %{
           name: name,
           race: map_race(fields["race"] || default_race),
           real_name: fields["name"],
           real_name_ko: fields["romanized_name"] || fields["hangul"],
+          aliases: aliases,
           birth_date: fields["birth_date"],
           country: map_country(fields["country"]),
           team: fields["team"],
           status: map_status(fields["status"]),
           liquipedia_page: page,
-          liquipedia_data: fields
+          liquipedia_data: Map.put(fields, "team_history", team_history)
         }
 
         # Upsert player
@@ -150,6 +159,33 @@ defmodule Broodwar.Ingestion.PlayerSync do
       {:error, reason} ->
         Logger.warning("[PlayerSync] #{name}: page not found (#{inspect(reason)})")
     end
+  end
+
+  @doc """
+  Extract team history from a player's wikitext.
+  Returns a list of %{team, start_date, end_date, role}.
+  """
+  def extract_team_history(wikitext) do
+    # Match {{TeamHistory|...}} blocks or team entries in infobox
+    Regex.scan(~r/\{\{TeamCard\|([^}]+)\}\}/, wikitext)
+    |> Enum.map(fn [_, content] ->
+      fields =
+        content
+        |> String.split("|")
+        |> Enum.reduce(%{}, fn part, acc ->
+          case String.split(part, "=", parts: 2) do
+            [k, v] -> Map.put(acc, String.trim(k), String.trim(v))
+            _ -> acc
+          end
+        end)
+
+      %{
+        team: fields["team"] || content |> String.split("|") |> List.first() |> String.trim(),
+        start_date: fields["sdate"],
+        end_date: fields["edate"],
+        role: fields["role"]
+      }
+    end)
   end
 
   defp parse_player_infobox(wikitext) do

@@ -27,6 +27,9 @@ defmodule Broodwar.Replays do
     with {:ok, parsed} <- parse_replay(data) do
       file_hash = :crypto.hash(:sha256, data) |> Base.hex_encode32(case: :lower, padding: false)
 
+      metadata = parsed["metadata"] || %{}
+      classifications = parsed["classifications"] || []
+
       attrs =
         %{
           file_hash: file_hash,
@@ -34,7 +37,12 @@ defmodule Broodwar.Replays do
           duration: trunc(parsed["header"]["duration_secs"]),
           parsed_data: parsed,
           race_a: player_race_code(parsed, 0),
-          race_b: player_race_code(parsed, 1)
+          race_b: player_race_code(parsed, 1),
+          matchup: get_in(metadata, ["matchup", "code"]),
+          map_name_normalized: metadata["map_name"],
+          winner_id: winner_player_id(metadata),
+          classification_a: opening_tag(classifications, 0),
+          classification_b: opening_tag(classifications, 1)
         }
         |> maybe_put_map_id(parsed["header"]["map_name"])
         |> maybe_put_player_ids(parsed["header"]["players"])
@@ -65,11 +73,40 @@ defmodule Broodwar.Replays do
     end
   end
 
+  @doc """
+  Compare build orders between two replay binaries.
+  """
+  @spec compare_builds(binary(), binary(), non_neg_integer()) ::
+          {:ok, map()} | {:error, String.t()}
+  def compare_builds(data_a, data_b, player_index \\ 0) do
+    BroodwarNif.ReplayParser.compare_builds(data_a, data_b, player_index)
+  end
+
+  @doc """
+  Normalize a player name (strip clan tags, whitespace).
+  """
+  @spec normalize_player_name(String.t()) :: map()
+  def normalize_player_name(name) do
+    BroodwarNif.ReplayParser.normalize_name(name)
+  end
+
+  # -- Private helpers --
+
   defp player_race_code(parsed, index) do
     players = parsed["header"]["players"] || []
 
     case Enum.at(players, index) do
       %{"race_code" => code} -> code
+      _ -> nil
+    end
+  end
+
+  defp winner_player_id(%{"result" => %{"player_id" => id}}), do: id
+  defp winner_player_id(_), do: nil
+
+  defp opening_tag(classifications, index) do
+    case Enum.at(classifications, index) do
+      %{"tag" => tag} -> tag
       _ -> nil
     end
   end
@@ -89,8 +126,6 @@ defmodule Broodwar.Replays do
   defp maybe_put_player_ids(attrs, []), do: attrs
 
   defp maybe_put_player_ids(attrs, players) do
-    alias Broodwar.Players.Player
-
     attrs
     |> maybe_match_player(:player_a_id, Enum.at(players, 0))
     |> maybe_match_player(:player_b_id, Enum.at(players, 1))

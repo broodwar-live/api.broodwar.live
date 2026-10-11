@@ -7,8 +7,8 @@
 </h1>
 
 <p align="center">
-  <em>The community platform for StarCraft: Brood War competitive play.</em><br>
-  <em>Player stats. Replay analysis. Build orders. Live streams.</em>
+  <em>JSON API for broodwar.live — the StarCraft: Brood War community platform.</em><br>
+  <em>Player stats. Replay parsing. Openings. Live streams.</em>
 </p>
 
 <p align="center">
@@ -30,135 +30,134 @@
 
 ---
 
-The unified home for the BW competitive community — think [basketball-reference.com](https://www.basketball-reference.com) for Brood War. Built with Elixir/Phoenix, Phoenix LiveView, SQLite, and Rust NIFs.
+`api.broodwar.live` is the slim JSON API behind [broodwar.live](https://broodwar.live). The website itself is a Zola static site on Cloudflare Pages; it calls this API with `fetch()` for dynamic data. This repo has **no HTML, LiveView or static assets**.
 
-## Features
+What it does:
 
-| Feature | Description |
-|---------|-------------|
-| **Player Profiles** | Career stats, Elo history, head-to-head records |
-| **Match History** | Game results with build orders, APM, and army timelines |
-| **Replay Analysis** | Upload a `.rep` and get instant breakdowns — build orders, APM curves, army composition |
-| **Build Orders** | Structured, searchable database backed by pro replay evidence |
-| **Balance Analytics** | Matchup winrates by map, era, and skill bracket |
-| **Live Streams** | Korean stream tracking, ASL/BSL schedules |
-| **Tournaments** | Tournament brackets, results, and history |
-| **Wiki** | Community knowledge base for maps, strategies, and game mechanics |
-
-## Quick Start
-
-```bash
-# Install dependencies and set up the database
-mix setup
-
-# Start the server
-mix phx.server
-```
-
-Visit [localhost:4000](http://localhost:4000).
-
-## Architecture
-
-```
-lib/
-├── broodwar/                 # Domain contexts
-│   ├── players.ex            # Player profiles, Elo, career stats
-│   ├── matches.ex            # Match results, head-to-head records
-│   ├── replays.ex            # Replay uploads, parsed data
-│   ├── builds_context.ex     # Build order database
-│   ├── streams.ex            # Live stream tracking
-│   ├── tournaments.ex        # Tournament data
-│   ├── wiki/                 # Wiki pages and content
-│   ├── maps/                 # Map pool and metadata
-│   └── ingestion/            # Background data sync
-│       ├── liquipedia.ex     # Liquipedia scraping
-│       ├── player_sync.ex    # Player data sync
-│       └── tournament_sync.ex
-├── broodwar_nif/             # Rust NIF bridge
-│   └── replay_parser.ex      # Thin wrapper around bw-engine
-├── broodwar_web/             # Web layer
-│   ├── live/                 # LiveView pages
-│   │   ├── players_live.ex   # Player list + search
-│   │   ├── player_detail_live.ex
-│   │   ├── matches_live.ex   # Match history
-│   │   ├── match_detail_live.ex
-│   │   ├── replay_live.ex    # Replay upload + browser
-│   │   ├── replay_detail_live.ex
-│   │   ├── builds_live.ex    # Build order database
-│   │   ├── build_detail_live.ex
-│   │   └── balance_live.ex   # Balance analytics
-│   └── controllers/
-│       └── api/              # JSON API
-│           ├── player_controller.ex
-│           ├── match_controller.ex
-│           ├── replay_controller.ex
-│           ├── build_controller.ex
-│           ├── map_controller.ex
-│           ├── balance_controller.ex
-│           ├── stream_controller.ex
-│           └── tournament_controller.ex
-└── native/
-    └── replay_parser/        # Rust NIF (via Rustler)
-```
-
-### Key Technical Decisions
-
-- **Phoenix LiveView** for all interactive UI — no SPA, no client-side framework
-- **SQLite** via `ecto_sqlite3` — single-file database, deployed alongside the app
-- **Rust NIFs** via Rustler for replay parsing — delegates to [bw-engine](https://github.com/broodwar-live/bw-engine)
-- **Oban** for background jobs — Liquipedia scraping, replay processing, stats aggregation
-- **Req** for HTTP client
+- Parses uploaded `.rep` files with a Rust NIF ([replay-core](https://github.com/broodwar-live/bw-engine) via Rustler)
+- Serves players, matches, replays, openings, balance stats, tournaments and maps
+- Polls live streams (Twitch, SOOP/AfreecaTV) every 3 minutes
+- Syncs player and tournament data from Liquipedia (operator-run)
 
 ## API
 
-Public JSON API at `/api`. See the full [API conventions](https://github.com/broodwar-live/.claude/blob/main/rules/api.md).
+All endpoints are under `/api` and follow the [API conventions](https://github.com/broodwar-live/.claude/blob/main/rules/api.md). Errors look like `{"error": {"code": "NOT_FOUND", "message": "..."}}`. Lists take `?page=` and `?per_page=` (default 50, max 200).
 
 ```
-GET /api/players          # Player list with search/filter
-GET /api/players/:id      # Player profile and stats
-GET /api/matches          # Match history
-GET /api/replays          # Replay metadata
-GET /api/builds           # Build order database
-GET /api/maps             # Map pool
-GET /api/balance          # Matchup winrates
-GET /api/streams          # Live streams
-GET /api/tournaments      # Tournament data
+GET  /api/health                     # Liveness + DB check (used by Fly)
+GET  /api/players                    # ?race= &status= &search=
+GET  /api/players/:id
+GET  /api/players/:id/matches
+GET  /api/players/:id/stats          # Tournament record + replay-derived stats
+GET  /api/matches                    # ?tournament_id= &matchup=
+GET  /api/replays                    # Summaries only (no parsed_data)
+GET  /api/replays/:id                # Full parsed replay
+POST /api/replays                    # Multipart "file" upload (see below)
+GET  /api/openings                   # ?race=T|P|Z &matchup=TvZ
+GET  /api/builds
+GET  /api/maps
+GET  /api/balance
+GET  /api/streams                    # ?platform= &live=true
+GET  /api/tournaments[/:slug[/:season]]
+
+POST /api/admin/replays              # Bearer ADMIN_API_KEY: upload + link + rate
+POST /api/admin/replays/:id/rate     # Bearer ADMIN_API_KEY: link + rate existing
 ```
+
+### Replay uploads
+
+`POST /api/replays` is anonymous, so it is deliberately limited:
+
+- Max 5 MiB per file (real replays are ~50–300 KB); larger → `413`
+- The file must start with the `.rep` magic (`reRS`/`seRS`); otherwise → `422` without touching the parser
+- 10 uploads per hour per client IP → `429` with `retry-after` (reads: 600/min per IP)
+- Duplicate files (same SHA-256) return the existing replay with `200`
+- Anonymous uploads **never** create players or change Elo. Linking replays to players and rating them happens only through the admin endpoints or the operator batch import (`mix broodwar.import_replays`), and at most once per replay.
+
+### Player images
+
+The static site hosts player photos under `https://broodwar.live/images/players/`. The API stores the path and returns an absolute `image_url`; it does not serve images itself.
 
 ## Development
 
-### Prerequisites
-
-- Elixir 1.18+ / Erlang OTP 27+
-- Rust stable toolchain (for NIF compilation)
-- Node.js (for esbuild/tailwind asset tooling)
-
-### Commands
+Prerequisites: Elixir 1.18+ / OTP 27+, Rust stable (Rustler compiles the NIF during `mix compile`).
 
 ```bash
-mix setup                 # Install deps, create DB, build assets
-mix phx.server            # Start dev server
-mix test                  # Run tests
-mix precommit             # Compile (warnings-as-errors) + format + test
-mix format                # Format code
+mix setup            # deps, create + migrate SQLite DB, seeds
+mix phx.server       # http://localhost:4000/api/health
+mix test
 ```
 
-### Database
-
-SQLite with WAL mode for concurrent reads during writes. Migrations must be reversible.
+CI-equivalent checks:
 
 ```bash
-mix ecto.create           # Create database
-mix ecto.migrate          # Run migrations
-mix ecto.reset            # Drop + recreate + seed
+mix format --check-formatted
+mix compile --warnings-as-errors
+mix credo --strict
+mix test
+(cd native/replay_parser && cargo fmt --check && cargo clippy --all-targets -- -D warnings)
 ```
+
+Data tasks:
+
+```bash
+mix broodwar.seed                        # Players + tournaments from Liquipedia
+mix broodwar.import_replays <dir>        # Trusted batch import (links + rates)
+```
+
+### Replay parser NIF
+
+`native/replay_parser` is the only Elixir binding for replay-core. It depends on `bw-engine` by pinned git `rev` (bump it deliberately with `cargo update -p replay-core` after editing `Cargo.toml`). `bw-engine/crates/replay-nif` is a separate, unused binding; its NIFs are subsets of this crate's `parse/1`.
+
+`native/replay_parser/.cargo/config.toml` sets `git-fetch-with-cli = true` so Cargo uses the `git` CLI, which respects SSH `insteadOf` rewrites in a global git config.
+
+### Configuration
+
+| Env var | Purpose | Default |
+|---|---|---|
+| `SECRET_KEY_BASE` | Required in prod (`mix phx.gen.secret`) | — |
+| `DATABASE_PATH` | SQLite file | `/data/broodwar.db` (prod) |
+| `PHX_HOST` | Public host | `api.broodwar.live` |
+| `ADMIN_API_KEY` | Bearer token for `/api/admin/*`; admin routes are disabled when unset | unset |
+| `CLIENT_IP_HEADER` | Header with the real client IP behind the proxy | `fly-client-ip` (prod) |
+| `TWITCH_CLIENT_ID` / `TWITCH_CLIENT_SECRET` | Twitch polling; skipped when unset | unset |
+| `SOOP_CLIENT_ID` / `SOOP_CATEGORY` | SOOP (AfreecaTV) polling; skipped when unset | unset |
+| `STATIC_SITE_URL` | Base for player image URLs | `https://broodwar.live` |
+
+SOOP note: the old `openapi.afreecatv.com/broad/search` endpoint returns 404. SOOP's `openapi.sooplive.co.kr/broad/list` requires a `client_id` registered at [developers.sooplive.co.kr](https://developers.sooplive.co.kr), plus the StarCraft category number. Until both are set, SOOP polling is skipped. The request shape is based on SOOP's public Open API and is unverified without a key.
+
+## Deployment (Fly.io)
+
+The `Dockerfile` builds the NIF and an Elixir release; `fly.toml` runs one machine in `nrt` (Tokyo, the closest Fly region to Korea) with SQLite on a volume at `/data`. Migrations run automatically on boot.
+
+```bash
+# 1. Create the app without deploying (keep fly.toml; rename if broodwar-api is taken)
+fly launch --no-deploy --copy-config --name broodwar-api --region nrt
+
+# 2. Volume for SQLite (one machine only; SQLite can't be shared)
+fly volumes create broodwar_data --region nrt --size 1
+
+# 3. Secrets
+fly secrets set SECRET_KEY_BASE=$(mix phx.gen.secret) ADMIN_API_KEY=$(openssl rand -hex 32)
+fly secrets set TWITCH_CLIENT_ID=... TWITCH_CLIENT_SECRET=...      # optional
+fly secrets set SOOP_CLIENT_ID=... SOOP_CATEGORY=...               # optional
+
+# 4. Deploy and check
+fly deploy
+curl https://broodwar-api.fly.dev/api/health
+
+# 5. Custom domain
+fly certs add api.broodwar.live
+```
+
+In Cloudflare DNS for `broodwar.live`, add a `CNAME` record `api` → `broodwar-api.fly.dev` set to **DNS only** (grey cloud). Fly issues the TLS certificate and sets `Fly-Client-IP`. Proxying through Cloudflare (orange cloud) would make every client look like a Cloudflare IP to the rate limiter, and needs extra certificate setup. Then run `fly certs check api.broodwar.live`.
+
+Backups: the database is a single file on the volume. Fly takes daily volume snapshots; for off-site copies, use `sqlite3 /data/broodwar.db ".backup ..."` via `fly ssh console`.
 
 ## Related Projects
 
-- [bw-engine](https://github.com/broodwar-live/bw-engine) — Rust replay parser and game engine (NIF + WASM)
-- [assets-pipeline](https://github.com/broodwar-live/assets-pipeline) — BW asset extraction tool
-- [assets](https://github.com/broodwar-live/assets) — Pre-built unit sprites and icons
-- [alphacraft](https://github.com/broodwar-live/alphacraft) — ML agent for competitive BW play
+- [broodwar.live](https://github.com/broodwar-live/broodwar.live) — Zola static site (frontend)
+- [bw-engine](https://github.com/broodwar-live/bw-engine) — Rust replay parser and game engine
 
 ## Legal Disclaimer
 

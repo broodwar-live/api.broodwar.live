@@ -5,6 +5,7 @@ defmodule Broodwar.Ingestion.PlayerSync do
   """
 
   alias Broodwar.Ingestion.Liquipedia
+  alias Broodwar.Players.Identity
   alias Broodwar.Players.Player
   alias Broodwar.Repo
 
@@ -105,7 +106,8 @@ defmodule Broodwar.Ingestion.PlayerSync do
     case Liquipedia.get_page(page) do
       {:ok, wikitext} ->
         attrs = player_attrs(name, page, default_race, wikitext)
-        upsert_player(name, attrs)
+        player = upsert_player(name, attrs)
+        record_aliases(player, attrs)
         Logger.info("[PlayerSync] #{name}: #{attrs.real_name || "?"} (#{attrs.race})")
 
       {:error, reason} ->
@@ -157,6 +159,14 @@ defmodule Broodwar.Ingestion.PlayerSync do
         |> Player.changeset(update_attrs)
         |> Repo.update!()
     end
+  end
+
+  # Make the player resolvable by its Liquipedia page and known IDs when
+  # match ingestion links to it.
+  defp record_aliases(player, attrs) do
+    Identity.add_alias(player, attrs.liquipedia_page, "liquipedia")
+    Identity.add_alias(player, player.name, "name")
+    Enum.each(attrs.aliases, &Identity.add_alias(player, &1, "profile"))
   end
 
   @doc """

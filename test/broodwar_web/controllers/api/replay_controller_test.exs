@@ -97,6 +97,12 @@ defmodule BroodwarWeb.Api.ReplayControllerTest do
 
       assert %{"data" => data} = json_response(conn, 201)
       assert data["parsed_data"]["header"]["players"] != []
+
+      assert %{"clean" => clean, "unknown_opcodes" => opcodes} =
+               data["parsed_data"]["command_warnings"]
+
+      assert is_boolean(clean) and is_list(opcodes)
+      assert Map.has_key?(hd(data["parsed_data"]["header"]["players"]), "custom_color")
       assert data["player_a"] == nil
       assert data["player_b"] == nil
 

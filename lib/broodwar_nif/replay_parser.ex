@@ -16,7 +16,9 @@ defmodule BroodwarNif.ReplayParser do
 
   Returns `{:ok, replay_map}` or `{:error, reason}`.
   The replay_map includes: header, build_order, player_apm, timeline,
-  apm_timeline, metadata, classifications, phases, skill_profiles.
+  apm_timeline, metadata, classifications, phases, skill_profiles,
+  command_warnings (decoding problems; `clean: false` means derived data may
+  be incomplete) and extra_sections (Remastered section tags).
   """
   @spec parse(binary()) :: {:ok, map()} | {:error, String.t()}
   def parse(_data), do: :erlang.nif_error(:nif_not_loaded)

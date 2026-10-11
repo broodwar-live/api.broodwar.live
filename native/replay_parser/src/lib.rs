@@ -153,6 +153,46 @@ fn encode_replay<'a>(env: Env<'a>, replay: &replay_core::Replay) -> NifResult<Te
             ("classifications", classifications.encode(env)),
             ("phases", phases),
             ("skill_profiles", skills.encode(env)),
+            (
+                "command_warnings",
+                encode_command_warnings(env, &replay.command_warnings)?,
+            ),
+            (
+                "extra_sections",
+                encode_extra_sections(env, &replay.extra_sections)?,
+            ),
+        ],
+    )
+}
+
+/// Decoding problems in the command stream. A non-clean replay still parses,
+/// but its derived data (APM, build order) may be incomplete.
+fn encode_command_warnings<'a>(
+    env: Env<'a>,
+    w: &replay_core::command::CommandParseWarnings,
+) -> NifResult<Term<'a>> {
+    map(
+        env,
+        &[
+            ("clean", w.is_clean().encode(env)),
+            ("unknown_commands", w.unknown_commands.encode(env)),
+            ("truncated_commands", w.truncated_commands.encode(env)),
+            ("skipped_bytes", w.skipped_bytes.encode(env)),
+            ("unknown_opcodes", w.unknown_opcodes.encode(env)),
+        ],
+    )
+}
+
+fn encode_extra_sections<'a>(
+    env: Env<'a>,
+    extra: &replay_core::extra::ExtraSections,
+) -> NifResult<Term<'a>> {
+    let tags: Vec<&str> = extra.tags.iter().map(String::as_str).collect();
+    map(
+        env,
+        &[
+            ("tags", tags.encode(env)),
+            ("truncated", extra.truncated.encode(env)),
         ],
     )
 }
@@ -224,7 +264,15 @@ fn encode_player<'a>(env: Env<'a>, player: &replay_core::header::Player) -> NifR
         _ => atoms::inactive().encode(env),
     };
 
-    let color_hex = bw_color_hex(player.color);
+    // Remastered custom colours (CCLR) override the palette index.
+    let color_hex = match player.custom_color {
+        Some(rgb) => format!("#{rgb:06X}"),
+        None => bw_color_hex(player.color).to_owned(),
+    };
+    let custom_color = player
+        .custom_color
+        .map(|rgb| format!("#{rgb:06X}").encode(env))
+        .unwrap_or_else(|| nil(env));
 
     map(
         env,
@@ -238,6 +286,7 @@ fn encode_player<'a>(env: Env<'a>, player: &replay_core::header::Player) -> NifR
             ("team", player.team.encode(env)),
             ("color", player.color.encode(env)),
             ("color_hex", color_hex.encode(env)),
+            ("custom_color", custom_color),
         ],
     )
 }

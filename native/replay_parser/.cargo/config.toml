@@ -1,0 +1,4 @@
+[net]
+# The global git config rewrites https://github.com/ to an SSH host alias that
+# libgit2 cannot resolve; delegate git fetches to the git CLI instead.
+git-fetch-with-cli = true

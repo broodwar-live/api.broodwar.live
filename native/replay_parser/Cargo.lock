@@ -119,7 +119,7 @@ checksum = "cab834c73d247e67f4fae452806d17d3c7501756d98c8808d7c9c7aa7d18f973"
 [[package]]
 name = "replay-core"
 version = "0.1.0"
-source = "git+https://github.com/broodwar-live/bw-engine.git?branch=main#512892c1be8674f7359e3a949d19cf2fc5c82733"
+source = "git+https://github.com/broodwar-live/bw-engine.git?rev=befa5432c8749cdea196703c5b82c0f0fcfad2c5#befa5432c8749cdea196703c5b82c0f0fcfad2c5"
 dependencies = [
  "encoding_rs",
  "explode",

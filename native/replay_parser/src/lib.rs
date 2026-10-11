@@ -41,6 +41,19 @@ mod atoms {
     }
 }
 
+/// Build an Elixir map from string-keyed pairs.
+///
+/// `Term::map_from_pairs` only fails on duplicate keys, which would be a bug in
+/// this crate; surface it as a raised error instead of panicking the BEAM.
+fn map<'a>(env: Env<'a>, pairs: &[(&str, Term<'a>)]) -> NifResult<Term<'a>> {
+    Term::map_from_pairs(env, pairs)
+        .map_err(|_| rustler::Error::Term(Box::new("failed to encode map")))
+}
+
+fn nil(env: Env<'_>) -> Term<'_> {
+    rustler::types::atom::nil().encode(env)
+}
+
 /// Parse a replay from raw binary data.
 ///
 /// Returns `{:ok, replay_map}` or `{:error, reason}`.
@@ -48,40 +61,40 @@ mod atoms {
 fn parse<'a>(env: Env<'a>, data: rustler::Binary<'a>) -> NifResult<Term<'a>> {
     match replay_core::parse(data.as_slice()) {
         Ok(replay) => {
-            let result = encode_replay(env, &replay);
+            let result = encode_replay(env, &replay)?;
             Ok((atoms::ok(), result).encode(env))
         }
         Err(e) => Ok((atoms::error(), e.to_string()).encode(env)),
     }
 }
 
-fn encode_replay<'a>(env: Env<'a>, replay: &replay_core::Replay) -> Term<'a> {
-    let header = encode_header(env, &replay.header);
+fn encode_replay<'a>(env: Env<'a>, replay: &replay_core::Replay) -> NifResult<Term<'a>> {
+    let header = encode_header(env, &replay.header)?;
 
     let build_order: Vec<Term> = replay
         .build_order
         .iter()
         .map(|entry| encode_build_order_entry(env, entry))
-        .collect();
+        .collect::<NifResult<_>>()?;
 
     let player_apm: Vec<Term> = replay
         .player_apm
         .iter()
         .map(|apm| encode_player_apm(env, apm))
-        .collect();
+        .collect::<NifResult<_>>()?;
 
     let timeline: Vec<Term> = replay
         .timeline
         .iter()
         .map(|snap| encode_timeline_snapshot(env, snap))
-        .collect();
+        .collect::<NifResult<_>>()?;
 
     // APM over time: sampled every 5 seconds with a 30-second window
     let apm_samples = replay.apm_over_time(30.0, 5.0);
     let apm_timeline: Vec<Term> = apm_samples
         .iter()
         .map(|s| {
-            rustler::Term::map_from_pairs(
+            map(
                 env,
                 &[
                     ("frame", s.frame.encode(env)),
@@ -91,12 +104,11 @@ fn encode_replay<'a>(env: Env<'a>, replay: &replay_core::Replay) -> Term<'a> {
                     ("eapm", (s.eapm.round() as u32).encode(env)),
                 ],
             )
-            .unwrap()
         })
-        .collect();
+        .collect::<NifResult<_>>()?;
 
     // Metadata
-    let metadata = encode_metadata(env, &replay.metadata);
+    let metadata = encode_metadata(env, &replay.metadata)?;
 
     // Classification
     let players_for_classify: Vec<(u8, Race)> = replay
@@ -105,20 +117,16 @@ fn encode_replay<'a>(env: Env<'a>, replay: &replay_core::Replay) -> Term<'a> {
         .iter()
         .map(|p| (p.player_id, p.race))
         .collect();
-    let classifications: Vec<Term> = replay_core::classify::classify_all(
-        &replay.build_order,
-        &players_for_classify,
-    )
-    .iter()
-    .map(|c| encode_classification(env, c))
-    .collect();
+    let classifications: Vec<Term> =
+        replay_core::classify::classify_all(&replay.build_order, &players_for_classify)
+            .iter()
+            .map(|c| encode_classification(env, c))
+            .collect::<NifResult<_>>()?;
 
     // Phases
-    let phase_analysis = replay_core::phases::detect_phases(
-        &replay.build_order,
-        replay.header.frame_count,
-    );
-    let phases = encode_phase_analysis(env, &phase_analysis);
+    let phase_analysis =
+        replay_core::phases::detect_phases(&replay.build_order, replay.header.frame_count);
+    let phases = encode_phase_analysis(env, &phase_analysis)?;
 
     // Skill
     let skill_profiles = replay_core::skill::estimate_skill(
@@ -130,9 +138,9 @@ fn encode_replay<'a>(env: Env<'a>, replay: &replay_core::Replay) -> Term<'a> {
     let skills: Vec<Term> = skill_profiles
         .iter()
         .map(|p| encode_skill_profile(env, p))
-        .collect();
+        .collect::<NifResult<_>>()?;
 
-    rustler::Term::map_from_pairs(
+    map(
         env,
         &[
             ("header", header),
@@ -147,10 +155,9 @@ fn encode_replay<'a>(env: Env<'a>, replay: &replay_core::Replay) -> Term<'a> {
             ("skill_profiles", skills.encode(env)),
         ],
     )
-    .unwrap()
 }
 
-fn encode_header<'a>(env: Env<'a>, header: &replay_core::header::Header) -> Term<'a> {
+fn encode_header<'a>(env: Env<'a>, header: &replay_core::header::Header) -> NifResult<Term<'a>> {
     let engine = match header.engine {
         Engine::StarCraft => atoms::starcraft().encode(env),
         Engine::BroodWar => atoms::brood_war().encode(env),
@@ -182,9 +189,9 @@ fn encode_header<'a>(env: Env<'a>, header: &replay_core::header::Header) -> Term
         .players
         .iter()
         .map(|p| encode_player(env, p))
-        .collect();
+        .collect::<NifResult<_>>()?;
 
-    rustler::Term::map_from_pairs(
+    map(
         env,
         &[
             ("engine", engine),
@@ -201,10 +208,9 @@ fn encode_header<'a>(env: Env<'a>, header: &replay_core::header::Header) -> Term
             ("players", players.encode(env)),
         ],
     )
-    .unwrap()
 }
 
-fn encode_player<'a>(env: Env<'a>, player: &replay_core::header::Player) -> Term<'a> {
+fn encode_player<'a>(env: Env<'a>, player: &replay_core::header::Player) -> NifResult<Term<'a>> {
     let race = match player.race {
         Race::Terran => atoms::terran().encode(env),
         Race::Protoss => atoms::protoss().encode(env),
@@ -220,7 +226,7 @@ fn encode_player<'a>(env: Env<'a>, player: &replay_core::header::Player) -> Term
 
     let color_hex = bw_color_hex(player.color);
 
-    rustler::Term::map_from_pairs(
+    map(
         env,
         &[
             ("slot_id", player.slot_id.encode(env)),
@@ -234,7 +240,6 @@ fn encode_player<'a>(env: Env<'a>, player: &replay_core::header::Player) -> Term
             ("color_hex", color_hex.encode(env)),
         ],
     )
-    .unwrap()
 }
 
 /// Map BW color index to hex color string.
@@ -271,8 +276,8 @@ fn bw_color_hex(idx: u32) -> &'static str {
 fn encode_build_order_entry<'a>(
     env: Env<'a>,
     entry: &replay_core::analysis::BuildOrderEntry,
-) -> Term<'a> {
-    rustler::Term::map_from_pairs(
+) -> NifResult<Term<'a>> {
+    map(
         env,
         &[
             ("frame", entry.frame.encode(env)),
@@ -282,11 +287,13 @@ fn encode_build_order_entry<'a>(
             ("name", entry.action.name().encode(env)),
         ],
     )
-    .unwrap()
 }
 
-fn encode_player_apm<'a>(env: Env<'a>, apm: &replay_core::analysis::PlayerApm) -> Term<'a> {
-    rustler::Term::map_from_pairs(
+fn encode_player_apm<'a>(
+    env: Env<'a>,
+    apm: &replay_core::analysis::PlayerApm,
+) -> NifResult<Term<'a>> {
+    map(
         env,
         &[
             ("player_id", apm.player_id.encode(env)),
@@ -294,20 +301,19 @@ fn encode_player_apm<'a>(env: Env<'a>, apm: &replay_core::analysis::PlayerApm) -
             ("eapm", (apm.eapm.round() as u32).encode(env)),
         ],
     )
-    .unwrap()
 }
 
 fn encode_timeline_snapshot<'a>(
     env: Env<'a>,
     snap: &replay_core::timeline::TimelineSnapshot,
-) -> Term<'a> {
+) -> NifResult<Term<'a>> {
     let players: Vec<Term> = snap
         .players
         .iter()
         .map(|ps| encode_player_state(env, ps))
-        .collect();
+        .collect::<NifResult<_>>()?;
 
-    rustler::Term::map_from_pairs(
+    map(
         env,
         &[
             ("frame", snap.frame.encode(env)),
@@ -315,20 +321,19 @@ fn encode_timeline_snapshot<'a>(
             ("players", players.encode(env)),
         ],
     )
-    .unwrap()
 }
 
 fn encode_player_state<'a>(
     env: Env<'a>,
     ps: &replay_core::timeline::PlayerState,
-) -> Term<'a> {
+) -> NifResult<Term<'a>> {
     // Encode units/buildings as list of {name, count} pairs
     let units: Vec<Term> = ps
         .units
         .iter()
         .map(|(&id, &count)| {
             let name = replay_core::gamedata::unit_name(id);
-            rustler::Term::map_from_pairs(
+            map(
                 env,
                 &[
                     ("id", id.encode(env)),
@@ -336,16 +341,15 @@ fn encode_player_state<'a>(
                     ("count", count.encode(env)),
                 ],
             )
-            .unwrap()
         })
-        .collect();
+        .collect::<NifResult<_>>()?;
 
     let buildings: Vec<Term> = ps
         .buildings
         .iter()
         .map(|(&id, &count)| {
             let name = replay_core::gamedata::unit_name(id);
-            rustler::Term::map_from_pairs(
+            map(
                 env,
                 &[
                     ("id", id.encode(env)),
@@ -353,29 +357,27 @@ fn encode_player_state<'a>(
                     ("count", count.encode(env)),
                 ],
             )
-            .unwrap()
         })
-        .collect();
+        .collect::<NifResult<_>>()?;
 
     let techs: Vec<Term> = ps
         .techs
         .iter()
         .map(|&id| {
             let name = replay_core::gamedata::tech_name(id);
-            rustler::Term::map_from_pairs(
+            map(
                 env,
                 &[("id", (id as u16).encode(env)), ("name", name.encode(env))],
             )
-            .unwrap()
         })
-        .collect();
+        .collect::<NifResult<_>>()?;
 
     let upgrades: Vec<Term> = ps
         .upgrades
         .iter()
         .map(|(&id, &level)| {
             let name = replay_core::gamedata::upgrade_name(id);
-            rustler::Term::map_from_pairs(
+            map(
                 env,
                 &[
                     ("id", (id as u16).encode(env)),
@@ -383,11 +385,10 @@ fn encode_player_state<'a>(
                     ("level", level.encode(env)),
                 ],
             )
-            .unwrap()
         })
-        .collect();
+        .collect::<NifResult<_>>()?;
 
-    rustler::Term::map_from_pairs(
+    map(
         env,
         &[
             ("player_id", ps.player_id.encode(env)),
@@ -401,7 +402,6 @@ fn encode_player_state<'a>(
             ("upgrades", upgrades.encode(env)),
         ],
     )
-    .unwrap()
 }
 
 // ---------------------------------------------------------------------------
@@ -419,17 +419,32 @@ fn compare_builds<'a>(
     let rb = replay_core::parse(data_b.as_slice());
     match (ra, rb) {
         (Ok(a), Ok(b)) => {
-            let pid_a = a.header.players.get(player_index as usize).map(|p| p.player_id).unwrap_or(0);
-            let pid_b = b.header.players.get(player_index as usize).map(|p| p.player_id).unwrap_or(0);
-            let seq_a = replay_core::similarity::BuildSequence::from_build_order(&a.build_order, pid_a);
-            let seq_b = replay_core::similarity::BuildSequence::from_build_order(&b.build_order, pid_b);
+            let pid_a = a
+                .header
+                .players
+                .get(player_index as usize)
+                .map(|p| p.player_id)
+                .unwrap_or(0);
+            let pid_b = b
+                .header
+                .players
+                .get(player_index as usize)
+                .map(|p| p.player_id)
+                .unwrap_or(0);
+            let seq_a =
+                replay_core::similarity::BuildSequence::from_build_order(&a.build_order, pid_a);
+            let seq_b =
+                replay_core::similarity::BuildSequence::from_build_order(&b.build_order, pid_b);
             let result = replay_core::similarity::compare(&seq_a, &seq_b);
-            let map = rustler::Term::map_from_pairs(env, &[
-                ("edit_similarity", result.edit_similarity.encode(env)),
-                ("lcs_similarity", result.lcs_similarity.encode(env)),
-                ("len_a", result.len_a.encode(env)),
-                ("len_b", result.len_b.encode(env)),
-            ]).unwrap();
+            let map = map(
+                env,
+                &[
+                    ("edit_similarity", result.edit_similarity.encode(env)),
+                    ("lcs_similarity", result.lcs_similarity.encode(env)),
+                    ("len_a", result.len_a.encode(env)),
+                    ("len_b", result.len_b.encode(env)),
+                ],
+            )?;
             Ok((atoms::ok(), map).encode(env))
         }
         (Err(e), _) | (_, Err(e)) => Ok((atoms::error(), e.to_string()).encode(env)),
@@ -443,13 +458,19 @@ fn compare_builds<'a>(
 #[rustler::nif]
 fn normalize_name<'a>(env: Env<'a>, name: &str) -> NifResult<Term<'a>> {
     let result = replay_core::identity::normalize_name(name);
-    let clan = result.clan_tag.as_deref().map(|s| s.encode(env))
-        .unwrap_or_else(|| rustler::types::atom::nil().encode(env));
-    let map = rustler::Term::map_from_pairs(env, &[
-        ("original", result.original.as_str().encode(env)),
-        ("normalized", result.normalized.as_str().encode(env)),
-        ("clan_tag", clan),
-    ]).unwrap();
+    let clan = result
+        .clan_tag
+        .as_deref()
+        .map(|s| s.encode(env))
+        .unwrap_or_else(|| nil(env));
+    let map = map(
+        env,
+        &[
+            ("original", result.original.as_str().encode(env)),
+            ("normalized", result.normalized.as_str().encode(env)),
+            ("clan_tag", clan),
+        ],
+    )?;
     Ok(map)
 }
 
@@ -457,92 +478,149 @@ fn normalize_name<'a>(env: Env<'a>, name: &str) -> NifResult<Term<'a>> {
 // Metadata / phases / skill / classification encoding
 // ---------------------------------------------------------------------------
 
-fn encode_metadata<'a>(env: Env<'a>, meta: &replay_core::metadata::GameMetadata) -> Term<'a> {
+fn encode_metadata<'a>(
+    env: Env<'a>,
+    meta: &replay_core::metadata::GameMetadata,
+) -> NifResult<Term<'a>> {
     use replay_core::metadata::GameResult;
 
     let matchup = match &meta.matchup {
-        Some(m) => rustler::Term::map_from_pairs(env, &[
-            ("code", m.code.as_str().encode(env)),
-            ("mirror", m.mirror.encode(env)),
-        ]).unwrap(),
-        None => rustler::types::atom::nil().encode(env),
+        Some(m) => map(
+            env,
+            &[
+                ("code", m.code.as_str().encode(env)),
+                ("mirror", m.mirror.encode(env)),
+            ],
+        )?,
+        None => nil(env),
     };
 
     let result = match &meta.result {
-        GameResult::Winner { player_id, player_name } => rustler::Term::map_from_pairs(env, &[
-            ("result", "winner".encode(env)),
-            ("player_id", player_id.encode(env)),
-            ("player_name", player_name.as_str().encode(env)),
-        ]).unwrap(),
+        GameResult::Winner {
+            player_id,
+            player_name,
+        } => map(
+            env,
+            &[
+                ("result", "winner".encode(env)),
+                ("player_id", player_id.encode(env)),
+                ("player_name", player_name.as_str().encode(env)),
+            ],
+        )?,
         GameResult::Unknown => "unknown".encode(env),
     };
 
-    rustler::Term::map_from_pairs(env, &[
-        ("matchup", matchup),
-        ("map_name", meta.map_name.as_str().encode(env)),
-        ("map_name_raw", meta.map_name_raw.as_str().encode(env)),
-        ("result", result),
-        ("duration_secs", meta.duration_secs.encode(env)),
-        ("is_1v1", meta.is_1v1.encode(env)),
-        ("player_count", meta.player_count.encode(env)),
-    ]).unwrap()
+    map(
+        env,
+        &[
+            ("matchup", matchup),
+            ("map_name", meta.map_name.as_str().encode(env)),
+            ("map_name_raw", meta.map_name_raw.as_str().encode(env)),
+            ("result", result),
+            ("duration_secs", meta.duration_secs.encode(env)),
+            ("is_1v1", meta.is_1v1.encode(env)),
+            ("player_count", meta.player_count.encode(env)),
+        ],
+    )
 }
 
-fn encode_classification<'a>(env: Env<'a>, c: &replay_core::classify::OpeningClassification) -> Term<'a> {
-    rustler::Term::map_from_pairs(env, &[
-        ("name", c.name.as_str().encode(env)),
-        ("tag", c.tag.as_str().encode(env)),
-        ("confidence", c.confidence.encode(env)),
-        ("race", c.race.as_str().encode(env)),
-        ("actions_analyzed", c.actions_analyzed.encode(env)),
-    ]).unwrap()
+fn encode_classification<'a>(
+    env: Env<'a>,
+    c: &replay_core::classify::OpeningClassification,
+) -> NifResult<Term<'a>> {
+    map(
+        env,
+        &[
+            ("name", c.name.as_str().encode(env)),
+            ("tag", c.tag.as_str().encode(env)),
+            ("confidence", c.confidence.encode(env)),
+            ("race", c.race.as_str().encode(env)),
+            ("actions_analyzed", c.actions_analyzed.encode(env)),
+        ],
+    )
 }
 
-fn encode_phase_analysis<'a>(env: Env<'a>, analysis: &replay_core::phases::PhaseAnalysis) -> Term<'a> {
-    let nil = || rustler::types::atom::nil().encode(env);
-    let opt = |v: Option<u32>| v.map(|f| f.encode(env)).unwrap_or_else(nil);
+fn encode_phase_analysis<'a>(
+    env: Env<'a>,
+    analysis: &replay_core::phases::PhaseAnalysis,
+) -> NifResult<Term<'a>> {
+    let opt = |v: Option<u32>| v.map(|f| f.encode(env)).unwrap_or_else(|| nil(env));
 
-    let phases: Vec<Term> = analysis.phases.iter().map(|p| {
-        let name = p.phase.name();
-        rustler::Term::map_from_pairs(env, &[
-            ("phase", name.encode(env)),
-            ("start_frame", p.start_frame.encode(env)),
-            ("start_seconds", p.start_seconds.encode(env)),
-            ("end_frame", p.end_frame.map(|f| f.encode(env)).unwrap_or_else(nil)),
-            ("end_seconds", p.end_seconds.map(|s| s.encode(env)).unwrap_or_else(nil)),
-        ]).unwrap()
-    }).collect();
+    let phases: Vec<Term> = analysis
+        .phases
+        .iter()
+        .map(|p| {
+            let name = p.phase.name();
+            map(
+                env,
+                &[
+                    ("phase", name.encode(env)),
+                    ("start_frame", p.start_frame.encode(env)),
+                    ("start_seconds", p.start_seconds.encode(env)),
+                    (
+                        "end_frame",
+                        p.end_frame
+                            .map(|f| f.encode(env))
+                            .unwrap_or_else(|| nil(env)),
+                    ),
+                    (
+                        "end_seconds",
+                        p.end_seconds
+                            .map(|s| s.encode(env))
+                            .unwrap_or_else(|| nil(env)),
+                    ),
+                ],
+            )
+        })
+        .collect::<NifResult<_>>()?;
 
     let lm = &analysis.landmarks;
-    let landmarks = rustler::Term::map_from_pairs(env, &[
-        ("first_gas", opt(lm.first_gas)),
-        ("first_tech", opt(lm.first_tech)),
-        ("first_tier2", opt(lm.first_tier2)),
-        ("first_tier3", opt(lm.first_tier3)),
-        ("first_expansion", opt(lm.first_expansion)),
-    ]).unwrap();
+    let landmarks = map(
+        env,
+        &[
+            ("first_gas", opt(lm.first_gas)),
+            ("first_tech", opt(lm.first_tech)),
+            ("first_tier2", opt(lm.first_tier2)),
+            ("first_tier3", opt(lm.first_tier3)),
+            ("first_expansion", opt(lm.first_expansion)),
+        ],
+    )?;
 
-    rustler::Term::map_from_pairs(env, &[
-        ("phases", phases.encode(env)),
-        ("landmarks", landmarks),
-    ]).unwrap()
+    map(
+        env,
+        &[("phases", phases.encode(env)), ("landmarks", landmarks)],
+    )
 }
 
-fn encode_skill_profile<'a>(env: Env<'a>, p: &replay_core::skill::SkillProfile) -> Term<'a> {
-    let first_action = p.first_action_frame.map(|f| f.encode(env))
-        .unwrap_or_else(|| rustler::types::atom::nil().encode(env));
-    rustler::Term::map_from_pairs(env, &[
-        ("player_id", p.player_id.encode(env)),
-        ("apm", p.apm.encode(env)),
-        ("eapm", p.eapm.encode(env)),
-        ("efficiency", p.efficiency.encode(env)),
-        ("hotkey_assigns_per_min", p.hotkey_assigns_per_min.encode(env)),
-        ("hotkey_recalls_per_min", p.hotkey_recalls_per_min.encode(env)),
-        ("apm_consistency", p.apm_consistency.encode(env)),
-        ("first_action_frame", first_action),
-        ("skill_score", p.skill_score.encode(env)),
-        ("tier", p.tier.name().encode(env)),
-    ]).unwrap()
+fn encode_skill_profile<'a>(
+    env: Env<'a>,
+    p: &replay_core::skill::SkillProfile,
+) -> NifResult<Term<'a>> {
+    let first_action = p
+        .first_action_frame
+        .map(|f| f.encode(env))
+        .unwrap_or_else(|| nil(env));
+    map(
+        env,
+        &[
+            ("player_id", p.player_id.encode(env)),
+            ("apm", p.apm.encode(env)),
+            ("eapm", p.eapm.encode(env)),
+            ("efficiency", p.efficiency.encode(env)),
+            (
+                "hotkey_assigns_per_min",
+                p.hotkey_assigns_per_min.encode(env),
+            ),
+            (
+                "hotkey_recalls_per_min",
+                p.hotkey_recalls_per_min.encode(env),
+            ),
+            ("apm_consistency", p.apm_consistency.encode(env)),
+            ("first_action_frame", first_action),
+            ("skill_score", p.skill_score.encode(env)),
+            ("tier", p.tier.name().encode(env)),
+        ],
+    )
 }
 
 rustler::init!("Elixir.BroodwarNif.ReplayParser");

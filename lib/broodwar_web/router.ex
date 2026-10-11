@@ -40,13 +40,18 @@ defmodule BroodwarWeb.Router do
     resources "/players", PlayerController, only: [:index, :show] do
       get "/matches", PlayerController, :matches
       get "/stats", PlayerController, :stats
+      get "/ratings", PlayerController, :ratings
     end
 
     resources "/matches", MatchController, only: [:index, :show]
     resources "/replays", ReplayController, only: [:index, :show]
     resources "/builds", BuildController, only: [:index, :show]
     get "/openings", BuildController, :openings
-    resources "/maps", MapController, only: [:index, :show]
+
+    resources "/maps", MapController, only: [:index, :show] do
+      get "/stats", MapController, :stats
+    end
+
     resources "/streams", StreamController, only: [:index, :show]
 
     get "/tournaments", TournamentController, :index
@@ -54,5 +59,7 @@ defmodule BroodwarWeb.Router do
     get "/tournaments/:slug/:season", TournamentController, :season
 
     get "/balance", BalanceController, :index
+    get "/head_to_head", HeadToHeadController, :show
+    get "/rankings", RankingController, :index
   end
 end

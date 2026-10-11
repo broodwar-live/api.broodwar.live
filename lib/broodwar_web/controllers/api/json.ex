@@ -5,6 +5,7 @@ defmodule BroodwarWeb.Api.JSON do
 
   alias Broodwar.Builds.Build
   alias Broodwar.Maps.Map, as: GameMap
+  alias Broodwar.Matches.Game
   alias Broodwar.Matches.Match
   alias Broodwar.Players.Player
   alias Broodwar.Replays.Replay
@@ -25,6 +26,8 @@ defmodule BroodwarWeb.Api.JSON do
       race: race(p.race),
       country: p.country,
       rating: p.rating,
+      rated_games: p.rated_games,
+      last_played_at: p.last_played_at,
       birth_date: p.birth_date,
       age: Player.age(p),
       team: p.team,
@@ -34,24 +37,64 @@ defmodule BroodwarWeb.Api.JSON do
   end
 
   def player_summary(%Player{} = p) do
-    %{id: p.id, name: p.name, race: race(p.race), country: p.country, rating: p.rating}
+    %{
+      id: p.id,
+      name: p.name,
+      race: race(p.race),
+      country: p.country,
+      rating: p.rating,
+      liquipedia_page: p.liquipedia_page
+    }
   end
 
   def match(%Match{} = m) do
     %{
       id: m.id,
+      stage: m.stage,
       round: m.round,
       race_a: race(m.race_a),
       race_b: race(m.race_b),
       matchup: matchup_string(m.race_a, m.race_b),
       score_a: m.score_a,
       score_b: m.score_b,
+      best_of: m.best_of,
+      walkover: m.walkover,
+      winner_id: m.winner_id,
       played_at: m.played_at,
-      source: m.source,
+      date_precision: m.date_precision,
+      source: Broodwar.Stats.match_source(m),
       player_a: maybe_assoc(m.player_a, &player_summary/1),
       player_b: maybe_assoc(m.player_b, &player_summary/1),
       tournament: maybe_assoc(m.tournament, &tournament_summary/1),
-      map: maybe_assoc(m.map, &game_map_summary/1)
+      games: maybe_list(m.games, &game/1)
+    }
+  end
+
+  def game(%Game{} = g) do
+    %{
+      id: g.id,
+      game_number: g.game_number,
+      map:
+        maybe_assoc(g.map, &game_map_summary/1) || (g.map_name && %{id: nil, name: g.map_name}),
+      race_a: race(g.race_a),
+      race_b: race(g.race_b),
+      winner_id: g.winner_id,
+      inferred: g.inferred,
+      played_at: g.played_at
+    }
+  end
+
+  def rating_point(h) do
+    %{
+      game_id: h.game_id,
+      match_id: h.match_id,
+      replay_id: h.replay_id,
+      played_at: h.played_at,
+      result: if(h.won, do: "win", else: "loss"),
+      rating_before: Float.round(h.rating_before, 1),
+      rating_after: Float.round(h.rating_after, 1),
+      games_played: h.games_played,
+      opponent: %{id: h.opponent_id, name: h.opponent_name}
     }
   end
 
@@ -153,6 +196,9 @@ defmodule BroodwarWeb.Api.JSON do
   defp matchup_string(nil, _), do: nil
   defp matchup_string(_, nil), do: nil
   defp matchup_string(a, b), do: "#{a}v#{b}"
+
+  defp maybe_list(%Ecto.Association.NotLoaded{}, _fun), do: nil
+  defp maybe_list(list, fun) when is_list(list), do: Enum.map(list, fun)
 
   defp maybe_assoc(%Ecto.Association.NotLoaded{}, _fun), do: nil
   defp maybe_assoc(nil, _fun), do: nil

@@ -18,6 +18,27 @@ defmodule BroodwarWeb.Api.MapController do
     json(conn, %{data: Enum.map(maps, &JSON.game_map/1)})
   end
 
+  @doc """
+  GET /api/maps/:id/stats — matchup winrates on this map from games with
+  known races and maps (sample size `n` per matchup).
+  """
+  def stats(conn, %{"map_id" => id}) do
+    map = Repo.get!(GameMap, id)
+    stats = Broodwar.Stats.map_stats(map.id)
+
+    json(conn, %{
+      data: %{
+        map: JSON.game_map_summary(map),
+        n: Enum.sum(Enum.map(stats, & &1.n)),
+        matchups: stats
+      },
+      meta: %{source: Broodwar.Stats.attribution()}
+    })
+  rescue
+    Ecto.NoResultsError -> {:error, :not_found}
+    Ecto.Query.CastError -> {:error, :not_found}
+  end
+
   def show(conn, %{"id" => id}) do
     map = Repo.get!(GameMap, id)
     json(conn, %{data: JSON.game_map(map)})

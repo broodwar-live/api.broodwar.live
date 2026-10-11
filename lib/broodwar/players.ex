@@ -19,14 +19,28 @@ defmodule Broodwar.Players do
 
   def get_player!(id), do: Repo.get!(Player, id)
 
-  def get_player_matches(player_id) do
+  @doc """
+  Series involving a player, newest first, with games and tournament.
+  Paginated (`:page`, `:per_page`).
+  """
+  def get_player_matches(player_id, opts \\ []) do
     alias Broodwar.Matches.Match
 
     Match
     |> where([m], m.player_a_id == ^player_id or m.player_b_id == ^player_id)
-    |> order_by(desc: :played_at)
-    |> preload([:tournament, :player_a, :player_b, :map])
+    |> order_by([m], desc: m.played_at, desc: m.id)
+    |> Pagination.paginate(opts)
+    |> preload([:tournament, :player_a, :player_b, :winner, :map, games: :map])
     |> Repo.all()
+  end
+
+  @doc "Number of series involving a player."
+  def count_player_matches(player_id) do
+    alias Broodwar.Matches.Match
+
+    Match
+    |> where([m], m.player_a_id == ^player_id or m.player_b_id == ^player_id)
+    |> Repo.aggregate(:count)
   end
 
   defp maybe_filter_race(query, nil), do: query
@@ -36,54 +50,43 @@ defmodule Broodwar.Players do
   defp maybe_filter_status(query, status), do: where(query, [p], p.status == ^status)
 
   @doc """
-  Returns all tournament matches involving this player, sourced from
-  the Liquipedia match data stored in tournaments.
+  All series involving this player, as player-perspective views for
+  `compute_stats/1`.
   """
-  def get_tournament_matches(player_name) do
-    alias Broodwar.Tournaments.Tournament
+  def get_tournament_matches(player_id) do
+    alias Broodwar.Matches.Match
 
-    Repo.all(from t in Tournament, where: not is_nil(t.liquipedia_data))
-    |> Enum.flat_map(fn t ->
-      (t.liquipedia_data["matches"] || [])
-      |> Enum.filter(&(&1["opponent1"] == player_name or &1["opponent2"] == player_name))
-      |> Enum.map(&player_match_view(t, &1, player_name))
-    end)
-    |> Enum.sort_by(fn m -> m.date || "" end, :desc)
+    Repo.all(
+      from m in Match,
+        where: m.player_a_id == ^player_id or m.player_b_id == ^player_id,
+        order_by: [desc: m.played_at, desc: m.id],
+        preload: [:tournament, :player_a, :player_b]
+    )
+    |> Enum.map(&player_match_view(&1, player_id))
   end
 
-  defp player_match_view(tournament, match, player_name) do
-    is_p1 = match["opponent1"] == player_name
-    opponent = if is_p1, do: match["opponent2"], else: match["opponent1"]
-    {s1, s2} = split_score(match["score"])
-    {my_score, opp_score} = if is_p1, do: {s1, s2}, else: {s2, s1}
+  defp player_match_view(m, player_id) do
+    is_a = m.player_a_id == player_id
+    opponent = if is_a, do: m.player_b, else: m.player_a
+    {mine, theirs} = if is_a, do: {m.score_a, m.score_b}, else: {m.score_b, m.score_a}
 
     %{
-      tournament: "#{tournament.short_name} S#{tournament.season}",
-      tournament_slug: String.downcase(tournament.short_name),
-      season: tournament.season,
-      context: match["context"],
-      date: match["date"],
-      opponent: opponent,
-      my_score: my_score,
-      opp_score: opp_score,
-      score: match["score"],
-      result: match_result(match["winner"], player_name),
-      maps: match["maps"] || []
+      match_id: m.id,
+      tournament: m.tournament && m.tournament.name,
+      context: Enum.join(Enum.reject([m.stage, m.round], &is_nil/1), " / "),
+      date: m.played_at,
+      opponent: opponent.name,
+      my_score: mine,
+      opp_score: theirs,
+      walkover: m.walkover,
+      result:
+        cond do
+          is_nil(m.winner_id) -> :unknown
+          m.winner_id == player_id -> :win
+          true -> :loss
+        end
     }
   end
-
-  defp split_score(score) when is_binary(score) do
-    case String.split(score, "-", parts: 2) do
-      [s1, s2] -> {s1, s2}
-      _ -> {"0", "0"}
-    end
-  end
-
-  defp split_score(_), do: {"0", "0"}
-
-  defp match_result(nil, _player_name), do: :unknown
-  defp match_result(player_name, player_name), do: :win
-  defp match_result(_winner, _player_name), do: :loss
 
   @doc """
   Computes win/loss stats for a player from tournament match data.

@@ -33,10 +33,46 @@ defmodule BroodwarWeb.Api.PlayerController do
       {:error, :not_found}
   end
 
-  def matches(conn, %{"player_id" => id}) do
-    _player = Players.get_player!(id)
-    matches = Players.get_player_matches(id)
-    json(conn, %{data: Enum.map(matches, &JSON.match/1)})
+  def matches(conn, %{"player_id" => id} = params) do
+    player = Players.get_player!(id)
+    pagination_opts = parse_pagination(params)
+    matches = Players.get_player_matches(player.id, pagination_opts)
+
+    json(conn, %{
+      data: Enum.map(matches, &JSON.match/1),
+      pagination:
+        pagination_opts
+        |> Pagination.pagination_meta()
+        |> Map.put(:total, Players.count_player_matches(player.id)),
+      meta: %{source: Broodwar.Stats.attribution()}
+    })
+  rescue
+    Ecto.NoResultsError ->
+      {:error, :not_found}
+  end
+
+  @doc """
+  GET /api/players/:id/ratings — Elo history, oldest first (one point per
+  rated game). Paginated; `pagination.total` is the number of games.
+  """
+  def ratings(conn, %{"player_id" => id} = params) do
+    player = Players.get_player!(id)
+    pagination_opts = parse_pagination(params)
+    history = Broodwar.Ratings.history(player.id, pagination_opts)
+
+    json(conn, %{
+      data: %{
+        player: JSON.player_summary(player),
+        rating: player.rating,
+        n: player.rated_games,
+        history: Enum.map(history, &JSON.rating_point/1)
+      },
+      pagination:
+        pagination_opts
+        |> Pagination.pagination_meta()
+        |> Map.put(:total, Broodwar.Ratings.history_count(player.id)),
+      meta: %{source: Broodwar.Stats.attribution()}
+    })
   rescue
     Ecto.NoResultsError ->
       {:error, :not_found}
@@ -44,7 +80,7 @@ defmodule BroodwarWeb.Api.PlayerController do
 
   def stats(conn, %{"player_id" => id}) do
     player = Players.get_player!(id)
-    tournament_matches = Players.get_tournament_matches(player.name)
+    tournament_matches = Players.get_tournament_matches(player.id)
     tournament_stats = Players.compute_stats(tournament_matches)
     replay_stats = Players.compute_replay_stats(player.name)
 
@@ -52,7 +88,8 @@ defmodule BroodwarWeb.Api.PlayerController do
       data: %{
         tournament: tournament_stats,
         replays: replay_stats
-      }
+      },
+      meta: %{source: Broodwar.Stats.attribution()}
     })
   rescue
     Ecto.NoResultsError ->

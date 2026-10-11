@@ -1,0 +1,16 @@
+.git
+.github
+.elixir_ls
+_build
+deps
+native/replay_parser/target
+priv/native
+*.db
+*.db-shm
+*.db-wal
+erl_crash.dump
+test
+README*.md
+fly.toml
+Dockerfile
+.dockerignore

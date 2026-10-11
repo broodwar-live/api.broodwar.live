@@ -1,0 +1,945 @@
+{{DISPLAYTITLE:AfreecaTV StarCraft League Remastered Season 17}}
+{{AfreecaTV StarCraft League Remastered Navbox}}
+{{AfreecaTV/StarCraft League Remastered/17/Tabs}}
+{{Infobox league
+|name=ASL Season 17
+|tickername=ASL Season 17
+|image=Afreecatv starcraft league remastered.png
+|icon=Afreecatv starcraft league remastered.png
+|series=AfreecaTV StarCraft League Remastered
+|abbreviation=ASL
+|organizer=AfreecaTV
+|sponsor=[https://wellnewlife.com/ Wellnewlife]
+|server=South Korea
+|type=Offline
+|localcurrency=KRW
+|prizepool=78,000,000
+|country=South Korea
+|city=Seoul
+|venue=Jamsil Vita 500 Colosseum
+|format='''Ro24''' and '''Ro16''' Dual Tournament Groupstage
+'''Ro8''' and on Single-Elimination
+|sdate=2024-02-26
+|edate=2024-04-27
+|web=
+|patch=
+|epatch=
+|edition=17
+|afreeca=afstar1
+|idfirst=|racefirst=|flagfirst=kr
+|idsecond=|racesecond=|flagsecond=kr
+|idthird=|racethird=|flagthird=kr
+|idfourth=|racefourth=|flagfourth=kr
+|player_number=28
+|protoss_number=7
+|terran_number=13
+|zerg_number=8
+|map1=Blitz Y
+|map2=Neo Dark Origin
+|map3=Apocalypse
+|map4=Citadel
+|map5=Radeon
+|map6=Retro
+|map7=Troy SE
+|previous=AfreecaTV StarCraft League Remastered/16{{!}}ASL Season 16
+|next=SOOP/StarCraft League/2024/AUTUMN{{!}}SSL 2024 AUTUMN
+|liquipediatier=1
+|headtohead=true
+}}{{TOClimit}}
+
+==Overview==
+The '''AfreecaTV StarCraft League Remastered Season 17''' ('''ASL Season 17''') (Korean: '''아프리카TV 스타리그 시즌17'''), is an offline tournament organized and broadcast live on [[AfreecaTV]].
+
+<embedvideo service="youtube">https://www.youtube.com/watch?v=LBusyIyPAJk</embedvideo>
+
+==Tournament Information==
+===Format===
+* '''Round of 24 group stage'''
+** [[Dual tournament]] format: {{abbr/Bo1}}
+** Top two players in each group advance
+
+* '''Round of 16 group stage'''
+** 12 players from the Round of 24 join the four seeds from [[AfreecaTV StarCraft League Remastered/16|ASL Season 16]]
+** [[Dual tournament]] format: First two matches: {{abbr/Bo1}} - Final three matches: {{abbr/Bo3}}
+** Top two players in each group advance
+
+* '''Elimination Stage'''
+** Eight player single-elimination bracket
+** Quarterfinals: {{abbr/Bo5}}
+** Semi-Finals & Finals: {{abbr/Bo7}}
+
+===Prize Pool===
+{{SoloPrizePool|localcurrency=KRW
+|{{Slot|localprize=30000000}}
+|{{Slot|localprize=10000000}}
+|{{Slot|place=3-4|localprize=3000000}}
+|{{Slot|place=5-8|localprize=2000000}}
+|{{Slot|place=9-12|localprize=1500000}}
+|{{Slot|place=13-16|localprize=1500000}}
+|{{Slot|place=17-22|localprize=1000000}}
+|{{Slot|place=23-28|localprize=1000000}}
+}}
+
+===Participants===
+{{ParticipantTable|countByFaction=true|disable_teams=true
+|{{ParticipantSection|title=Ro16 Seeds from [[AfreecaTV/StarCraft League Remastered/16|ASL Season 16]]
+|Rush
+|Soulkey
+|Mini
+|EffOrt |p4note=1 |p4dq=true
+}}
+|{{ParticipantSection|title=From [[AfreecaTV/StarCraft League Remastered/17/Qualifiers/Wild Card|Wild Card Qualifier]]
+|Sharp |p1note=1
+}}
+|{{ParticipantSection|title=From [[AfreecaTV/StarCraft League Remastered/17/Qualifiers/Online 1|Online Qualifier 1]]
+|Best
+|sSak
+|Shine
+|Mind
+|hero
+|SnOw
+|Jaedong
+|Action
+|Mong
+|RoyaL
+|Shuttle|p11link=Shuttle_(Player)
+|beast
+}}
+|{{ParticipantSection|title=From [[AfreecaTV/StarCraft League Remastered/17/Qualifiers/Online 2|Online Qualifier 2]]
+|TaeNgGu
+|Light
+|TY
+|Killer
+|Stork
+|BarrackS
+|Bisu
+|JyJ
+|Speed
+|ZeLoT
+|Rain
+|Sea
+}}
+}}
+{{note|1|{{InlinePlayer|1=EffOrt|flag=kr|link=EffOrt|faction=z}} was unable to participate due to wrist injury. {{InlinePlayer|1=Sharp|flag=kr|link=Sharp|faction=t}} won the Ro16 seed vacated by EffOrt via [[AfreecaTV StarCraft League Remastered/17/Qualifiers/Wild Card|Wild Card Qualifier]]}}
+
+===Maps===
+{{MapPoolTable
+|size=x140px
+}}
+
+===Talents===
+{{box|start|padding=2em}}
+{{BroadcasterCard
+|position=Korean Host
+|b1=Lee Hyun Kyung |b1flag=kr
+}}
+{{BroadcasterCard
+|position=Korean Play-by-play
+|b1=Park Sang-hyun |b1flag=kr
+}}
+{{BroadcasterCard
+|position=Korean Analyst
+|b1=Lee Seung-won |b1flag=kr
+|b2=IntoTheRain
+}}
+{{BroadcasterCard
+|position=Observer
+|b1=JKS |b1name=Son Jae-kyung |b1flag=kr
+}}
+{{box|break}}
+{{BroadcasterCard
+|position=Tastosis English Commentator
+|b1=Artosis
+|b2=Tasteless
+}}
+{{BroadcasterCard
+|position=StarCastTV English Commentator
+|b1=Nyoken
+|b2=gypsy
+|b3=eOnzErG
+|b4=ret
+}}
+{{BroadcasterCard
+|position=StarCastTV Spanish Commentator
+|b1=Yu
+|b2=Dipa |b2name=Julián Di Pace Herrera |b2flag=ar
+|b3=Remastr TV
+}}
+{{box|end}}
+
+==Results==
+==={{Stage|Round of 24}}===
+{{Toggle group start|state=show}}
+{{Box|start|padding=2em}}
+===={{HiddenSort|Group A}}====
+{{GroupTableLeague|id=ASL17R24GA|show_g=false
+|title=Group A
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/621574-asl17-ro24-preview-pt1-fresh-start
+|lrthread=https://tl.net/forum/bw-tournaments/621597-asl17-ro24-group-a
+|vod=https://vod.afreecatv.com/player/117406897
+|vod1=https://vod.afreecatv.com/player/117409217
+|vod2=https://www.youtube.com/watch?v=e_LcMkuAiGw
+|vod3=
+|p1=Light|temp_tie1=0.4
+|p2=ZeLoT|temp_tie2=0.3
+|p3=Bisu|temp_tie3=0.2
+|p4=Sea|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R24GA|attached=true|title=Group A Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match|bestof=1
+	|date=2024-02-26 19:20 {{Abbr/KST}}
+	|opponent1={{1Opponent|Light}}
+	|opponent2={{1Opponent|ZeLoT}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M2={{Match
+	|date=2024-02-26 19:45 {{Abbr/KST}}
+	|opponent1={{1Opponent|Bisu}}
+	|opponent2={{1Opponent|Sea}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M3={{Match
+	|date=2024-02-26 20:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Light}}
+	|opponent2={{1Opponent|Bisu}}
+	|map1={{Map|winner=2|map=Troy SE}}
+	|vetoplayer1=1|veto1=Blitz Y
+	|vetoplayer2=2|veto2=Citadel
+}}
+|M4={{Match
+	|date=2024-02-26 20:20 {{Abbr/KST}}
+	|opponent1={{1Opponent|ZeLoT}}
+	|opponent2={{1Opponent|Sea}}
+	|map1={{Map|winner=2|map=Citadel}}
+	|vetoplayer1=1|veto1=Troy SE
+	|vetoplayer2=2|veto2=Troy SE
+}}
+|M5={{Match
+	|date=2024-02-26 20:45 {{Abbr/KST}}
+	|opponent1={{1Opponent|Light}}
+	|opponent2={{1Opponent|Sea}}
+	|map1={{Map|winner=1|map=Retro}}
+	|vetoplayer1=1|veto1=Apocalypse
+	|vetoplayer2=2|veto2=Neo Dark Origin
+}}
+}}
+{{Box|break|padding=2em}}
+
+===={{HiddenSort|Group B}}====
+{{GroupTableLeague|id=ASL17R24GB|show_g=false
+|title=Group B
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/621574-asl17-ro24-preview-pt1-fresh-start
+|lrthread=https://tl.net/forum/bw-tournaments/621639-asl17-ro24-group-c
+|vod=https://vod.afreecatv.com/player/117497889
+|vod1=https://vod.afreecatv.com/player/117498339
+|vod2=https://www.youtube.com/watch?v=8mA1gLvc4Eg
+|vod3=
+|p1=hero|temp_tie1=0.4
+|p2=Killer|temp_tie2=0.3
+|p3=Mind|temp_tie3=0.2
+|p4=Stork|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R24GB|attached=true|title=Group B Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match
+	|date=2024-02-27 19:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|hero}}
+	|opponent2={{1Opponent|Killer}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M2={{Match
+	|date=2024-02-27 19:25 {{Abbr/KST}}
+	|opponent1={{1Opponent|Mind}}
+	|opponent2={{1Opponent|Stork}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M3={{Match
+	|date=2024-02-27 19:50 {{Abbr/KST}}
+	|opponent1={{1Opponent|hero}}
+	|opponent2={{1Opponent|Mind}}
+	|map1={{Map|winner=2|map=Blitz Y}}
+	|vetoplayer1=1|veto1=Citadel
+	|vetoplayer2=2|veto2=Troy SE
+}}
+|M4={{Match
+	|date=2024-02-27 20:10 {{Abbr/KST}}
+	|opponent1={{1Opponent|Killer}}
+	|opponent2={{1Opponent|Stork}}
+	|map1={{Map|winner=2|map=Blitz Y}}
+	|vetoplayer1=1|veto1=Troy SE
+	|vetoplayer2=2|veto2=Citadel
+}}
+|M5={{Match
+	|date=2024-02-27 20:40 {{Abbr/KST}}
+	|opponent1={{1Opponent|hero}}
+	|opponent2={{1Opponent|Stork}}
+	|map1={{Map|winner=1|map=Retro}}
+	|vetoplayer1=1|veto1=Apocalypse
+	|vetoplayer2=2|veto2=Neo Dark Origin
+}}
+}}
+{{Box|break|padding=2em}}
+
+===={{HiddenSort|Group C}}====
+{{GroupTableLeague|id=ASL17R24GC|show_g=false
+|title=Group C
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/621574-asl17-ro24-preview-pt1-fresh-start
+|lrthread=https://tl.net/forum/bw-tournaments/621730-asl17-ro24-group-c-was-b
+|vod=https://vod.afreecatv.com/player/117592999
+|vod1=https://www.youtube.com/watch?v=9sHTVsLYnxM
+|vod2=https://vod.afreecatv.com/player/117593739
+|vod3=
+|p1=Best|temp_tie1=0.4
+|p2=TaeNgGu|temp_tie2=0.3
+|p3=Action|temp_tie3=0.2
+|p4=sSak|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R24GC|attached=true|title=Group C Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match
+	|date=2024-02-28 19:15 {{Abbr/KST}}
+	|opponent1={{1Opponent|Best}}
+	|opponent2={{1Opponent|TaeNgGu}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M2={{Match
+	|date=2024-02-28 19:45 {{Abbr/KST}}
+	|opponent1={{1Opponent|Action}}
+	|opponent2={{1Opponent|sSak}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M3={{Match
+	|date=2024-02-28 20:10 {{Abbr/KST}}
+	|opponent1={{1Opponent|Best}}
+	|opponent2={{1Opponent|Action}}
+	|map1={{Map|winner=1|map=Citadel}}
+	|vetoplayer1=1|veto1=Troy SE
+	|vetoplayer2=2|veto2=Troy SE
+}}
+|M4={{Match
+	|date=2024-02-28 20:30 {{Abbr/KST}}
+	|opponent1={{1Opponent|TaeNgGu}}
+	|opponent2={{1Opponent|sSak}}
+	|map1={{Map|winner=2|map=Blitz Y}}
+	|vetoplayer1=1|veto1=Troy SE
+	|vetoplayer2=2|veto2=Citadel
+}}
+|M5={{Match
+	|date=2024-02-28 21:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Action}}
+	|opponent2={{1Opponent|sSak}}
+	|map1={{Map|winner=1|map=Retro}}
+	|vetoplayer1=1|veto1=Apocalypse
+	|vetoplayer2=2|veto2=Neo Dark Origin
+}}
+}}
+{{Box|break|padding=2em}}
+
+===={{HiddenSort|Group D}}====
+{{GroupTableLeague|id=ASL17R24GD|show_g=false
+|title=Group D
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/621975-asl17-ro24-preview-pt2-the-return
+|lrthread=https://tl.net/forum/bw-tournaments/621976-asl17-ro24-group-d
+|vod=https://vod.afreecatv.com/player/118088779
+|vod1=https://vod.afreecatv.com/player/118084931
+|vod2=https://www.youtube.com/watch?v=ryz_fZrc3jI
+|vod3=
+|p1=JyJ|temp_tie1=0.4
+|p2=TY|temp_tie2=0.3
+|p3=Shuttle|temp_tie3=0.2
+|p4=Jaedong|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R24GD|attached=true|title=Group D Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match
+	|date=2024-03-04 19:10 {{Abbr/KST}}
+	|opponent1={{1Opponent|JyJ}}
+	|opponent2={{1Opponent|TY}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M2={{Match
+	|date=2024-03-04 19:40 {{Abbr/KST}}
+	|opponent1={{1Opponent|Shuttle}}
+	|opponent2={{1Opponent|Jaedong}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M3={{Match
+	|date=2024-03-04 20:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|JyJ}}
+	|opponent2={{1Opponent|Shuttle}}
+	|map1={{Map|winner=1|map=Blitz Y}}
+	|vetoplayer1=1|veto1=Troy SE
+	|vetoplayer2=2|veto2=Citadel
+}}
+|M4={{Match
+	|date=2024-03-04 20:30 {{Abbr/KST}}
+	|opponent1={{1Opponent|TY}}
+	|opponent2={{1Opponent|Jaedong}}
+	|map1={{Map|winner=1|map=Blitz Y}}
+	|vetoplayer1=1|veto1=Troy SE
+	|vetoplayer2=2|veto2=Troy SE
+}}
+|M5={{Match
+	|date=2024-03-04 21:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Shuttle}}
+	|opponent2={{1Opponent|TY}}
+	|map1={{Map|winner=1|map=Retro}}
+	|vetoplayer1=1|veto1=Neo Dark Origin
+	|vetoplayer2=2|veto2=Neo Dark Origin
+}}
+}}
+{{Box|break|padding=2em}}
+
+===={{HiddenSort|Group E}}====
+{{GroupTableLeague|id=ASL17R24GE|show_g=false
+|title=Group E
+|date=2024-03-05 19:00 {{Abbr/KST}}
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/621975-asl17-ro24-preview-pt2-the-return
+|lrthread=https://tl.net/forum/bw-tournaments/622033-asl17-ro24-group-e
+|vod=https://vod.afreecatv.com/player/118181873
+|vod1=https://vod.afreecatv.com/player/118182659
+|vod2=https://www.youtube.com/watch?v=-dOnSE_Bgz4
+|vod3=
+|p1=SnOw|temp_tie1=0.4
+|p2=Speed|temp_tie2=0.3
+|p3=Mong|temp_tie3=0.2
+|p4=Shine|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R24GE|attached=true|title=Group E Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match
+	|date=2024-03-05 19:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|SnOw}}
+	|opponent2={{1Opponent|Speed}}
+	|map1={{Map|winner=1|map=Radeon}}
+}}
+|M2={{Match
+	|date=2024-03-05 19:35 {{Abbr/KST}}
+	|opponent1={{1Opponent|Mong}}
+	|opponent2={{1Opponent|Shine}}
+	|map1={{Map|winner=2|map=Radeon}}
+}}
+|M3={{Match
+	|date=2024-03-05 20:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|SnOw}}
+	|opponent2={{1Opponent|Shine}}
+	|map1={{Map|winner=1|map=Citadel}}
+	|vetoplayer1=1|veto1=Blitz Y/Troy SE
+	|vetoplayer2=2|veto2=Blitz Y/Troy SE
+}}
+|M4={{Match
+	|date=2024-03-05 20:30 {{Abbr/KST}}
+	|opponent1={{1Opponent|Speed}}
+	|opponent2={{1Opponent|Mong}}
+	|map1={{Map|winner=2|map=Blitz Y}}
+	|vetoplayer1=1|veto1=Troy SE
+	|vetoplayer2=2|veto2=Troy SE
+}}
+|M5={{Match
+	|date=2024-03-05 21:05 {{Abbr/KST}}
+	|opponent1={{1Opponent|Shine}}
+	|opponent2={{1Opponent|Mong}}
+	|map1={{Map|winner=2|map=Apocalypse}}
+	|vetoplayer1=1|veto1=Neo Dark Origin/Retro
+	|vetoplayer2=2|veto2=Neo Dark Origin/Retro
+}}
+}}
+{{Box|break|padding=2em}}
+
+===={{HiddenSort|Group F}}====
+{{GroupTableLeague|id=ASL17R24GF|show_g=false
+|title=Group F
+|date=2024-03-06 19:00 {{Abbr/KST}}
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/621975-asl17-ro24-preview-pt2-the-return
+|lrthread=https://tl.net/forum/bw-tournaments/622092-asl17-ro24-group-f
+|vod=https://vod.afreecatv.com/player/118275043
+|vod1=https://vod.afreecatv.com/player/118275901
+|vod2=https://www.youtube.com/watch?v=oYouDrkLg54
+|vod3=
+|p1=RoyaL|temp_tie1=0.4
+|p2=beast|temp_tie2=0.3
+|p3=Rain|temp_tie3=0.2
+|p4=BarrackS|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R24GF|attached=true|title=Group F Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match
+	|date=2024-03-06 19:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|RoyaL}}
+	|opponent2={{1Opponent|beast}}
+	|map1={{Map|winner=2|map=Radeon}}
+}}
+|M2={{Match
+	|date=2024-03-06 19:30 {{Abbr/KST}}
+	|opponent1={{1Opponent|Rain}}
+	|opponent2={{1Opponent|BarrackS}}
+	|map1={{Map|winner=2|map=Radeon}}
+}}
+|M3={{Match
+	|date=2024-03-06 20:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|beast}}
+	|opponent2={{1Opponent|BarrackS}}
+	|map1={{Map|winner=2|map=Citadel}}
+	|vetoplayer1=1|veto1=Blitz Y/Troy SE
+	|vetoplayer2=2|veto2=Blitz Y/Troy SE
+}}
+|M4={{Match
+	|date=2024-03-06 20:30 {{Abbr/KST}}
+	|opponent1={{1Opponent|RoyaL}}
+	|opponent2={{1Opponent|Rain}}
+	|map1={{Map|winner=1|map=Blitz Y}}
+	|vetoplayer1=1|veto1=Citadel/Troy SE
+	|vetoplayer2=2|veto2=Citadel/Troy SE
+}}
+|M5={{Match
+	|date=2024-03-06 21:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|beast}}
+	|opponent2={{1Opponent|RoyaL}}
+	|map1={{Map|winner=2|map=Retro}}
+	|vetoplayer1=1|veto1=Neo Dark Origin/Apocalypse
+	|vetoplayer2=2|veto2=Neo Dark Origin/Apocalypse
+}}
+}}
+{{Box|end}}
+{{Toggle group end}}
+
+==={{Stage|Round of 16}}===
+''A group selection ceremony was held on {{countdown|date=2024-03-11 19:00 {{Abbr/KST}}|finished=true|youtube=AfreecaTV Live|afreecatv=AfreecaTVASL|rawdatetime=true}}.''
+[https://vod.afreecatv.com/player/118741691 VOD]
+{{Toggle group start|state=show}}
+{{Box|start|padding=2em}}
+===={{HiddenSort|Group A}}====
+{{GroupTableLeague|id=ASL17R16GA
+|title=Group A
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/622627-asl17-ro16-preview-pt1-heating-up
+|lrthread=https://tl.net/forum/bw-tournaments/622628-asl17-ro16-group-a
+|vod=https://vod.afreecatv.com/player/119415315
+|vod1=https://vod.afreecatv.com/player/119415985
+|vod2=https://www.youtube.com/watch?v=rGR7uTL5DC8
+|p1=Soulkey|temp_tie1=0.4
+|p2=Mong|temp_tie2=0.3
+|p3=Bisu|temp_tie3=0.2
+|p4=JyJ|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R16GA|attached=true|title=Group A Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match|bestof=1
+	|date=2024-03-18 19:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Soulkey}}
+	|opponent2={{1Opponent|Mong}}
+	|map1={{Map|winner=1|map=Apocalypse}}
+}}
+|M2={{Match
+	|date=2024-03-18 19:40 {{Abbr/KST}}
+	|opponent1={{1Opponent|Bisu}}
+	|opponent2={{1Opponent|JyJ}}
+	|map1={{Map|winner=1|map=Apocalypse}}
+}}
+|M3={{Match|bestof=3
+	|date=2024-03-18 20:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Soulkey}}
+	|opponent2={{1Opponent|Bisu}}
+	|map1={{Map|winner=1|map=Blitz Y}}
+	|map2={{Map|winner=1|map=Citadel}}
+	|map3={{Map|finished=skip|map=Retro}}
+}}
+|M4={{Match
+	|date=2024-03-18 21:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Mong}}
+	|opponent2={{1Opponent|JyJ}}
+	|map1={{Map|winner=2|map=Neo Dark Origin}}
+	|map2={{Map|winner=1|map=Blitz Y}}
+	|map3={{Map|winner=2|map=Radeon}}
+}}
+|M5={{Match
+	|date=2024-03-18 22:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Bisu}}
+	|opponent2={{1Opponent|JyJ}}
+	|map1={{Map|winner=1|map=Neo Dark Origin}}
+	|map2={{Map|winner=1|map=Retro}}
+	|map3={{Map|finished=skip|map=Citadel}}
+}}
+}}
+{{Box|break|padding=2em}}
+
+===={{HiddenSort|Group B}}====
+{{GroupTableLeague|id=ASL17R16GB
+|title=Group B
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/622627-asl17-ro16-preview-pt1-heating-up
+|lrthread=https://tl.net/forum/bw-tournaments/622705-asl17-ro16-group-b
+|vod=https://vod.afreecatv.com/player/119502791
+|vod1=https://vod.afreecatv.com/player/119503905
+|vod2=https://www.youtube.com/watch?v=Dgd3A0dmw9E
+|p1=Mini|temp_tie1=0.4
+|p2=BarrackS|temp_tie2=0.3
+|p3=RoyaL|temp_tie3=0.2
+|p4=hero|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R16GB|attached=true|title=Group B Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match|bestof=1
+	|date=2024-03-19 19:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Mini}}
+	|opponent2={{1Opponent|BarrackS}}
+	|map1={{Map|winner=2|map=Apocalypse}}
+}}
+|M2={{Match
+	|date=2024-03-19 19:45 {{Abbr/KST}}
+	|opponent1={{1Opponent|RoyaL}}
+	|opponent2={{1Opponent|hero}}
+	|map1={{Map|winner=2|map=Apocalypse}}
+}}
+|M3={{Match|bestof=3
+	|date=2024-03-19 20:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|BarrackS}}
+	|opponent2={{1Opponent|hero}}
+	|map1={{Map|winner=2|map=Radeon}}
+	|map2={{Map|winner=2|map=Neo Dark Origin}}
+	|map3={{Map|finished=skip|map=Blitz Y}}
+}}
+|M4={{Match
+	|date=2024-03-19 21:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Mini}}
+	|opponent2={{1Opponent|RoyaL}}
+	|map1={{Map|winner=1|map=Neo Dark Origin}}
+	|map2={{Map|winner=1|map=Retro}}
+	|map3={{Map|finished=skip|map=Citadel}}
+}}
+|M5={{Match
+	|date=2024-03-19 22:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|BarrackS}}
+	|opponent2={{1Opponent|Mini}}
+	|map1={{Map|winner=2|map=Citadel}}
+	|map2={{Map|winner=2|map=Retro}}
+	|map3={{Map|finished=skip|map=Blitz Y}}
+}}
+}}
+{{Box|break|padding=2em}}
+
+===={{HiddenSort|Group C}}====
+{{GroupTableLeague|id=ASL17R16GC
+|title=Group C
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/622968-asl17-ro16-preview-pt2-weeding-out
+|lrthread=https://tl.net/forum/bw-tournaments/622969-asl17-ro16-group-c
+|vod=https://vod.afreecatv.com/player/120065027
+|vod1=https://vod.afreecatv.com/player/120066187
+|vod2=https://www.youtube.com/watch?v=dQyoW_g3xBU
+|p1=Rush|temp_tie1=0.4
+|p2=Shuttle|temp_tie2=0.3
+|p3=Best|temp_tie3=0.2
+|p4=Light|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R16GC|attached=true|title=Group C Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match|bestof=1
+	|date=2024-03-25 19:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Rush}}
+	|opponent2={{1Opponent|Shuttle}}
+	|map1={{Map|winner=1|map=Apocalypse}}
+}}
+|M2={{Match
+	|date=2024-03-25 19:30 {{Abbr/KST}}
+	|opponent1={{1Opponent|Best}}
+	|opponent2={{1Opponent|Light}}
+	|map1={{Map|winner=1|map=Apocalypse}}
+}}
+|M3={{Match|bestof=3
+	|date=2024-03-25 20:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Rush}}
+	|opponent2={{1Opponent|Best}}
+	|map1={{Map|winner=2|map=Neo Dark Origin}}
+	|map2={{Map|winner=1|map=Blitz Y}}
+	|map3={{Map|winner=2|map=Radeon}}
+}}
+|M4={{Match
+	|date=2024-03-25 21:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Shuttle}}
+	|opponent2={{1Opponent|Light}}
+	|map1={{Map|winner=1|map=Retro}}
+	|map2={{Map|winner=2|map=Neo Dark Origin}}
+	|map3={{Map|winner=1|map=Troy SE}}
+}}
+|M5={{Match
+	|date=2024-03-25 22:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Rush}}
+	|opponent2={{1Opponent|Shuttle}}
+	|map1={{Map|winner=1|map=Radeon}}
+	|map2={{Map|winner=1|map=Neo Dark Origin}}
+	|map3={{Map|finished=skip|map=Retro}}
+}}
+}}
+{{Box|break|padding=2em}}
+
+===={{HiddenSort|Group D}}====
+{{GroupTableLeague|id=ASL17R16GD
+|title=Group D
+|afreeca=AfreecaTVASL
+|preview=https://tl.net/forum/brood-war/622968-asl17-ro16-preview-pt2-weeding-out
+|lrthread=https://tl.net/forum/bw-tournaments/623005-asl17-ro16-group-d
+|vod=https://vod.afreecatv.com/player/120157995
+|vod1=https://vod.afreecatv.com/player/120158595
+|vod2=https://www.youtube.com/watch?v=agSP6WjcZsw
+|vod3=
+|p1=Sharp|temp_tie1=0.4
+|p2=Mind|temp_tie2=0.3
+|p3=Action|temp_tie3=0.2
+|p4=SnOw|temp_tie4=0.1
+}}
+{{Matchlist|id=ASL17R16GD|attached=true|title=Group D Matches|collapsed=true
+|M1header=Opening Matches
+|M3header=Winner's Match
+|M4header=Loser's Match
+|M5header=Final Match
+|M1={{Match|bestof=1
+	|date=2024-03-26 19:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Sharp}}
+	|opponent2={{1Opponent|Mind}}
+	|map1={{Map|winner=1|map=Apocalypse}}
+}}
+|M2={{Match
+	|date=2024-03-26 19:30 {{Abbr/KST}}
+	|opponent1={{1Opponent|Action}}
+	|opponent2={{1Opponent|SnOw}}
+	|map1={{Map|winner=2|map=Apocalypse}}
+}}
+|M3={{Match|bestof=3
+	|date=2024-03-26 20:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Sharp}}
+	|opponent2={{1Opponent|SnOw}}
+	|map1={{Map|winner=1|map=Retro}}
+	|map2={{Map|winner=2|map=Citadel}}
+	|map3={{Map|winner=2|map=Neo Dark Origin}}
+}}
+|M4={{Match
+	|date=2024-03-26 21:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Mind}}
+	|opponent2={{1Opponent|Action}}
+	|map1={{Map|winner=1|map=Radeon}}
+	|map2={{Map|winner=1|map=Blitz Y}}
+	|map3={{Map|finished=skip|map=Troy SE}}
+}}
+|M5={{Match
+	|date=2024-03-26 22:00 {{Abbr/KST}}
+	|opponent1={{1Opponent|Sharp}}
+	|opponent2={{1Opponent|Mind}}
+	|map1={{Map|winner=1|map=Citadel}}
+	|map2={{Map|winner=1|map=Retro}}
+	|map3={{Map|finished=skip|map=Radeon}}
+}}
+}}
+{{Box|end}}
+{{Toggle group end}}
+
+==={{Stage|Playoffs}}===
+<section begin=Results />
+{{Bracket|Bracket/8|id=ASL17R08PO
+|R1M1header=Quarterfinals (Bo5)
+|R2M1header=Semifinals (Bo7)
+|R3M1header=Finals (Bo7)
+
+<!-- Quarterfinals -->
+|R1M1={{Match|bestof=5
+	|date=2024-04-01 19:15 {{Abbr/KST}}
+	|afreeca=AfreecaTVASL
+	|opponent1={{1Opponent|Best}}
+	|opponent2={{1Opponent|Sharp}}
+	|map1={{Map|winner=2|map=Radeon}}
+	|map2={{Map|winner=1|map=Blitz Y}}
+	|map3={{Map|winner=2|map=Citadel}}
+	|map4={{Map|winner=2|map=Apocalypse}}
+	|map5={{Map|finished=skip|map=Retro}}
+	|comment=[[Best]] picked maps Set 2, 4
+                 [[Sharp]] picked maps Set 1, 3
+	|preview=https://tl.net/forum/brood-war/623234-asl17-ro8-preview-pt1-the-playoffs
+	|lrthread=https://tl.net/forum/bw-tournaments/623235-asl17-ro8-day-1
+	|vod=https://www.youtube.com/watch?v=QH0L0MHwb6M
+	|vod2=
+	|vod3=
+}}
+|R1M2={{Match
+	|date=2024-04-02 19:10 {{Abbr/KST}}
+	|afreeca=AfreecaTVASL
+	|opponent1={{1Opponent|hero}}
+	|opponent2={{1Opponent|Rush}}
+	|map1={{Map|winner=2|map=Troy SE}}
+	|map2={{Map|winner=1|map=Citadel}}
+	|map3={{Map|winner=1|map=Neo Dark Origin}}
+	|map4={{Map|winner=1|map=Radeon}}
+	|map5={{Map|finished=skip|map=Blitz Y}}
+	|comment=[[hero]] picked maps Set 1, 3
+                 [[Rush]] picked maps Set 2, 4
+	|preview=https://tl.net/forum/brood-war/623234-asl17-ro8-preview-pt1-the-playoffs
+	|lrthread=https://tl.net/forum/bw-tournaments/623296-asl17-ro8-day-2
+	|vod=https://www.youtube.com/watch?v=xJfoQkrGhX8
+	|vod2=
+	|vod3=
+}}
+|R1M3={{Match
+	|date=2024-04-08 19:00 {{Abbr/KST}}
+	|afreeca=AfreecaTVASL
+	|opponent1={{1Opponent|SnOw}}
+	|opponent2={{1Opponent|Bisu}}
+	|map1={{Map|winner=1|map=Neo Dark Origin}}
+	|map2={{Map|winner=1|map=Apocalypse}}
+	|map3={{Map|winner=1|map=Citadel}}
+	|map4={{Map|finished=skip|map=Troy SE}}
+	|map5={{Map|finished=skip|map=Radeon}}
+	|comment=[[SnOw]] picked maps Set 1, 3
+                 [[Bisu]] picked maps Set 2, 4
+	|preview=https://tl.net/forum/brood-war/623512-asl17-ro8-preview-pt2-electrifying
+	|lrthread=https://tl.net/forum/bw-tournaments/623522-asl17-ro8-day-3
+	|vod=https://www.youtube.com/watch?v=mONYlEGJeSc
+	|vod2=
+	|vod3=
+}}
+|R1M4={{Match
+	|date=2024-04-09 19:00 {{Abbr/KST}}
+	|afreeca=AfreecaTVASL
+	|opponent1={{1Opponent|Soulkey}}
+	|opponent2={{1Opponent|Mini}}
+	|map1={{Map|winner=2|map=Radeon}}
+	|map2={{Map|winner=2|map=Troy SE}}
+	|map3={{Map|winner=1|map=Neo Dark Origin}}
+	|map4={{Map|winner=1|map=Blitz Y}}
+	|map5={{Map|winner=1|map=Retro}}
+	|comment=[[Soulkey]] picked maps Set 1, 3
+                 [[Mini]] picked maps Set 2, 4
+	|preview=https://tl.net/forum/brood-war/623512-asl17-ro8-preview-pt2-electrifying
+	|lrthread=https://tl.net/forum/bw-tournaments/623569-asl17-ro8-day-4
+	|vod=https://www.youtube.com/watch?v=cW_4vRIVqrc
+	|vod2=
+	|vod3=
+}}
+
+<!-- Semifinals -->
+|R2M1={{Match|bestof=7
+	|date=2024-04-15 19:00 {{Abbr/KST}}
+	|afreeca=AfreecaTVASL
+	|opponent1={{1Opponent|Sharp}}
+	|opponent2={{1Opponent|hero}}
+	|map1={{Map|winner=1|map=Citadel}}
+	|map2={{Map|winner=2|map=Troy SE}}
+	|map3={{Map|winner=2|map=Retro}}
+	|map4={{Map|winner=2|map=Neo Dark Origin}}
+	|map5={{Map|winner=2|map=Apocalypse}}
+	|map6={{Map|finished=skip|map=Blitz Y}}
+	|map7={{Map|finished=skip|map=Radeon}}
+	|comment=[[Sharp]] picked maps Set 1, 3, 5
+                 [[hero]] picked maps Set 2, 4, 6
+	|preview=https://tl.net/forum/brood-war/623841-asl17-ro4-preview-take-off
+	|lrthread=https://tl.net/forum/bw-tournaments/623842-asl17-semifinal-a
+	|vod=https://www.youtube.com/watch?v=v0TLo3rfQ3o
+	|vod2=
+	|vod3=
+}}
+|R2M2={{Match
+	|date=2024-04-16 19:00 {{Abbr/KST}}
+	|afreeca=AfreecaTVASL
+	|opponent1={{1Opponent|SnOw}}
+	|opponent2={{1Opponent|Soulkey}}
+	|map1={{Map|winner=1|map=Neo Dark Origin}}
+	|map2={{Map|winner=1|map=Retro}}
+	|map3={{Map|winner=2|map=Blitz Y}}
+	|map4={{Map|winner=2|map=Citadel}}
+	|map5={{Map|winner=2|map=Troy SE}}
+	|map6={{Map|winner=2|map=Radeon}}
+	|map7={{Map|finished=skip|map=Apocalypse}}
+	|comment=[[SnOw]] picked maps Set 1, 3, 5
+                 [[Soulkey]] picked maps Set 2, 4, 6
+	|preview=https://tl.net/forum/brood-war/623841-asl17-ro4-preview-take-off
+	|lrthread=https://tl.net/forum/bw-tournaments/623923-asl17-semifinal-b
+	|vod=https://www.youtube.com/watch?v=BjbzB8vJutk
+	|vod2=
+	|vod3=
+}}
+
+<!-- Grand Final -->
+|R3M1={{Match
+	|date=2024-04-27 17:00 {{Abbr/KST}}
+	|afreeca=AfreecaTVASL
+	|opponent1={{1Opponent|hero}}
+	|opponent2={{1Opponent|Soulkey}}
+	|map1={{Map|winner=1|map=Radeon}}
+	|map2={{Map|winner=2|map=Neo Dark Origin}}
+	|map3={{Map|winner=2|map=Apocalypse}}
+	|map4={{Map|winner=2|map=Retro}}
+	|map5={{Map|winner=1|map=Citadel}}
+	|map6={{Map|winner=1|map=Troy SE}}
+	|map7={{Map|winner=2|map=Blitz Y}}
+	|comment=[[hero]] picked maps Set 1, 3, 5
+                 [[Soulkey]] picked maps Set 2, 4, 6
+	|preview=https://tl.net/forum/brood-war/624504-asl17-finals-preview-arrival
+	|lrthread=https://tl.net/forum/bw-tournaments/624505-asl17-grand-finals
+	|vod=https://www.youtube.com/watch?v=U90VDu2X-yw
+	|vod2=
+	|vod3=
+}}
+}}
+<section end=Results />
+
+==Racial distribution==
+{{RaceDist|last=1}}
+
+==Statistics==
+{{Tournament_statistics}}
+
+==Media==
+===Streams===
+* {{Flag|kr}} [http://play.afreecatv.com/afstar1 Livestream in Korean] at Afreecatv.com
+* {{Flag|usuk}} [http://play.afreecatv.com/dth03119 Livestream in English] at Afreecatv.com
+* {{Flag|esmx}} [http://play.afreecatv.com/basic0020512 Livestream in Spanish] at Afreecatv.com
+
+===VODS===
+* {{Flag|kr}} [https://bj.afreecatv.com/afstar1/vods Spoiler-free Official AfreecaTV VODs] at AfreecaTV.com
+* {{Flag|usuk}} [https://bj.afreecatv.com/dth03119/vods Spoiler-free English AfreecaTV VODs] at AfreecaTV.com
+* {{Flag|esmx}} [https://bj.afreecatv.com/basic0020512/vods Spoiler-free Spanish AfreecaTV VODs] at Afreecatv.com
+* {{Flag|usuk}} [https://www.sc2links.com/tournament/?match=794 Spoiler-free VODs on SC2Links.com]
+
+==References==
+{{Reflist}}
+
+==External links==
+*{{Flag|us}} [https://tl.net/forum/brood-war/620180-asl-season-17-announced-qualifier-info ASL Season 17 announcement]
+*{{Flag|kr}} [https://bj.afreecatv.com/afstar1/post/114118759 ASL Season 17 Announcement]
+*{{Flag|kr}} [https://bj.afreecatv.com/afstar1/post/116123701 afreecatv.com - ASL Season 17 Round of 24 announcement]
+*{{Flag|kr}} [https://namu.wiki/w/%EC%95%84%ED%94%84%EB%A6%AC%EC%B9%B4TV%20%EC%8A%A4%ED%83%80%EB%A6%AC%EA%B7%B8%20%EC%8B%9C%EC%A6%8C17 ASL Season 17 in namu.wiki]
+*{{Flag|kr}} [https://910map.tistory.com/188 ASL Season 17 map pool]
+
+[[Category:Post-KeSPA Tournaments]]

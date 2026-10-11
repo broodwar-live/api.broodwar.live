@@ -1,0 +1,899 @@
+{{KSL_Navbox}}
+{{DISPLAYTITLE:AfreecaTV StarCraft League Remastered Season 6}}
+{{tabs static
+|name1=Main Event
+|link1=2018 AfreecaTV Starleague Season 6
+|name2=Qualifier
+|link2=2018 AfreecaTV Starleague Season 6/Qualifier
+|name3=Tournament Statistics
+|link3=2018 AfreecaTV Starleague Season 6/Tournament Statistics
+|This=1}}
+{{Infobox league
+|name=ASL Season 6
+|image=Afreeca_Starleague_banner.jpg
+|icon=ASL_icon.png
+|series=AfreecaTV StarCraft League Remastered
+|abbreviation=ASL
+|organizer=AfreecaTV
+|sponsor=olleh tv, KB Kookmin Bank
+|server=
+|type=Offline
+|localcurrency=KRW
+|prizepool=80,000,000
+|prizepoolusd={{formatnum:{{#expr:{{#currencyexchange:80000000|KRW|USD|2018-10-28}}round 0}}}}
+|country=South Korea
+|city=Seoul
+|format='''Ro24''' and '''Ro16''' Dual Tournament Groupstage
+'''Ro8''' and on Single-Elimination
+|sdate=2018-09-02
+|edate=2018-10-28
+|patch=Patch 1.22
+|epatch=
+|edition=6th
+|tlpd=https://tl.net/tlpd/sospa/leagues/5109_2018_AfreecaTV_Starleague_Season_6
+|web=https://starleague.kr/
+|afreeca=afstar1
+|youtube=AfreecaTV_Live
+|idfirst=EffOrt   |racefirst=z  |flagfirst=kr
+|idsecond=Flash   |racesecond=t |flagsecond=kr
+|idthird=Last     |racethird=t  |flagthird=kr
+|idfourth=Shuttle |racefourth=p |flagfourth=kr
+|player_number=28
+|protoss_number=9
+|terran_number=9
+|zerg_number=10
+|map1=Autobahn
+|map2=Circuit Breaker
+|map3=Sylphid
+|map4=Neo Transistor
+|map5=
+|previous=Afreeca Starleague Season 5{{!}}ASL Season 5
+|next=Afreeca Starleague Season 7{{!}}ASL Season 7
+|liquipediatier=1
+}}
+{{TOClimit}}
+==Overview==
+The '''AfreecaTV Starleague Season 6''' (아프리카TV 스타리그 시즌6) or '''AfreecaTV StarCraft League Remastered Season 6''', was an offline tournament organized and broadcast live on [[AfreecaTV]].
+
+The Starleague featured 3 qualifiers held in Seoul, Gwangju and Busan on August 18, 19 and 20, 2018, respectively. Wildcard qualifiers were held on August 14, 2018 to determine fourth seed from the [[Asl5|ASL5]].<ref>[https://tl.net/forum/brood-war/536324-asl-season-6-announced-starts-september-2nd ASL Season 6 Announced (Starts September 2nd)]</ref>.
+
+Round of 24 play began on Sunday September 2nd, 2018. Matches were broadcast every week on Sunday and Tuesday.<ref>[https://starleague.kr/ ASL6 Official Website]</ref><br>
+
+<embedvideo service="youtube">https://www.youtube.com/watch?v=LcUE6eRTGjI</embedvideo>
+
+==Tournament Information==
+===Participants===
+{| class="wikitable participantstable"
+|class="{{RaceColor2|p}}" style="width:130px;text-align:center;" | '''{{p}} Protoss ''(9)''
+|class="{{RaceColor2|t}}" style="width:130px;text-align:center;" | '''{{t}} Terran ''(9)''
+|class="{{RaceColor2|z}}" style="width:130px;text-align:center;" | '''{{z}} Zerg ''(10)''
+|-
+!colspan="3" style="text-align:center;" |From '''[[AfreecaTV Starleague Season 5]]'''
+|----
+|'''{{InlinePlayer|1=Rain|flag=kr|link=Rain|faction=u}}'''
+|'''{{InlinePlayer|1=Flash|flag=kr|link=Flash|faction=u}}'''
+|'''{{InlinePlayer|1=hero|flag=kr|link=Hero|faction=u}} <sup>1</sup>'''
+|----
+|'''{{InlinePlayer|1=Snow|flag=kr|link=SnOw|faction=u}}'''
+|{{emdash}}
+|{{emdash}}
+|----
+|'''{{InlinePlayer|1=Mini|flag=kr|link=Mini|faction=u}}'''
+|{{emdash}}
+|{{emdash}}
+|----
+!colspan="3" style="text-align:center;" |From '''[[2018 AfreecaTV Starleague Season 6/Qualifier/Seoul|Seoul Preliminary]]'''
+|----
+|'''{{InlinePlayer|1=Horang2|flag=kr|link=Horang2|faction=u}}'''
+|'''{{InlinePlayer|1=Last|flag=kr|link=Last|faction=u}}'''
+|'''{{InlinePlayer|1=Shine|flag=kr|link=Shine|faction=u}}'''
+|----
+|{{emdash}}
+|'''{{InlinePlayer|1=Sharp|flag=kr|link=Sharp|faction=u}}'''
+|'''{{InlinePlayer|1=MIsO|flag=kr|link=MIsO|faction=u}}'''
+|----
+|{{emdash}}
+|'''{{InlinePlayer|1=Sea|flag=kr|link=Sea|faction=u}}'''
+|'''{{InlinePlayer|1=Jaedong|flag=kr|link=Jaedong|faction=u}}'''
+|----
+|{{emdash}}
+|'''{{InlinePlayer|1=Mind|flag=kr|link=Mind|faction=u}}'''
+|'''{{InlinePlayer|1=EffOrt|flag=kr|link=EffOrt|faction=u}}'''
+|----
+|{{emdash}}
+|'''{{InlinePlayer|1=Mong|flag=kr|link=Mong|faction=u}}'''
+|'''{{InlinePlayer|1=Killer|flag=kr|link=Killer|faction=u}}'''
+|----
+|{{emdash}}
+|{{emdash}}
+|'''{{InlinePlayer|1=Soulkey|flag=kr|link=Soulkey|faction=u}}'''
+|----
+!colspan="3" style="text-align:center;" |From '''[[2018 AfreecaTV Starleague Season 6/Qualifier/Gwangju|Gwangju Preliminary]]'''
+|----
+|'''{{InlinePlayer|1=BeSt|flag=kr|link=Best|faction=u}}'''
+|'''{{InlinePlayer|1=Rush|flag=kr|link=Rush|faction=u}}'''
+|'''{{InlinePlayer|1=Calm|flag=kr|link=Calm|faction=u}}'''
+|-
+|'''{{InlinePlayer|1=Shuttle|flag=kr|link=Shuttle (Player)|faction=u}}'''
+|{{emdash}}
+|'''{{InlinePlayer|1=Sacsri|flag=kr|link=Sacsri|faction=u}}'''
+|-
+|'''{{InlinePlayer|1=GuemChi|flag=kr|link=GuemChi|faction=u}}'''
+|{{emdash}}
+|{{emdash}}
+|----
+!colspan="3" style="text-align:center;" |From '''[[2018 AfreecaTV Starleague Season 6/Qualifier/Busan|Busan Preliminary]]'''
+|----
+|'''{{InlinePlayer|1=Stork|flag=kr|link=Stork|faction=u}}'''
+|'''{{InlinePlayer|1=Light|flag=kr|link=Light|faction=u}}'''
+|'''{{InlinePlayer|1=Yerim2|flag=kr|link=Yerim2|faction=u}} <sup>2</sup>'''
+|----
+|'''{{InlinePlayer|1=Movie|flag=kr|link=Movie|faction=u}}'''
+|'''{{InlinePlayer|1=ErOs_ByuL|flag=kr|link=ByuL|faction=u}}'''
+|'''{{InlinePlayer|1=Action|flag=kr|link=Action|faction=u}}'''
+|}
+<sup>'''1'''</sup> [[hero]] cannot attend due to his mandatory military service, [[Flash]] gains his spot after winning the [[2018 AfreecaTV Starleague Season 6/Qualifier/Wildcard|Wild Card Qualifier]].<br>
+<sup>'''2'''</sup> [[Yerim2]] is unable to participate due to academic reasons.
+
+===Prize Pool===
+{{prize pool start|localcurrency=krw |disable_teams=true}}
+{{prize pool slot|place=1|usdprize=26,893|localprize=30,000,000
+|EffOrt |flag1=kr |race1=z |lastvs1=Flash |lastscore1=3 |lastvsscore1=2 |lastvsrace1=t |lastvsflag1=kr
+}}
+{{prize pool slot|place=2|usdprize=8,964|localprize=10,000,000
+|Flash |flag1=kr |race1=t|lastvs1=EffOrt |lastscore1=2 |lastvsscore1=3 |lastvsrace1=z |lastvsflag1=kr
+}}
+{{prize pool slot|place=3|usdprize=4,482|localprize=5,000,000
+|Last |flag1=kr |race1=t |lastvs1=Shuttle |lastvspage1=Shuttle (Player) |lastscore1=3 |lastvsscore1=0 |lastvsrace1=p |lastvsflag1=kr |date1=2018-10-27
+}}
+{{prize pool slot|place=4|usdprize=2,689|localprize=3,000,000
+|Shuttle (Player){{!}}Shuttle |flag1=kr |race1=p |lastvs1=Last |lastscore1=0 |lastvsscore1=3 |lastvsrace1=t |lastvsflag1=kr |date1=2018-10-27
+}}
+{{prize pool slot|place=5-8|usdprize=1,778|localprize=2,000,000
+|Sharp |flag1=kr |race1=t |lastvs1=Last |lastscore1=0 |lastvsscore1=3 |lastvsrace1=t |lastvsflag1=kr |date1=2018-10-07
+|Rain |flag2=kr |race2=p |lastvs2=EffOrt |lastscore2=1 |lastvsscore2=3 |lastvsrace2=z |lastvsflag2=kr |date2=2018-10-09
+|Action |flag3=kr |race3=z |lastvs3=Shuttle |lastscore3=2 |lastvsscore3=3 |lastvsrace3=p |lastvsflag3=kr |lastvspage3=Shuttle (Player)|date3=2018-10-14
+|Mini |flag4=kr |race4=p |lastvs4=Flash |lastscore4=0 |lastvsscore4=3 |lastvsrace4=t |lastvsflag4=kr |date4=2018-10-16
+}}
+{{prize pool slot|place=9-12|usdprize=1,334|localprize=1,500,000
+|Sea |flag1=kr |race1=t |wdl1=1-2 |date1=2018-09-18
+|Snow |flag2=kr |race2=p |wdl2=1-2 |date2=2018-09-20
+|BeSt |flag3=kr |race3=p |wdl3=1-2 |date3=2018-10-02
+|Jaedong |flag4=kr |race4=z |wdl4=1-2 |date4=2018-10-04
+}}
+{{prize pool slot|place=13-16|usdprize=1,334|localprize=1,500,000
+|Mind |flag1=kr |race1=t |wdl1=0-2 |date1=2018-09-18
+|Neo.G_Soulkey{{!}}Soulkey |flag2=kr |race2=z |wdl2=0-2 |date2=2018-09-20
+|Shine (Player){{!}}Shine |flag3=kr |race3=z |wdl3=0-2 |date3=2018-10-02
+|Light |flag4=kr |race4=t |wdl4=0-2 |date4=2018-10-04
+}}
+{{prize pool slot|place=17-22|usdprize=889|localprize=1,000,000
+|Killer |flag1=kr |race1=z |wdl1=1-2 |date1=2018-09-02
+|MIsO |flag2=kr |race2=z |wdl2=1-2 |date2=2018-09-04
+|Movie |flag3=kr |race3=p |wdl3=1-2 |date3=2018-09-06
+|Mong |flag4=kr |race4=t |wdl4=1-2 |date4=2018-09-10
+|Rush |flag5=kr |race5=t |wdl5=1-2 |date5=2018-09-11
+|GuemChi |flag6=kr |race6=p |wdl6=1-2 |date6=2018-09-13
+}}
+{{prize pool slot|place=23-28|usdprize=889|localprize=1,000,000
+|Horang2 |flag1=kr |race1=p |wdl1=0-2 |date1=2018-09-02
+|ErOs_ByuL |flag2=kr |race2=t |wdl2=0-2 |date2=2018-09-04
+|Sacsri |flag3=kr |race3=z |wdl3=0-2 |date3=2018-09-06
+|Stork |flag4=kr |race4=p |wdl4=0-2 |date4=2018-09-10
+|Calm |flag5=kr |race5=z |wdl5=0-2 |date5=2018-09-11
+|Yerim2 |flag6=kr |race6=z |wdl6=0-2 |date6=2018-09-13
+}}
+{{LegacyPrizePoolEnd|}}
+
+===Format===
+* '''Round of 24 group stage'''
+** [[Dual tournament]] format: best-of-one
+** Top two players in each group advance
+
+* '''Round of 16 group stage'''
+** 12 players from the Round of 24 join the four seeds from [[AfreecaTV Starleague Season 5]]
+** [[Dual tournament]] format: best-of-one
+** Top two players in each group advance
+
+* '''Elimination Stage'''
+** Eight player single-elimination bracket
+** Quarterfinals through finals: best-of-five
+
+===Maps===
+{{MapPoolTable
+|map1=Circuit Breakers|map1displayName=Circuit Breaker
+|map2=Neo Transistor|map2displayName=Neo Transistor
+|map3=Sylphid|map3displayName=Sylphid
+|map4=Autobahn|map4displayName=Autobahn
+}}
+
+==Results==
+===Round of 24 Group Stage===
+{{Toggle group start|state=show}}
+{{Box|start|padding=4em}}
+====Group A====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group A
+|width=300px
+|date=September 2, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/536959-asl6-ro24-group-a
+|preview=https://tl.net/forum/brood-war/536945-asl6-ro24-preview-pt-1-back-and-better-than-ever#ksl-group-a
+|review=https://tl.net/forum/brood-war/537152-asl6-ro24-preview-pt-2-tip-of-the-iceberg#ksl-group-a
+|vod=https://www.youtube.com/watch?v=tzKbBKzILTc&t=553s
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=z |p1flag=kr|p1=Jaedong}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=t |p1flag=kr|p1=Sea}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=z |p1flag=kr|p1=Killer}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=p |p1flag=kr|p1=Horang2}}
+}}
+{{Matchlist|id=Liee4NMRxO
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Sea|race=t}}
+    |opponent2={{SoloOpponent|name=Horang2|race=p}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M2={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Jaedong|race=z}}
+    |opponent2={{SoloOpponent|name=Killer|race=z}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M3={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Sea|race=t}}
+    |opponent2={{SoloOpponent|name=Jaedong|race=z}}
+    |map1={{Map|map=Autobahn|winner=2}}
+}}
+|M4={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Horang2|race=p}}
+    |opponent2={{SoloOpponent|name=Killer|race=z}}
+    |map1={{Map|map=Autobahn|winner=2}}
+}}
+|M5={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Sea|race=t}}
+    |opponent2={{SoloOpponent|name=Killer|race=z}}
+    |map1={{Map|map=Circuit Breaker|winner=1}}
+}}
+}}
+{{Box|break|padding=4em}}
+
+====Group B====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group B
+|width=300px
+|date=September 4, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/536993-asl6-ro24-group-b
+|preview=https://tl.net/forum/brood-war/536945-asl6-ro24-preview-pt-1-back-and-better-than-ever#ksl-group-b
+|review=https://tl.net/forum/brood-war/537152-asl6-ro24-preview-pt-2-tip-of-the-iceberg#ksl-group-b
+|vod=https://www.youtube.com/watch?v=78gmVpL8hwg&t=545s
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1=Shine|p1link=Shine (Player)}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1=Shuttle|p1link=Shuttle (Player)}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=z |p1flag=kr|p1=MIsO}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=t |p1flag=kr|p1=ErOs_ByuL}}
+}}
+{{Matchlist|id=dGL2dCXG2U
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Shuttle|race=p}}
+    |opponent2={{SoloOpponent|name=ErOs_ByuL|race=t}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M2={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Shine|race=z}}
+    |opponent2={{SoloOpponent|name=MIsO|race=z}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M3={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Shuttle|race=p}}
+    |opponent2={{SoloOpponent|name=Shine|race=z}}
+    |map1={{Map|map=Autobahn|winner=2}}
+}}
+|M4={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=ErOs_ByuL|race=t}}
+    |opponent2={{SoloOpponent|name=MIsO|race=z}}
+    |map1={{Map|map=Autobahn|winner=2}}
+}}
+|M5={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Shuttle|race=p}}
+    |opponent2={{SoloOpponent|name=MIsO|race=z}}
+    |map1={{Map|map=Circuit Breaker|winner=1}}
+}}
+}}
+
+
+{{Box|break|padding=4em}}
+
+====Group C====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group C
+|width=300px
+|date=September 6, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/537033-asl6-ro24-group-c
+|preview=https://tl.net/forum/brood-war/536945-asl6-ro24-preview-pt-1-back-and-better-than-ever#ksl-group-c
+|review=https://tl.net/forum/brood-war/537152-asl6-ro24-preview-pt-2-tip-of-the-iceberg#ksl-group-c
+|vod=https://www.youtube.com/watch?v=NR9shth8t8Q&t=529s
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=p |p1flag=kr|p1=BeSt}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=t |p1flag=kr|p1=Mind}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=p |p1flag=kr|p1=Movie}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=z |p1flag=kr|p1=Sacsri}}
+}}
+{{Matchlist|id=orzXfFwY9v
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Mind|race=t}}
+    |opponent2={{SoloOpponent|name=Sacsri|race=z}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M2={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=BeSt|race=p}}
+    |opponent2={{SoloOpponent|name=Movie|race=p}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M3={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Mind|race=t}}
+    |opponent2={{SoloOpponent|name=BeSt|race=p}}
+    |map1={{Map|map=Autobahn|winner=2}}
+}}
+|M4={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Sacsri|race=z}}
+    |opponent2={{SoloOpponent|name=Movie|race=p}}
+    |map1={{Map|map=Autobahn|winner=2}}
+}}
+|M5={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Mind|race=t}}
+    |opponent2={{SoloOpponent|name=Movie|race=p}}
+    |map1={{Map|map=Circuit Breaker|winner=1}}
+}}
+}}
+
+
+{{Box|break|padding=4em}}
+
+====Group D====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group D
+|width=300px
+|date=September 10, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/537168-asl6-ro24-group-d
+|preview=https://tl.net/forum/brood-war/537152-asl6-ro24-preview-pt-2-tip-of-the-iceberg#ksl-group-d
+|review=https://tl.net/forum/brood-war/537378-asl6-ro16-preview-pt-1-a-storm-is-coming#ksl-group-a
+|vod=https://www.youtube.com/watch?v=-n7uOPrgLPQ
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=z |p1flag=kr|p1=Action}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=z |p1flag=kr|p1=EffOrt}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=t |p1flag=kr|p1=Mong}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=p |p1flag=kr|p1=Stork}}
+}}
+{{Matchlist|id=CXfxHrY5nl
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=EffOrt|race=z}}
+    |opponent2={{SoloOpponent|name=Action|race=z}}
+    |map1={{Map|map=Sylphid|winner=2}}
+}}
+|M2={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Mong|race=t}}
+    |opponent2={{SoloOpponent|name=Stork|race=p}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M3={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Action|race=z}}
+    |opponent2={{SoloOpponent|name=Mong|race=t}}
+    |map1={{Map|map=Autobahn|winner=1}}
+}}
+|M4={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=EffOrt|race=z}}
+    |opponent2={{SoloOpponent|name=Stork|race=p}}
+    |map1={{Map|map=Autobahn|winner=1}}
+}}
+|M5={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Mong|race=t}}
+    |opponent2={{SoloOpponent|name=EffOrt|race=z}}
+    |map1={{Map|map=Circuit Breaker|winner=2}}
+}}
+}}
+{{Box|break|padding=4em}}
+
+====Group E====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group E
+|width=300px
+|date=September 11, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/537194-asl6-ro24-group-e
+|preview=https://tl.net/forum/brood-war/537152-asl6-ro24-preview-pt-2-tip-of-the-iceberg#ksl-group-e
+|review=https://tl.net/forum/brood-war/537378-asl6-ro16-preview-pt-1-a-storm-is-coming#ksl-group-b
+|vod=https://www.youtube.com/watch?v=ocLFfamNNYU
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=t |p1flag=kr|p1=Last}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1=Neo.G_Soulkey}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=t |p1flag=kr|p1=Rush}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=z |p1flag=kr|p1=Calm}}
+}}
+{{Matchlist|id=EQkeSQb6a3
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Last|race=t}}
+    |opponent2={{SoloOpponent|name=Calm|race=z}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M2={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Soulkey|race=z}}
+    |opponent2={{SoloOpponent|name=Rush|race=t}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M3={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Last|race=t}}
+    |opponent2={{SoloOpponent|name=Soulkey|race=z}}
+    |map1={{Map|map=Autobahn|winner=1}}
+}}
+|M4={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Calm|race=z}}
+    |opponent2={{SoloOpponent|name=Rush|race=t}}
+    |map1={{Map|map=Autobahn|winner=2}}
+}}
+|M5={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Soulkey|race=z}}
+    |opponent2={{SoloOpponent|name=Rush|race=t}}
+    |map1={{Map|map=Circuit Breaker|winner=1}}
+}}
+}}
+
+
+{{Box|break|padding=4em}}
+
+====Group F====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group F
+|width=300px
+|date=September 13, 2018 - 17:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/537256-asl6-ro24-group-f
+|preview=https://tl.net/forum/brood-war/537152-asl6-ro24-preview-pt-2-tip-of-the-iceberg#ksl-group-f
+|review=https://tl.net/forum/brood-war/537378-asl6-ro16-preview-pt-1-a-storm-is-coming#ksl-group-c
+|vod=https://www.youtube.com/watch?v=qOI0x0phNm4
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=t |p1flag=kr|p1=Sharp}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=t |p1flag=kr|p1=Light}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=p |p1flag=kr|p1=GuemChi}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=z |p1flag=kr|p1=Yerim2}}
+}}
+{{Matchlist|id=fndC08cTEd
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |walkover=1|winner=1
+    |opponent1={{SoloOpponent|name=Sharp|race=t}}
+    |opponent2={{SoloOpponent|name=Yerim2|race=z}}
+    |map1={{Map|map=Sylphid|winner=skip}}
+}}
+|M2={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=GuemChi|race=p}}
+    |opponent2={{SoloOpponent|name=Light|race=t}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M3={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Sharp|race=t}}
+    |opponent2={{SoloOpponent|name=GuemChi|race=p}}
+    |map1={{Map|map=Autobahn|winner=1}}
+}}
+|M4={{Match
+    |walkover=2|winner=2
+    |opponent1={{SoloOpponent|name=Yerim2|race=z}}
+    |opponent2={{SoloOpponent|name=Light|race=t}}
+    |map1={{Map|map=Autobahn|winner=skip}}
+}}
+|M5={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=GuemChi|race=p}}
+    |opponent2={{SoloOpponent|name=Light|race=t}}
+    |map1={{Map|map=Circuit Breaker|winner=2}}
+}}
+}}
+{{Box|end}}
+{{Toggle group end}}
+
+===Round of 16 Group Stage===
+*Groups selections were held on September 13, 2018 - 20:00 {{Abbr/KST}}. [https://www.youtube.com/watch?v=qOI0x0phNm4&t=11135s (English VoD)] - [https://vod.afreecatv.com/PLAYER/STATION/36888077 (Korean VoD)]
+{{Toggle group start|state=show}}
+{{Box|start|padding=4em}}
+
+====Group A====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group A
+|width=300px
+|date=September 18, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/537386-asl6-ro16-group-a
+|preview=https://tl.net/forum/brood-war/537378-asl6-ro16-preview-pt-1-a-storm-is-coming#ksl-group-d
+|review=https://tl.net/forum/brood-war/537809-asl6-ro16-preview-pt-2-flash-vs-jaedong-rematch#ksl-group-a
+|vod=https://www.youtube.com/watch?v=WSYHluWNT6M
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=t|p1flag=kr|p1=Sharp}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=p|p1flag=kr|p1=Rain}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=t|p1flag=kr|p1=Sea}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=t|p1flag=kr|p1=Mind}}
+}}
+{{Matchlist|id=MvWmwZ9iai
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Rain|race=p}}
+    |opponent2={{SoloOpponent|name=Sharp|race=t}}
+    |map1={{Map|map=Neo Transistor|winner=2}}
+}}
+|M2={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Mind|race=t}}
+    |opponent2={{SoloOpponent|name=Sea|race=t}}
+    |map1={{Map|map=Neo Transistor|winner=2}}
+}}
+|M3={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Sharp|race=t}}
+    |opponent2={{SoloOpponent|name=Sea|race=t}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M4={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Rain|race=p}}
+    |opponent2={{SoloOpponent|name=Mind|race=t}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M5={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Sea|race=t}}
+    |opponent2={{SoloOpponent|name=Rain|race=p}}
+    |map1={{Map|map=Circuit Breaker|winner=2}}
+}}
+}}
+{{Box|break|padding=4em}}
+
+====Group B====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group B
+|width=300px
+|date=September 20, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/537456-asl6-ro16-group-b
+|preview=https://tl.net/forum/brood-war/537378-asl6-ro16-preview-pt-1-a-storm-is-coming#ksl-group-e
+|review=https://tl.net/forum/brood-war/537809-asl6-ro16-preview-pt-2-flash-vs-jaedong-rematch#ksl-group-b
+|vod=https://www.youtube.com/watch?v=_ptBSOabIN8
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=z|p1flag=kr|p1=EffOrt}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=p|p1link=Shuttle (Player)|p1flag=kr|p1=Shuttle}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=p|p1flag=kr|p1=Snow}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=z|p1link=Neo.G_Soulkey|p1flag=kr|p1=Soulkey}}
+}}
+{{Matchlist|id=5mJ0Rzpmaj
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Snow|race=p}}
+    |opponent2={{SoloOpponent|name=Shuttle|race=p}}
+    |map1={{Map|map=Neo Transistor|winner=1}}
+}}
+|M2={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Soulkey|race=z}}
+    |opponent2={{SoloOpponent|name=EffOrt|race=z}}
+    |map1={{Map|map=Neo Transistor|winner=2}}
+}}
+|M3={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Snow|race=p}}
+    |opponent2={{SoloOpponent|name=EffOrt|race=z}}
+    |map1={{Map|map=Sylphid|winner=2}}
+}}
+|M4={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Shuttle|race=p}}
+    |opponent2={{SoloOpponent|name=Soulkey|race=z}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M5={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Snow|race=p}}
+    |opponent2={{SoloOpponent|name=Shuttle|race=p}}
+    |map1={{Map|map=Circuit Breaker|winner=2}}
+}}
+}}
+{{Box|break|padding=4em}}
+
+====Group C====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group C
+|width=300px
+|date=October 2, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/537813-asl6-ro16-group-c
+|preview=https://tl.net/forum/brood-war/537809-asl6-ro16-preview-pt-2-flash-vs-jaedong-rematch#ksl-group-c
+|review=https://tl.net/forum/brood-war/537958-asl6-ro8-preview-pt-1-outlasting-rain#ksl-group-a
+|vod=https://www.youtube.com/watch?v=wCYtDQsVkAA
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=p|p1flag=kr|p1=Mini}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=t|p1flag=kr|p1=Last}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=p|p1flag=kr|p1=BeSt}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=z|p1link=Shine (Player)|p1flag=kr|p1=Shine}}
+}}
+{{Matchlist|id=f1WosN7WsI
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Mini|race=p}}
+    |opponent2={{SoloOpponent|name=Shine|race=z}}
+    |map1={{Map|map=Neo Transistor|winner=1}}
+}}
+|M2={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=BeSt|race=p}}
+    |opponent2={{SoloOpponent|name=Last|race=t}}
+    |map1={{Map|map=Neo Transistor|winner=2}}
+}}
+|M3={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Mini|race=p}}
+    |opponent2={{SoloOpponent|name=Last|race=t}}
+    |map1={{Map|map=Sylphid|winner=1}}
+}}
+|M4={{Match
+    |winner=2
+    |opponent1={{SoloOpponent|name=Shine|race=z}}
+    |opponent2={{SoloOpponent|name=BeSt|race=p}}
+    |map1={{Map|map=Sylphid|winner=2}}
+}}
+|M5={{Match
+    |winner=1
+    |opponent1={{SoloOpponent|name=Last|race=t}}
+    |opponent2={{SoloOpponent|name=BeSt|race=p}}
+    |map1={{Map|map=Circuit Breaker|winner=1}}
+}}
+}}
+{{Box|break|padding=4em}}
+
+====Group D====
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group D
+|width=300px
+|date=October 4, 2018 - 19:00 {{Abbr/KST}}
+
+|afreecatv=afstar1
+|youtube=AfreecaTV Live
+|lrthread=https://tl.net/forum/bw-tournaments/537872-asl6-ro16-group-d
+|preview=https://tl.net/forum/brood-war/537809-asl6-ro16-preview-pt-2-flash-vs-jaedong-rematch#ksl-group-d
+|review=https://tl.net/forum/brood-war/537958-asl6-ro8-preview-pt-1-outlasting-rain#ksl-group-b
+|vod=https://www.youtube.com/watch?v=u5rG-1201nY
+
+|bg1=up|pbg1=up|temp_tie1=49|temp_lose_m1=0|temp_win_m1=2|{{soloOpponent|p1race=z|p1flag=kr|p1=Action}}
+|bg2=up|pbg2=up|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=t|p1flag=kr|p1=Flash}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=z|p1flag=kr|p1=Jaedong}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=0|{{soloOpponent|p1race=t|p1flag=kr|p1=Light}}
+}}
+{{Matchlist|id=riQTmngPwn
+|attached=true|collapsed=true|store=true|title=Detailed Results
+|M1={{Match
+    |vodgame1=http://www.youtube.com/watch?v=u5rG-1201nY&t=30m05s|winner=2
+    |opponent1={{SoloOpponent|name=Flash|race=t}}
+    |opponent2={{SoloOpponent|name=Jaedong|race=z}}
+    |map1={{Map|map=Neo Transistor|vod=http://www.youtube.com/watch?v=u5rG-1201nY&t=30m05s|winner=2}}
+}}
+|M2={{Match
+    |vodgame1=http://www.youtube.com/watch?v=u5rG-1201nY&t=46m24s|winner=1
+    |opponent1={{SoloOpponent|name=Action|race=z}}
+    |opponent2={{SoloOpponent|name=Light|race=t}}
+    |map1={{Map|map=Neo Transistor|vod=http://www.youtube.com/watch?v=u5rG-1201nY&t=46m24s|winner=1}}
+}}
+|M3={{Match
+    |vodgame1=http://www.youtube.com/watch?v=u5rG-1201nY&t=1h06m15s|winner=2
+    |opponent1={{SoloOpponent|name=Jaedong|race=z}}
+    |opponent2={{SoloOpponent|name=Action|race=z}}
+    |map1={{Map|map=Sylphid|vod=http://www.youtube.com/watch?v=u5rG-1201nY&t=1h06m15s|winner=2}}
+}}
+|M4={{Match
+    |vodgame1=http://www.youtube.com/watch?v=u5rG-1201nY&t=1h29m31s|winner=1
+    |opponent1={{SoloOpponent|name=Flash|race=t}}
+    |opponent2={{SoloOpponent|name=Light|race=t}}
+    |map1={{Map|map=Sylphid|vod=http://www.youtube.com/watch?v=u5rG-1201nY&t=1h29m31s|winner=1}}
+}}
+|M5={{Match
+    |vodgame1=http://www.youtube.com/watch?v=u5rG-1201nY&t=1h45m26s|winner=2
+    |opponent1={{SoloOpponent|name=Jaedong|race=z}}
+    |opponent2={{SoloOpponent|name=Flash|race=t}}
+    |map1={{Map|map=Circuit Breaker|vod=http://www.youtube.com/watch?v=u5rG-1201nY&t=1h45m26s|winner=2}}
+}}
+}}
+{{Box|end}}
+{{Toggle group end}}
+
+===Elimination Bracket===
+{{Bracket|Bracket/8|id=aTlzn2LRfZ
+|R1M1header=Quarterfinals (Bo5)|R2M1header=Semifinals (Bo5)|R3M1header=Finals (Bo5)|RxMTPheader=3rd Place Match (Bo5)
+
+<!-- Quarterfinals -->
+|R1M1={{Match
+    |finished=true|winner=2
+    |opponent1={{SoloOpponent|flag=kr|name=Sharp|race=t|score=0}}
+    |opponent2={{SoloOpponent|flag=kr|name=Last|race=t|score=3|win=1}}
+}}
+
+|R1M2={{Match
+    |finished=true|winner=1
+    |opponent1={{SoloOpponent|flag=kr|name=EffOrt|race=z|score=3|win=1}}
+    |opponent2={{SoloOpponent|flag=kr|name=Rain|race=p|score=1}}
+}}
+
+|R1M3={{Match
+    |finished=true|winner=2
+    |opponent1={{SoloOpponent|flag=kr|name=Action|race=z|score=2}}
+    |opponent2={{SoloOpponent|flag=kr|name=Shuttle|race=p|score=3|win=1}}
+}}
+
+|R1M4={{Match
+    |finished=true|winner=2
+    |opponent1={{SoloOpponent|flag=kr|name=Mini|race=p|score=0}}
+    |opponent2={{SoloOpponent|flag=kr|name=Flash|race=t|score=3|win=1}}
+}}
+
+<!-- Semifinals -->
+|R2M1={{Match
+    |finished=true|winner=2
+    |opponent1={{SoloOpponent|flag=kr|name=Last|race=t|score=2}}
+    |opponent2={{SoloOpponent|flag=kr|name=EffOrt|race=z|score=3|win=1}}
+}}
+
+|R2M2={{Match
+    |finished=true|winner=2
+    |opponent1={{SoloOpponent|flag=kr|name=Shuttle|race=p|score=0}}
+    |opponent2={{SoloOpponent|flag=kr|name=Flash|race=t|score=3|win=1}}
+}}
+
+<!-- Grand Final -->
+|R3M1={{Match
+    |finished=true|winner=1
+    |opponent1={{SoloOpponent|flag=kr|name=EffOrt|race=z|score=3|win=1}}
+    |opponent2={{SoloOpponent|flag=kr|name=Flash|race=t|score=2}}
+}}
+<!-- Third Place Match -->
+|RxMTP={{Match
+    |finished=true|winner=1
+    |opponent1={{SoloOpponent|flag=kr|name=Last|race=t|score=3|win=1}}
+    |opponent2={{SoloOpponent|flag=kr|name=Shuttle|race=p|score=0}}
+}}
+}}
+
+==Racial Distribution==
+{{RaceDist|title=Round of 24   |protoss=6|terran=8|zerg=10|first=1}}
+{{RaceDist|title=Round of 16   |protoss=5|terran=6|zerg=5}}
+{{RaceDist|title=Quarterfinals |protoss=3|terran=3|zerg=2}}
+{{RaceDist|title=Semifinals    |protoss=1|terran=2|zerg=1}}
+{{RaceDist|title=Finals        |terran=1|zerg=1}}
+{{RaceDist|title=Winner        |zerg=1|last=1}}
+
+==Statistics==
+{{Tournament_statistics}}
+
+==Media==
+===Casters===
+{{Tabs dynamic|name1=English Broadcast|name2=Korean Broadcast|name3=Remote Broadcast|This=1}}
+{{Tabs dynamic/tab|1}}
+{{BroadcasterCard
+|position=Commentator
+|b1=Artosis
+|b2=Tasteless
+|b3=RAPiD
+|b4=NoRegreT |b4link=starcraft2:NoRegreT |b4flag=ca |b4name=Jake Umpleby
+}}
+{{Tabs dynamic/tab|2}}
+{{BroadcasterCard
+|position=Host
+|b1=Lee Hyun Kyung |b1flag=kr
+}}
+{{BroadcasterCard
+|position=Play-by-play
+|b1=Park Sang-hyun |b1flag=kr
+}}
+{{BroadcasterCard
+|position=Analyst
+|b1=Lee Seung-won |b1flag=kr
+|b2=IntoTheRain
+}}
+{{BroadcasterCard
+|position=Observer
+|b1=JKS |b1name=Son Jae-kyung |b1flag=kr
+}}
+{{Tabs dynamic/tab|3}}
+{{BroadcasterCard
+|position=Russian Commentator
+|b1=kabyraGe |b1link=starcraft2:kabyraGe |b1flag=ru |b1name=Vladislav Perchik
+}}
+{{Tabs dynamic/end}}
+
+===Streams===
+* {{Flag|kr}} [http://play.afreecatv.com/afstar1 Afreecatv.com]
+* {{Flag|usuk}} [http://play.afreecatv.com/aslenglish Tasteless and Artosis (RaPiD sub) Afreecatv.com]
+* {{Flag|usuk}} [https://www.youtube.com/channel/UCK5eBtuoj_HkdXKHNmBLAXg Tasteless and Artosis Youtube.com]
+* {{Flag|usuk}} [http://play.afreecatv.com/aslenglish2 Ty2 Afreecatv.com]
+
+===VODs===
+*[https://www.sc2links.com/tournament/?match=558 Spoiler-free VODs on SC2Links.com]
+*[https://sc2casts.com/event996-2018-Starcraft-1-ASL-S6 Spoiler-Free Official YouTube VODs] at SC2Casts.com
+
+==Gallery==
+{{col}}
+{{#ev:youtube|ocDu36uvpNc|356}}
+{{col-break}}
+{{#ev:youtube|vZ17NoKh5Ko|356}}
+{{endCol}}
+
+==References==
+{{Reflist}}
+[[Category:Post-KeSPA Tournaments]]

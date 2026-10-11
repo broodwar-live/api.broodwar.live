@@ -1,0 +1,564 @@
+{{OSL_Navbox}}
+<br>
+{{tabs static
+|name1=Overview|link1=2008_Bacchus_OSL
+|name2=Ro24 Dual Tournament|link2=2008_Bacchus_OSL/Ro24_Dual_Tournament
+|name3=Tournament Statistics|link3=2008_Bacchus_OSL/Tournament Statistics
+|This=1}}
+<br>
+{{Infobox league
+|name=2008 Bacchus OSL
+|series=OnGameNet Starleague
+|image=2008 Bacchus OSL logo.jpg
+|icon=Osl_logo.png
+|sponsor=[http://www.baccussite.kr Bacchus]
+|organizer=OnGameNet
+|server=
+|type=Offline
+|country=South Korea
+|localcurrency=KRW
+|prizepool=100,000,000
+|format=1v1
+|sdate=2008-01-16
+|edate=2008-03-15
+|tlpd=https://tl.net/tlpd/korean/leagues/140_Bacchus_OSL
+|web=https://tl.net/forum/viewmessage.php?topic_id=65014
+|idfirst=Flash   |racefirst=t  |flagfirst=kr
+|idsecond=Stork  |racesecond=p |flagsecond=kr
+|idthird=Bisu    |racethird=p  |flagthird=kr
+|idthird2=Luxury |racethird2=z |flagthird2=kr
+|player_number=16
+|protoss_number=6
+|terran_number=4
+|zerg_number=6
+|map1=Blue Storm
+|map2=Demon's Forest
+|map3=Katrina
+|map4=Troy
+|map5=Fantasy II
+|previous=2007 EVER OSL
+|next=2008 EVER OSL
+|liquipediatier=1
+}}
+
+[[File:2008 Bacchus Flash victory.png|thumbnail|right|300px]][[File:2008 Bacchus venue1.JPG|thumbnail|right|300px]][[File:2008 Bacchus groups.jpg|300px|thumbnail|right]]
+
+==Overview==
+The '''2008 Bacchus OSL''' was held from January through March 2008.
+
+This [[OnGameNet Starleague (OSL)]] is most known for being one of the defining moments of [[Flash]]'s career. Only two weeks after defeating [[Stork]] in the [[GOMTV Star Invitational]] in a tight 3-2 series, Flash defeated Stork in the finals of the 2008 Bacchus OSL 3-0 in one of the shortest finals of all time. Flash's road to the finals is considered one of the most difficult, having had to defeated [[Jaedong]], [[Bisu]] and Stork in a best of three or five matches. This is the only OSL to date where one of the four [[TaekBangLeeSsang]] members has defeated the other three on his way to winning the tournament. Flash also became the first [[Terran]] to win an OSL since [[NaDa]] in the [[2006 Shinhan Bank OSL Season 2]]. Flash's most talked about games include his continued use of the dual-[[Armory]] build to counter 2-base [[Carrier]] by Stork during the finals and his game vs Jaedong in the Ro8 on [[Katrina]] where he executed a mech build.  In winning the title, Flash became the youngest OSL champion to date, at age 15 years, 8 months, 10 days.
+
+The 2008 Bacchus OSL is not only the place where Flash solidified his position as the world's number one Terran (and indeed, Flash went on to be the most successful Terran for at least the next year), but it is also the place where [[Luxury]] first found limited Starleague success, reaching the semifinals for the first time where he lost to Stork. Luxury went on to be considered a top [[Zerg]] player on the scene for the next year, with only [[Jaedong]] being considered stronger. Another newcomer to the 2008 Bacchus OSL who gained attention was the young [[Protoss]] player [[BeSt]], who impressed many by advancing to the Ro8 in his first Starleague, and defeating Jaedong in his match vs him. BeSt went on to become one of the [[Six Dragons]] and reached the finals of the very next OSL (the [[EVER2008 OSL]]). The 2008 Bacchus OSL is also the last Starleague in which [[XellOs]] has qualified. He reached the Ro16 where he lost in tiebreakers to Bisu.
+
+This OSL is also notable for the low number of Terran players among the 16 that qualified. The past several OSLs all saw a plurality of Terrans, with the past four OSLs seeing Terran making up almost 50% of the participants. The 2008 Bacchus, however, would only feature four Terrans, the lowest in years, but along the way, virtually balanced the racial representation of this OSL. For other notable trends and facts from this OSL, see [https://tl.net/forum/news-archive/68185-bacchus-osl-top-10 this TL forum thread].<ref>[https://ko.wikipedia.org/wiki/%EB%B0%95%EC%B9%B4%EC%8A%A4_%EC%8A%A4%ED%83%80%EB%A6%AC%EA%B7%B8_2008 2008 Bacchus OSL at Wikipedia Korea]</ref>
+
+==Tournament Details==
+===Prize Pool===
+₩74,000,000 ( ≃ $ {{formatnum:{{#expr:{{#currencyexchange:74000000|KRW|USD|2008-03-15}} round 0}}}}) was awarded to the top four finishers per the below.<ref>[http://www.pgr21.com/pb/pb.php?id=free2&no=28744&page=847 PGR21 tournament winnings]</ref><ref>[https://web.archive.org/web/20141009135127/http://www.ygosu.com/starlife/?m2=manual&s_assort=etc&page=11&search=&searcht=&idx=1848&c_order=bad&focus=comment#comment_list Compilation of historical StarCraft prize purses]</ref><ref>[https://tl.net/forum/news-archive/49033-teamliquid-awards-2006?page=4#63 TL thread on prize money]</ref><ref>[http://game.donga.com/38850/ 2008 Bacchus OSL 40M Flash]</ref><ref>[http://mlbpark.donga.com/bbs/view.php?bbs=mpark_bbs_bullpen&idx=517345&cpage=3 Bisu wins 7M for semifinalist 2008 Bacchus OSL]</ref><ref>[http://hgc.bestiz.net/zboard/view.php?id=gworld0707&page=9311&sn1=&divpage=100&category=1&sn=off&ss=on&sc=off&select_arrange=headnum&desc=asc&no=54229 2008 Bacchus Stork 20M]</ref> The total amount distributed was most likely just over ₩100,000,000, so as to be more in line with the purses from the neighboring OSLs. For example, the OSL that immediately preceded the 2008 Bacchus OSL, the [[EVER2007 OSL|2007 EVER OSL]], had a total prize pool of ₩104,000,000, while the [[2009 Bacchus OSL]], which followed the 2008 Bacchus OSL one year later and shared the same sponsor, had a prize pool of ₩108,000,000. Nonetheless, from the available sources, only the top four cash awards, per the below, can be confirmed.
+{{Prize pool start|localcurrency=krw |cutafter=4 }}
+{{Prize pool slot|place=1 |localprize=40,000,000|Flash|flag1=kr |race1=t |team1=kt|lastvs1=Stork |lastscore1=3|lastvsscore1=0|lastvsrace1=p |lastvsflag1=kr |date1=2008-03-15}}
+{{Prize pool slot|place=2 |localprize=20,000,000|Stork|flag1=kr |race1=p|team1=samsung|lastvs1=Flash |lastscore1=0|lastvsscore1=3|lastvsrace1=t |lastvsflag1=kr |date1=2008-03-15}}
+{{Prize pool slot|place=3-4 |localprize=7,000,000
+|Bisu|flag1=kr |race1=p |team1=skt |lastvs1=Flash |lastscore1=1 |lastvsscore1=3 |lastvsrace1=t |lastvsflag1=kr |date1=2008-02-29
+|Luxury|flag2=kr |race2=z |team2=OnGameNet SPARKYZ |lastvs2=Stork |lastscore2=1 |lastvsscore2=3 |lastvsrace2=p |lastvsflag2=kr |date2=2008-03-07
+}}
+{{Prize pool slot|place=5-8 |localprize=0 |date=2008-02-22
+|Jaedong|flag1=kr |race1=z |team1=lecaf |lastvs1=Flash  |lastscore1=1 |lastvsscore1=2 |lastvsrace1=t |lastvsflag1=kr
+|Much   |flag2=kr |race2=p |team2=cj    |lastvs2=Bisu   |lastscore2=0 |lastvsscore2=2 |lastvsrace2=p |lastvsflag2=kr
+|FrOzen |flag3=kr |race3=t |team3=khan  |lastvs3=Luxury |lastscore3=0 |lastvsscore3=2 |lastvsrace3=z |lastvsflag3=kr
+|BeSt   |flag4=kr |race4=p |team4=skt   |lastvs4=Stork  |lastscore4=1 |lastvsscore4=2 |lastvsrace4=p |lastvsflag4=kr
+}}
+{{Prize pool slot|place=9-12 |localprize=0
+|Sea         |flag1=kr |race1=t |team1=mbc        |wdl1=2-1 |date1=2008-02-06
+|Rock        |flag2=kr |race2=p |team2=wemade     |wdl2=1-2 |date2=2008-02-06
+|XellOs      |flag3=kr |race3=t |team3=cj         |wdl3=1-2 |date3=2008-02-06
+|YellOw(ArnC)|flag4=kr |race4=z |team4=ognsparkyz |wdl4=1-2 |date4=2008-02-01
+}}
+{{Prize pool slot|place=13-16 |localprize=0
+|sAviOr |flag1=kr |race1=z |team1=cj    |wdl1=0-3 |date1=2008-02-01
+|Rumble |flag2=kr |race2=z |team2=skt   |wdl2=1-2 |date2=2008-02-06
+|July   |flag3=kr |race3=z |team3=skt   |wdl3=1-2 |date3=2008-02-06
+|BackHo |flag4=kr |race4=p |team4=lecaf |wdl4=0-3 |date4=2008-01-30
+}}
+{{LegacyPrizePoolEnd|}}
+Information concerning further cash prizes for other top finishers is not readily available.
+
+===Players===
+{{ParticipantTable|countByFaction=true
+|BackHo|p1flag=Korea|p1race=p|p1team=lecaf
+|Flash|p2flag=Korea|p2race=t|p2team=ktf
+|Jaedong|p3flag=Korea|p3race=z|p3team=lecaf|p3note=1
+|BeSt|p4flag=Korea|p4race=p|p4team=skt
+|FrOzen|p5flag=Korea|p5race=t|p5team=khan
+|July|p6flag=Korea|p6race=z|p6team=skt
+|Bisu|p7flag=Korea|p7race=p|p7team=mbc|p7note=1
+|Sea|p8flag=Korea|p8race=t|p8team=mbc
+|Luxury|p9flag=Korea|p9race=z|p9team=ognsparkyz
+|Much|p10flag=Korea|p10race=p|p10team=cj|p10note=1
+|XellOs|p11flag=Korea|p11race=t|p11team=cj
+|Rumble|p12flag=Korea|p12race=z|p12team=skt
+|Rock|p13flag=Korea|p13race=p|p13team=wemade
+|sAviOr|p14flag=Korea|p14race=z|p14team=cj
+|Stork|p15flag=Korea|p15race=p|p15team=khan|p15note=1
+|YellOw(ArnC)|p16flag=Korea|p16race=z|p16team=ognsparkyz
+}}
+<small>*Seeded players</small>
+
+
+===Format===
+The preliminary group round was played using a four-person round robin format with best of one matches. The top eight finishers then competed in a single elimination bracket where the quarterfinal round was a best of three format while the best of five format was used for both the semifinals and finals.
+
+
+===Maps===
+{{MapPoolTable
+|title=2008 Bacchus OSL
+|map1=Blue Storm|map1displayName=Blue Storm
+|map2=Demon's Forest|map2displayName=Demon's Forest
+|map3=Katrina|map3displayName=Katrina
+|map4=Troy|map4displayName=Troy
+|map5=Fantasy (Map)|map5displayName=Fantasy II
+}}
+*''[[Demon's Forest]] was removed from the map pool after the group stage because of concerns over race imbalance (i.e. the trees in the center of the map interfered with unit pathing). In the elimination bracket it was replaced by [[Fantasy II]]''
+
+===Talents===
+{{BroadcasterCard
+|position=Caster|lang=kr
+|b1=Caster Jun |b1name=Jeon Yong-jun|b1flag=kr
+}}
+{{BroadcasterCard
+|position=Commentator|lang=kr
+|b1=Kim Carrier|b1flag=kr
+|b2=Eom Jae-gyung|b2flag=kr
+}}
+
+==Results: Group Stage==
+''See also [[2008 Bacchus OSL/Ro24 Dual Tournament|Round of 24 (Dual Tournament)]]
+
+{{Box|start|padding=4em}}
+===Group A===
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group A
+|width=320px
+|lrthread=https://tl.net/forum/articles/65014-bacchus-osl-jan-08-mar-08
+|bg1=proceed|pbg1=proceed|temp_tie1=49|temp_lose_m1=1|temp_win_m1=2|note1=*|{{soloOpponent|p1race=Zerg|p1flag=Korea|p1=Jaedong}}
+|bg2=proceed|pbg2=proceed|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|note2=*|{{soloOpponent|p1race=Protoss|p1flag=Korea|p1=BeSt}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=1|temp_win_m3=2|{{soloOpponent|p1race=Terran|p1flag=Korea|p1=Sea}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=3|temp_win_m4=0|{{soloOpponent|p1race=Zerg|p1flag=Korea|p1=sAviOr}}
+}}
+{{Matchlist|id=vjwIfFur3u|width=320px|title=Detailed Results
+|M1={{Match
+|date=January 16, 2008
+|dateheader=true
+|bestof=1
+|opponent1={{1Opponent|Jaedong}}
+|opponent2={{1Opponent|sAviOr}}
+|map1={{Map|winner=1|map=Blue Storm}}
+}}
+|M2={{Match
+|date=January 18, 2008
+|dateheader=true
+|opponent1={{1Opponent|Sea}}
+|opponent2={{1Opponent|BeSt}}
+|map1={{Map|winner=1|map=Troy}}
+}}
+|M3={{Match
+|date=January 23, 2008
+|dateheader=true
+|opponent1={{1Opponent|Jaedong}}
+|opponent2={{1Opponent|Sea}}
+|map1={{Map|winner=1|map=Katrina}}
+}}
+|M4={{Match
+|date=January 25, 2008
+|dateheader=true
+|opponent1={{1Opponent|BeSt}}
+|opponent2={{1Opponent|sAviOr}}
+|map1={{Map|winner=1|map=Katrina}}
+}}
+|M5={{Match
+|date=January 30, 2008
+|dateheader=true
+|opponent1={{1Opponent|BeSt}}
+|opponent2={{1Opponent|Jaedong}}
+|map1={{Map|winner=1|map=Demon's Forest}}
+}}
+|M6={{Match
+|date=February 1, 2008
+|dateheader=true
+|opponent1={{1Opponent|Sea}}
+|opponent2={{1Opponent|sAviOr}}
+|map1={{Map|winner=1|map=Demon's Forest}}
+}}
+}}
+<small>*Advanced by tiebreaker</small>
+<br>
+{{Matchlist|id=tUfApkmcCn|width=320px|title=Tiebreaker
+|M1={{Match
+|date=February 6, 2008
+|dateheader=true
+|bestof=1
+|opponent1={{1Opponent|Jaedong}}
+|opponent2={{1Opponent|Sea}}
+|map1={{Map|winner=1|map=Demon's Forest}}
+}}
+|M2={{Match
+|opponent1={{1Opponent|BeSt}}
+|opponent2={{1Opponent|Sea}}
+|map1={{Map|winner=1|map=Troy}}
+}}
+|M3={{Match
+|opponent1={{1Opponent|Jaedong}}
+|opponent2={{1Opponent|BeSt}}
+|map1={{Map|winner=1|map=Katrina}}
+}}
+}}
+<br>
+{{Box|break|padding=4em}}
+===Group B===
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group B
+|width=320px
+|lrthread=https://tl.net/forum/articles/65014-bacchus-osl-jan-08-mar-08
+|bg1=proceed|pbg1=proceed|temp_tie1=49|temp_lose_m1=0|temp_win_m1=3|{{soloOpponent|p1race=Protoss|p1flag=Korea|p1=Stork}}
+|bg2=proceed|pbg2=proceed|temp_tie2=48|temp_lose_m2=2|temp_win_m2=1|note2=*|{{soloOpponent|p1race=Terran|p1flag=Korea|p1=Flash}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=Protoss|p1flag=Korea|p1=Rock}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=1|{{soloOpponent|p1race=Zerg|p1flag=Korea|p1=Rumble}}
+}}
+{{Matchlist|id=Pi1gLor8ZH|width=320px|title=Detailed Results
+|M1={{Match
+|date=January 16, 2008
+|dateheader=true
+|bestof=1
+|opponent1={{1Opponent|Flash}}
+|opponent2={{1Opponent|Rumble}}
+|map1={{Map|winner=1|map=Troy}}
+}}
+|M2={{Match
+|date=January 18, 2008
+|dateheader=true
+|opponent1={{1Opponent|Stork}}
+|opponent2={{1Opponent|Rock}}
+|map1={{Map|winner=1|map=Katrina}}
+}}
+|M3={{Match
+|date=January 23, 2008
+|dateheader=true
+|opponent1={{1Opponent|Rock}}
+|opponent2={{1Opponent|Flash}}
+|map1={{Map|winner=1|map=Demon's Forest}}
+}}
+|M4={{Match
+|date=January 25, 2008
+|dateheader=true
+|opponent1={{1Opponent|Stork}}
+|opponent2={{1Opponent|Rumble}}
+|map1={{Map|winner=1|map=Demon's Forest}}
+}}
+|M5={{Match
+|date=January 30, 2008
+|dateheader=true
+|opponent1={{1Opponent|Rumble}}
+|opponent2={{1Opponent|Rock}}
+|map1={{Map|winner=1|map=Blue Storm}}
+}}
+|M6={{Match
+|date=February 1, 2008
+|dateheader=true
+|opponent1={{1Opponent|Stork}}
+|opponent2={{1Opponent|Flash}}
+|map1={{Map|winner=1|map=Blue Storm}}
+}}
+}}
+<small>*Advanced by tiebreaker</small>
+<br>
+{{Matchlist|id=ejMEGWhWsg|width=320px|title=Tiebreaker
+|M1={{Match
+|date=February 6, 2008
+|dateheader=true
+|bestof=1
+|opponent1={{1Opponent|Rock}}
+|opponent2={{1Opponent|Rumble}}
+|map1={{Map|winner=1|map=Demon's Forest}}
+}}
+|M2={{Match
+|opponent1={{1Opponent|Flash}}
+|opponent2={{1Opponent|Rumble}}
+|map1={{Map|winner=1|map=Katrina}}
+}}
+|M3={{Match
+|opponent1={{1Opponent|Flash}}
+|opponent2={{1Opponent|Rock}}
+|map1={{Map|winner=1|map=Troy}}
+}}
+}}
+<br>
+{{Box|break|padding=4em}}
+
+===Group C===
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group C
+|width=320px
+|lrthread=https://tl.net/forum/articles/65014-bacchus-osl-jan-08-mar-08
+|bg1=proceed|pbg1=proceed|temp_tie1=49|temp_lose_m1=0|temp_win_m1=3|{{soloOpponent|p1race=Zerg|p1flag=Korea|p1=Luxury}}
+|bg2=proceed|pbg2=proceed|temp_tie2=48|temp_lose_m2=2|temp_win_m2=1|note2=*|{{soloOpponent|p1race=Protoss|p1flag=Korea|p1=Bisu}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=Terran|p1flag=Korea|p1=XellOs}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=2|temp_win_m4=1|{{soloOpponent|p1race=Zerg|p1flag=Korea|p1=July}}
+}}
+{{Matchlist|id=uGJSmZBX5C|width=320px|title=Detailed Results
+|M1={{Match
+|date=January 16, 2008
+|dateheader=true
+|bestof=1
+|opponent1={{1Opponent|XellOs}}
+|opponent2={{1Opponent|Bisu}}
+|map1={{Map|winner=2|map=Katrina}}
+}}
+|M2={{Match
+|date=January 18, 2008
+|dateheader=true
+|opponent1={{1Opponent|Luxury}}
+|opponent2={{1Opponent|July}}
+|map1={{Map|winner=1|map=Demon's Forest}}
+}}
+|M3={{Match
+|date=January 23, 2008
+|dateheader=true
+|opponent1={{1Opponent|July}}
+|opponent2={{1Opponent|Bisu}}
+|map1={{Map|winner=1|map=Blue Storm}}
+}}
+|M4={{Match
+|date=January 25, 2008
+|dateheader=true
+|opponent1={{1Opponent|Luxury}}
+|opponent2={{1Opponent|XellOs}}
+|map1={{Map|winner=1|map=Blue Storm}}
+}}
+|M5={{Match
+|date=January 30, 2008
+|dateheader=true
+|opponent1={{1Opponent|Luxury}}
+|opponent2={{1Opponent|Bisu}}
+|map1={{Map|winner=1|map=Troy}}
+}}
+|M6={{Match
+|date=February 1, 2008
+|dateheader=true
+|opponent1={{1Opponent|XellOs}}
+|opponent2={{1Opponent|July}}
+|map1={{Map|winner=1|map=Troy}}
+}}
+}}
+<small>*Advanced by tiebreaker</small>
+<br>
+{{Matchlist|id=wW21Bs58Sa|width=320px|title=Tiebreaker
+|M1={{Match
+|date=February 6, 2008
+|dateheader=true
+|bestof=1
+|opponent1={{1Opponent|XellOs}}
+|opponent2={{1Opponent|Bisu}}
+|map1={{Map|winner=2|map=Katrina}}
+}}
+|M2={{Match
+|opponent1={{1Opponent|Bisu}}
+|opponent2={{1Opponent|July}}
+|map1={{Map|winner=1|map=Blue Storm}}
+}}
+|M3={{Match
+|opponent1={{1Opponent|XellOs|race=Zerg}}
+|opponent2={{1Opponent|July|race=Protoss}}
+|map1={{Map|winner=skip|map=Troy}}
+}}
+}}
+<br>
+{{Box|break|padding=4em}}
+
+===Group D===
+{{GroupTableLeague|finished=true|import=false
+<!--converted from manual group table-->
+|tiebreaker1=finalTiebreak|tiebreaker2=finalTiebreak
+|title=Group D
+|width=320px
+|lrthread=https://tl.net/forum/articles/65014-bacchus-osl-jan-08-mar-08
+|bg1=proceed|pbg1=proceed|temp_tie1=49|temp_lose_m1=0|temp_win_m1=3|{{soloOpponent|p1race=Protoss|p1flag=Korea|p1=Much}}
+|bg2=proceed|pbg2=proceed|temp_tie2=48|temp_lose_m2=1|temp_win_m2=2|{{soloOpponent|p1race=Terran|p1flag=Korea|p1=FrOzen}}
+|bg3=down|pbg3=down|temp_tie3=47|temp_lose_m3=2|temp_win_m3=1|{{soloOpponent|p1race=Zerg|p1flag=Korea|p1=YellOw(ArnC)}}
+|bg4=down|pbg4=down|temp_tie4=46|temp_lose_m4=3|temp_win_m4=0|{{soloOpponent|p1race=Protoss|p1flag=Korea|p1=BackHo}}
+}}
+{{Matchlist|id=Q2cQimeUqp|width=320px|title=Detailed Results
+|M1={{Match
+|date=January 16, 2008
+|dateheader=true
+|bestof=1
+|opponent1={{1Opponent|FrOzen}}
+|opponent2={{1Opponent|YellOw(ArnC)}}
+|map1={{Map|winner=1|map=Demon's Forest}}
+}}
+|M2={{Match
+|date=January 18, 2008
+|dateheader=true
+|opponent1={{1Opponent|Much}}
+|opponent2={{1Opponent|BackHo}}
+|map1={{Map|winner=1|map=Blue Storm}}
+}}
+|M3={{Match
+|date=January 23, 2008
+|dateheader=true
+|opponent1={{1Opponent|YellOw(ArnC)}}
+|opponent2={{1Opponent|BackHo}}
+|map1={{Map|winner=1|map=Troy}}
+}}
+|M4={{Match
+|date=January 25, 2008
+|dateheader=true
+|opponent1={{1Opponent|Much}}
+|opponent2={{1Opponent|FrOzen}}
+|map1={{Map|winner=1|map=Troy}}
+}}
+|M5={{Match
+|date=January 30, 2008
+|dateheader=true
+|opponent1={{1Opponent|FrOzen}}
+|opponent2={{1Opponent|BackHo}}
+|map1={{Map|winner=1|map=Katrina}}
+}}
+|M6={{Match
+|date=February 1, 2008
+|dateheader=true
+|opponent1={{1Opponent|Much}}
+|opponent2={{1Opponent|YellOw(ArnC)}}
+|map1={{Map|winner=1|map=Katrina}}
+}}
+}}
+<br>
+{{Box|end|padding=4em}}
+
+==Results: Elimination Bracket==
+{{box|start|padding=2em}}
+{{Bracket|Bracket/8|id=6NO2rUOrDw
+ <!-- QUARTERFINALS -->
+|R1M1={{Match|bestof=3
+|opponent1={{1Opponent|Jaedong|score=1}}
+|opponent2={{1Opponent|Flash|score=2}}
+|date=February 22, 2008
+|map1={{Map|map=Troy|winner=2|vod=http://www.youtube.com/watch?v=VTrD4gAFsnY}}
+|map2={{Map|map=Fantasy II|winner=1|vod=http://www.youtube.com/watch?v=0YsCwLGIA3I}}
+|map3={{Map|map=Katrina|winner=2|vod=http://www.youtube.com/watch?v=tBrwfPZCrcQ}}
+}}
+|R1M2={{Match
+|opponent1={{1Opponent|Much|score=0}}
+|opponent2={{1Opponent|Bisu|score=2}}
+|date=February 22, 2008
+|map1={{Map|map=Katrina|winner=2|vod=http://www.youtube.com/watch?v=f_4CcOaPAyA}}
+|map2={{Map|map=Blue Storm|winner=2|vod=http://www.youtube.com/watch?v=B1diK_ts9gw}}
+}}
+|R1M3={{Match
+|opponent1={{1Opponent|Luxury|score=2}}
+|opponent2={{1Opponent|FrOzen|score=0}}
+|date=February 22, 2008
+|map1={{Map|map=Fantasy II|winner=1|vod=https://tl.net/tlpd/korean/games/8658_FrOzen_vs_Luxury/vod}}
+|map2={{Map|map=Katrina|winner=1|vod=http://www.youtube.com/watch?v=TEGWpcuKlfo}}
+}}
+|R1M4={{Match
+|opponent1={{1Opponent|Stork|score=2}}
+|opponent2={{1Opponent|BeSt|score=1}}
+|date=February 22, 2008
+|map1={{Map|map=Blue Storm|winner=1|vod=http://www.youtube.com/watch?v=3LPiY9JuaVE}}
+|map2={{Map|map=Troy|winner=2|vod=http://www.youtube.com/watch?v=zloXXGqH7ok}}
+|map3={{Map|map=Fantasy II|winner=1|vod=http://www.youtube.com/watch?v=76yilIr-PYQ}}
+}}
+
+ <!-- SEMIFINALS-->
+|R2M1={{Match|bestof=5
+|opponent1={{1Opponent|Flash|score=3}}
+|opponent2={{1Opponent|Bisu|score=1}}
+|date=February 29, 2008
+|map1={{Map|map=Troy|winner=2|vod=http://www.youtube.com/watch?v=-tCOEyvLhKA}}
+|map2={{Map|map=Fantasy II|winner=1|vod=http://www.youtube.com/watch?v=q25xon9BW2c}}
+|map3={{Map|map=Katrina|winner=1|vod=http://www.youtube.com/watch?v=yThIvKGEKS0}}
+|map4={{Map|map=Blue Storm|winner=1|vod=http://www.youtube.com/watch?v=S7Vp6XtS5BE}}
+|recap=https://tl.net/forum/news-archive/67313-light-at-the-end-of-the-tunnel-osl-ro4-1
+}}
+|R2M2={{Match
+|opponent1={{1Opponent|Luxury|score=1}}
+|opponent2={{1Opponent|Stork|score=3}}
+|date=March 7, 2008
+|map1={{Map|map=Blue Storm|winner=2|vod=http://www.youtube.com/watch?v=TBRUfZwDTsk}}
+|map2={{Map|map=Fantasy II|winner=1|vod=http://www.youtube.com/watch?v=gG3MwaXgK6s}}
+|map3={{Map|map=Katrina|winner=2|vod=http://www.youtube.com/watch?v=Kta_mXQXLfo}}
+|map4={{Map|map=Troy|winner=2|vod=http://www.youtube.com/watch?v=bc-C2fcLNl8}}
+}}
+
+ <!-- FINAL MATCH-->
+|R3M1={{Match
+|opponent1={{1Opponent|Flash|score=3}}
+|opponent2={{1Opponent|Stork|score=0}}
+|date=March 15, 2008 - 18:00 {{Abbr/KST}}
+|map1={{Map|map=Blue Storm|winner=1|vod=https://tl.net/tlpd/korean/games/8999_Flash_vs_Stork/vod}}
+|map2={{Map|map=Katrina|winner=1|vod=https://tl.net/tlpd/korean/games/9000_Flash_vs_Stork/vod}}
+|map3={{Map|map=Troy|winner=1|vod=https://tl.net/tlpd/korean/games/9001_Flash_vs_Stork/vod}}
+|lrthread=https://tl.net/forum/bw-tournaments/68028-osl-finals-stork-vs-flash-3-15-08
+|recap=https://tl.net/forum/news-archive/68283-prison-rape-bacchus-osl-finals
+}}
+}}
+
+{{box|break}}
+ [[File:2008 Bacchus Flash victory1.jpg|300px|thumbnail|left]]
+{{box|end}}
+
+''See for additional TeamLiquid coverage, recaps for:
+*[https://tl.net/forum/news-archive/65258-bacchus-08-osl-week-1-1 Group Stage Week 1], [https://tl.net/forum/news-archive/65430-bacchus-08-osl-week-1-2 Week 1 (part 2)], [https://tl.net/forum/news-archive/65598-bacchus-08-osl-week-2-1 Week 2], [https://tl.net/forum/news-archive/65899-bacchus-08-osl-week-3-1 Week 3], [https://tl.net/forum/news-archive/66016-bacchus-08-osl-week-3-2 Week 3 (part 2)], [https://tl.net/forum/news-archive/66159-on-the-edge-tie-breaker-wednesday Tiebreakers]
+*[https://tl.net/forum/news-archive/66682-fire-storm-and-blood-osl-ro8-1 Quarterfinals], [https://tl.net/forum/news-archive/67025-we-die-among-the-stars-tonight-osl-ro8-2 Quarterfinals (part 2)],
+
+==Racial Distribution==
+{{RaceDist|title=Group&nbsp;Stage|protoss=6|terran=5|zerg=6|nyd=0|first=1}}
+{{RaceDist|title=Quarterfinals|protoss=4|terran=2|zerg=2|nyd=0}}
+{{RaceDist|title=Semifinals|protoss=2|terran=1|zerg=1|nyd=0}}
+{{RaceDist|title=Finals|protoss=1|terran=1|zerg=0|nyd=0}}
+{{RaceDist|title=Winner|protoss=0|terran=1|zerg=0|nyd=0|last=1}}
+
+==Maps Statistics==
+{{Tournament_statistics}}
+
+==Recommended Games==
+*{{Vodlink|vod=https://tl.net/tlpd/games/8909_Flash_vs_Jaedong/vod}} Flash vs Jaedong on Katrina - Flash's infamous mech build vs Jaedong.
+*{{Vodlink|vod=https://tl.net/tlpd/games/8981_Bisu_vs_Flash/vod}} Flash vs Bisu on Katrina - Flash's anti Carrier build meets Bisu's Arbiters in a close game.
+
+==External links==
+*[https://tl.net/forum/viewmessage.php?topic_id=68283 TL Finals Write-Up]
+*[https://tl.net/forum/viewmessage.php?topic_id=65014 TL R&S Page]
+
+==Media==
+{{col}}
+===Openings===
+*Opening 1 {{YT-link|file-id=_oNy7LXp3rI}}
+*Opening 2 {{YT-link|file-id=iy1NE306Md0}}
+{{col-break}}
+
+===Soundtrack===
+*Boys Like Girls - The Great Escape {{YT-link|file-id=JbRmGRWfYcg}}
+*Massive Attack - Teardrop {{YT-link|file-id=7jzn92Qmbqg}}
+*R Cicinas - Lietaus Dukra
+*Rise Against - My Life Inside Your Heart {{YT-link|file-id=EDvSyssiPy8}}
+*Rise Against - The Good Left Undone {{YT-link|file-id=2LIcsfk5Cxk}}
+{{endCol}}
+
+==Gallery==
+<gallery mode=packed heights="250px">
+Image:2008 Bacchus final bracket.jpg
+Image:2008 Bacchus Flash victory.jpg
+Image:2008 Bacchus Flash victory2.jpg
+Image:2008 Bacchus venue.jpg
+</gallery>
+
+==References==
+{{Reflist}}
+
+{{Starleague-BottomTable|EVER2007 OSL|2008 Bacchus OSL|EVER2008 OSL}}

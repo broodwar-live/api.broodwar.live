@@ -83,6 +83,7 @@ Ingestion (`Broodwar.Ingestion.MatchIngest`, parser in `Broodwar.Ingestion.Match
 - `date_precision` records where a date came from: `minute` / `day` (the match itself), `stage` (group table), `inherited` (previous match on the page) or `tournament` (infobox start date)
 - Players are created only from Liquipedia identities. Opponents resolve by Liquipedia page first, then by alias (case-insensitive) among players with no linked page. Anything ambiguous is reported, not merged.
 - Races missing from the page are looked up from the players' Liquipedia pages, 50 per request
+- Only 1v1 opponents are ingested. Team leagues (Proleague-style `{{TeamOpponent}}`) are skipped and reported.
 
 Liquipedia API terms are enforced in code (`Broodwar.Ingestion.LiquipediaThrottle`): a descriptive User-Agent, gzip, at most 1 request every 2 s and 1 `action=parse` every 30 s, across the whole node, with no automatic retries. A 403/429 stops the job.
 

@@ -24,7 +24,11 @@ config :broodwar, Oban,
   prefix: false,
   notifier: Oban.Notifiers.PG,
   peer: false,
-  queues: [default: 10, ingestion: 2]
+  queues: [default: 10, ingestion: 2],
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
+    {Oban.Plugins.Cron, crontab: [{"*/3 * * * *", Broodwar.Ingestion.StreamPoll}]}
+  ]
 
 # Base URL of the static site, which hosts player images.
 config :broodwar, :static_site_url, "https://broodwar.live"
@@ -40,10 +44,15 @@ config :broodwar, :client_ip_header, nil
 # Bearer token for /api/admin/* (set ADMIN_API_KEY in runtime.exs/env).
 config :broodwar, :admin_api_key, nil
 
-# Twitch Helix API credentials (override in runtime.exs or env vars).
+# Twitch Helix API credentials (read from env in config/runtime.exs).
 config :broodwar, :twitch,
-  client_id: System.get_env("TWITCH_CLIENT_ID", ""),
-  client_secret: System.get_env("TWITCH_CLIENT_SECRET", ""),
+  client_id: "",
+  client_secret: "",
   bw_game_id: "1466"
+
+# SOOP (AfreecaTV) Open API. Requires a registered client_id from
+# developers.sooplive.co.kr; polling is skipped until both are set
+# (read from env in config/runtime.exs).
+config :broodwar, :soop, client_id: "", category: ""
 
 import_config "#{config_env()}.exs"

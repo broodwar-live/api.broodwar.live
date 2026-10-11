@@ -1,26 +1,32 @@
 defmodule Broodwar.Ingestion.StreamPoll do
   @moduledoc """
-  Oban worker that polls live BW streams from Twitch via Helix API.
+  Oban worker that polls live BW streams from Twitch and SOOP (formerly
+  AfreecaTV), upserts stream records, and marks stale streams offline.
 
-  Runs every 5 minutes on the `:ingestion` queue. Fetches all live streams
-  for StarCraft: Brood War (game_id 1466), upserts stream records, and
-  marks stale streams as offline.
+  Scheduled every 3 minutes by the `Oban.Plugins.Cron` entry in
+  `config/config.exs`. Each platform is skipped (with a warning) unless its
+  credentials are configured, and HTTP failures are logged, never raised,
+  so one platform being down doesn't block the other.
 
   ## Configuration
 
-  Set in config or environment variables:
-
       config :broodwar, :twitch,
-        client_id: "your_client_id",
-        client_secret: "your_client_secret"
+        client_id: "...",          # TWITCH_CLIENT_ID
+        client_secret: "...",      # TWITCH_CLIENT_SECRET
+        bw_game_id: "1466"
 
-  ## Scheduling
+      config :broodwar, :soop,
+        client_id: "...",          # SOOP_CLIENT_ID (developers.sooplive.co.kr)
+        category: "..."            # SOOP_CATEGORY (StarCraft category number)
 
-      Oban.insert(Broodwar.Ingestion.StreamPoll.new(%{}))
+  The legacy `openapi.afreecatv.com/broad/search` endpoint is gone (404).
+  SOOP's `openapi.sooplive.co.kr/broad/list` exists but rejects requests
+  without a registered `client_id`, so SOOP polling is opt-in. SOOP streams
+  are stored with platform `"afreeca"` for compatibility with existing data.
   """
   use Oban.Worker,
     queue: :ingestion,
-    max_attempts: 3,
+    max_attempts: 1,
     unique: [period: 120]
 
   require Logger
@@ -28,18 +34,17 @@ defmodule Broodwar.Ingestion.StreamPoll do
   alias Broodwar.Repo
   alias Broodwar.Streams.Stream
 
-  @poll_interval_seconds 300
   @stale_threshold_seconds 600
   @twitch_token_url "https://id.twitch.tv/oauth2/token"
   @twitch_streams_url "https://api.twitch.tv/helix/streams"
-  @afreeca_search_url "https://openapi.afreecatv.com/broad/search"
+  @soop_broad_list_url "https://openapi.sooplive.co.kr/broad/list"
+  @http_opts [retry: false, receive_timeout: 15_000]
 
   @impl Oban.Worker
   def perform(%Oban.Job{}) do
     poll_twitch_streams()
-    poll_afreeca_streams()
+    poll_soop_streams()
     mark_stale_offline()
-    reschedule()
     :ok
   end
 
@@ -51,7 +56,7 @@ defmodule Broodwar.Ingestion.StreamPoll do
     if client_id == "" or client_secret == "" do
       Logger.warning("[StreamPoll] Twitch credentials not configured, skipping")
     else
-      case get_access_token(client_id, client_secret) do
+      case cached_access_token(client_id, client_secret) do
         {:ok, token} ->
           poll_streams(client_id, token, config[:bw_game_id] || "1466")
 
@@ -63,13 +68,32 @@ defmodule Broodwar.Ingestion.StreamPoll do
 
   # -- Twitch OAuth --
 
+  # App access tokens live ~60 days; reuse one for an hour instead of
+  # requesting a new token every poll. Errors are not cached.
+  defp cached_access_token(client_id, client_secret) do
+    case Broodwar.Cache.fetch("twitch_token", 3600, fn ->
+           get_access_token(client_id, client_secret)
+         end) do
+      {:ok, _token} = ok ->
+        ok
+
+      error ->
+        Broodwar.Cache.invalidate("twitch_token")
+        error
+    end
+  end
+
   defp get_access_token(client_id, client_secret) do
-    case Req.post(@twitch_token_url,
-           form: [
-             client_id: client_id,
-             client_secret: client_secret,
-             grant_type: "client_credentials"
-           ]
+    case Req.post(
+           @twitch_token_url,
+           @http_opts ++
+             [
+               form: [
+                 client_id: client_id,
+                 client_secret: client_secret,
+                 grant_type: "client_credentials"
+               ]
+             ]
          ) do
       {:ok, %{status: 200, body: %{"access_token" => token}}} ->
         {:ok, token}
@@ -108,12 +132,16 @@ defmodule Broodwar.Ingestion.StreamPoll do
   end
 
   defp fetch_live_streams(client_id, token, game_id) do
-    case Req.get(@twitch_streams_url,
-           params: [game_id: game_id, first: 100],
-           headers: [
-             {"Authorization", "Bearer #{token}"},
-             {"Client-Id", client_id}
-           ]
+    case Req.get(
+           @twitch_streams_url,
+           @http_opts ++
+             [
+               params: [game_id: game_id, first: 100],
+               headers: [
+                 {"Authorization", "Bearer #{token}"},
+                 {"Client-Id", client_id}
+               ]
+             ]
          ) do
       {:ok, %{status: 200, body: %{"data" => data}}} ->
         {:ok, data}
@@ -126,37 +154,57 @@ defmodule Broodwar.Ingestion.StreamPoll do
     end
   end
 
-  # -- AfreecaTV polling --
+  # -- SOOP (AfreecaTV) polling --
 
-  defp poll_afreeca_streams do
-    # AfreecaTV search API: search for StarCraft streams.
-    # The public search endpoint doesn't require auth.
-    case Req.get(@afreeca_search_url,
-           params: [szKeyword: "스타크래프트", szType: "live", nPageNo: 1, nListCnt: 50],
-           headers: [{"User-Agent", "broodwar.live/0.1"}]
-         ) do
-      {:ok, %{status: 200, body: body}} when is_map(body) ->
-        broadcasts = get_in(body, ["broad"]) || []
+  defp poll_soop_streams do
+    config = Application.get_env(:broodwar, :soop, [])
+    client_id = config[:client_id] || ""
+    category = config[:category] || ""
+
+    if client_id == "" or category == "" do
+      Logger.warning("[StreamPoll] SOOP client_id/category not configured, skipping")
+    else
+      fetch_soop_streams(client_id, category)
+    end
+  end
+
+  defp fetch_soop_streams(client_id, category) do
+    params = [
+      client_id: client_id,
+      select_key: "cate",
+      select_value: category,
+      order_type: "view_cnt",
+      page_no: 1
+    ]
+
+    case Req.get(@soop_broad_list_url, @http_opts ++ [params: params]) do
+      {:ok, %{status: 200, body: %{"broad" => broadcasts}}} when is_list(broadcasts) ->
         now = DateTime.utc_now()
+        Enum.each(broadcasts, &upsert_soop_broadcast(&1, now))
+        Logger.info("[StreamPoll] Found #{length(broadcasts)} SOOP BW streams")
 
-        for b <- broadcasts do
-          upsert_stream(%{
-            platform: "afreeca",
-            channel_id: b["user_id"] || b["broad_no"] || "unknown",
-            title: b["broad_title"],
-            is_live: true,
-            viewer_count: parse_viewer_count(b["total_view_cnt"]),
-            last_seen_at: now
-          })
-        end
-
-        Logger.info("[StreamPoll] Found #{length(broadcasts)} AfreecaTV BW streams")
-
-      {:ok, %{status: status}} ->
-        Logger.warning("[StreamPoll] AfreecaTV returned HTTP #{status}")
+      {:ok, %{status: status, body: body}} ->
+        Logger.warning("[StreamPoll] SOOP returned HTTP #{status}: #{inspect(body)}")
 
       {:error, reason} ->
-        Logger.error("[StreamPoll] AfreecaTV error: #{inspect(reason)}")
+        Logger.error("[StreamPoll] SOOP error: #{inspect(reason)}")
+    end
+  end
+
+  defp upsert_soop_broadcast(b, now) do
+    case b["user_id"] || b["broad_no"] do
+      nil ->
+        :skip
+
+      channel_id ->
+        upsert_stream(%{
+          platform: "afreeca",
+          channel_id: to_string(channel_id),
+          title: b["broad_title"],
+          is_live: true,
+          viewer_count: parse_viewer_count(b["total_view_cnt"]),
+          last_seen_at: now
+        })
     end
   end
 
@@ -201,11 +249,5 @@ defmodule Broodwar.Ingestion.StreamPoll do
       |> Repo.update_all(set: [is_live: false, viewer_count: 0])
 
     if count > 0, do: Logger.info("[StreamPoll] Marked #{count} stale streams offline")
-  end
-
-  defp reschedule do
-    %{}
-    |> __MODULE__.new(schedule_in: @poll_interval_seconds)
-    |> Oban.insert()
   end
 end

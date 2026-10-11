@@ -23,6 +23,16 @@ end
 config :broodwar, BroodwarWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+# Stream polling credentials. Each platform is skipped while unset.
+config :broodwar, :twitch,
+  client_id: System.get_env("TWITCH_CLIENT_ID", ""),
+  client_secret: System.get_env("TWITCH_CLIENT_SECRET", ""),
+  bw_game_id: System.get_env("TWITCH_BW_GAME_ID", "1466")
+
+config :broodwar, :soop,
+  client_id: System.get_env("SOOP_CLIENT_ID", ""),
+  category: System.get_env("SOOP_CATEGORY", "")
+
 if config_env() == :prod do
   database_path =
     System.get_env("DATABASE_PATH") ||

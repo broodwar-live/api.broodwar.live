@@ -16,6 +16,7 @@ defmodule Broodwar.Application do
       {Phoenix.PubSub, name: Broodwar.PubSub},
       {Oban, Application.fetch_env!(:broodwar, Oban)},
       Broodwar.Cache,
+      {Broodwar.RateLimit, clean_period: :timer.minutes(10)},
       # Start to serve requests, typically the last entry
       BroodwarWeb.Endpoint
     ]

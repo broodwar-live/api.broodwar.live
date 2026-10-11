@@ -1,15 +1,40 @@
 defmodule Broodwar.Replays do
   @moduledoc """
   Context for replay parsing, storage, and retrieval.
+
+  Replays enter the system through two kinds of paths:
+
+    * **Untrusted** (anonymous `POST /api/replays`): the replay is parsed and
+      stored with its derived data only. It is never linked to player
+      records and never affects ratings.
+    * **Trusted** (operator batch import, admin API): after storing, the
+      replay may be linked to players and rated via `link_and_rate/1`.
   """
   import Ecto.Query
+
+  alias Broodwar.Elo
+  alias Broodwar.Pagination
+  alias Broodwar.Players.Player
   alias Broodwar.Replays.Replay
   alias Broodwar.Repo
 
-  def list_replays do
+  # 5 MiB. Real 1v1 replays are typically 50–300 KB.
+  @max_size 5 * 1024 * 1024
+  @valid_races ~w(T P Z R)
+
+  @doc "Maximum accepted replay size in bytes."
+  def max_size, do: @max_size
+
+  @doc """
+  Lists replays newest first, paginated in the database. `parsed_data` is
+  not loaded (it can be hundreds of KB per replay).
+  """
+  def list_replays(opts \\ []) do
     Replay
-    |> order_by(desc: :inserted_at)
-    |> preload([:player_a, :player_b, :map, :match])
+    |> select([r], struct(r, ^Replay.summary_fields()))
+    |> order_by(desc: :inserted_at, desc: :id)
+    |> Pagination.paginate(opts)
+    |> preload([:player_a, :player_b, :map])
     |> Repo.all()
   end
 
@@ -20,50 +45,105 @@ defmodule Broodwar.Replays do
   end
 
   @doc """
-  Parse raw `.rep` binary data and persist the replay to the database.
-  Returns `{:ok, %Replay{}}` or `{:error, reason}`.
+  Cheap structural check before handing bytes to the NIF.
+
+  Every `.rep` (1.16 through Remastered) starts with a section whose first
+  4-byte chunk is stored uncompressed and holds the replay magic: bytes
+  12..15 are `"reRS"` (legacy) or `"seRS"` (1.18+).
+  """
+  @spec validate_format(binary()) :: :ok | {:error, :too_large | :invalid_format}
+  def validate_format(data) when byte_size(data) > @max_size, do: {:error, :too_large}
+
+  def validate_format(
+        <<_checksum::binary-4, _chunks::binary-4, _len::binary-4, magic::binary-4, _rest::binary>>
+      )
+      when magic in ["reRS", "seRS"],
+      do: :ok
+
+  def validate_format(_data), do: {:error, :invalid_format}
+
+  @doc """
+  Validate, parse and persist raw `.rep` data.
+
+  Options:
+    * `:source` — `"upload"` (default), `"import"` or `"admin"`
+    * `:file_path` — original path for batch imports
+
+  Returns `{:ok, replay, :created | :existing}` or `{:error, reason}`.
+  Never links players or changes ratings; see `link_and_rate/1`.
   """
   def parse_and_save(data, opts \\ []) when is_binary(data) do
-    with {:ok, parsed} <- parse_replay(data) do
+    with :ok <- validate_format(data),
+         {:ok, parsed} <- parse_replay(data) do
       file_hash = :crypto.hash(:sha256, data) |> Base.hex_encode32(case: :lower, padding: false)
 
-      metadata = parsed["metadata"] || %{}
-      classifications = parsed["classifications"] || []
-
-      attrs =
-        %{
-          file_hash: file_hash,
-          file_path: opts[:file_path],
-          duration: trunc(parsed["header"]["duration_secs"]),
-          parsed_data: parsed,
-          race_a: player_race_code(parsed, 0),
-          race_b: player_race_code(parsed, 1),
-          matchup: get_in(metadata, ["matchup", "code"]),
-          map_name_normalized: metadata["map_name"],
-          winner_id: winner_player_id(metadata),
-          classification_a: opening_tag(classifications, 0),
-          classification_b: opening_tag(classifications, 1)
-        }
-        |> maybe_put_map_id(parsed["header"]["map_name"])
-        |> maybe_put_player_ids(parsed["header"]["players"])
-
       case Repo.get_by(Replay, file_hash: file_hash) do
-        nil ->
-          case Repo.insert(Replay.changeset(%Replay{}, attrs)) do
-            {:ok, replay} ->
-              # Update Elo ratings from this replay's result.
-              Broodwar.Elo.update_from_replay(parsed)
-              # Invalidate cached stats.
-              Broodwar.Cache.invalidate_all()
-              {:ok, replay}
-
-            error ->
-              error
-          end
-
-        existing ->
-          {:ok, existing}
+        nil -> insert_replay(file_hash, parsed, opts)
+        existing -> {:ok, existing, :existing}
       end
+    end
+  end
+
+  defp insert_replay(file_hash, parsed, opts) do
+    attrs =
+      parsed
+      |> derived_attrs()
+      |> Map.merge(%{
+        file_hash: file_hash,
+        file_path: opts[:file_path],
+        source: opts[:source] || "upload",
+        parsed_data: parsed
+      })
+
+    case Repo.insert(Replay.changeset(%Replay{}, attrs)) do
+      {:ok, replay} ->
+        Broodwar.Cache.invalidate_all()
+        {:ok, replay, :created}
+
+      {:error, changeset} ->
+        # Lost a race with a concurrent upload of the same file.
+        case Repo.get_by(Replay, file_hash: file_hash) do
+          nil -> {:error, changeset}
+          existing -> {:ok, existing, :existing}
+        end
+    end
+  end
+
+  @doc """
+  Trusted-only: link a stored replay to existing player records by name and
+  apply its result to Elo ratings. Idempotent — a replay is rated at most
+  once (tracked via `rated_at`).
+  """
+  def link_and_rate(%Replay{rated_at: %DateTime{}} = replay), do: {:ok, replay}
+
+  def link_and_rate(%Replay{} = replay) do
+    Repo.transaction(fn ->
+      # Rate first: Elo may create player records for unknown names, which
+      # the link step below then picks up.
+      with :ok <- apply_rating(replay),
+           {:ok, replay} <- Repo.update(Replay.changeset(replay, link_attrs(replay))) do
+        Broodwar.Cache.invalidate_all()
+        replay
+      else
+        {:error, reason} -> Repo.rollback(reason)
+      end
+    end)
+  end
+
+  defp link_attrs(replay) do
+    %{
+      player_a_id: player_id_by_name(replay.player_a_name),
+      player_b_id: player_id_by_name(replay.player_b_name),
+      rated_at: DateTime.utc_now() |> DateTime.truncate(:second)
+    }
+  end
+
+  defp apply_rating(replay) do
+    case Elo.update_from_replay(replay.parsed_data || %{}) do
+      {:ok, _ratings} -> :ok
+      # No decisive result (e.g. both left) — nothing to rate.
+      {:error, reason} when reason in [:no_winner, :insufficient_data] -> :ok
+      {:error, reason} -> {:error, reason}
     end
   end
 
@@ -105,17 +185,44 @@ defmodule Broodwar.Replays do
 
   # -- Private helpers --
 
-  defp player_race_code(parsed, index) do
-    players = parsed["header"]["players"] || []
+  defp derived_attrs(parsed) do
+    header = parsed["header"] || %{}
+    metadata = parsed["metadata"] || %{}
+    classifications = parsed["classifications"] || []
+    players = header["players"] || []
 
+    %{
+      duration: trunc(header["duration_secs"] || 0),
+      race_a: player_race_code(players, 0),
+      race_b: player_race_code(players, 1),
+      player_a_name: player_name(players, 0),
+      player_b_name: player_name(players, 1),
+      winner_name: winner_name(metadata["result"]),
+      matchup: get_in(metadata, ["matchup", "code"]),
+      map_name_normalized: metadata["map_name"],
+      classification_a: opening_tag(classifications, 0),
+      classification_b: opening_tag(classifications, 1),
+      map_id: map_id_by_name(header["map_name"])
+    }
+  end
+
+  defp player_race_code(players, index) do
     case Enum.at(players, index) do
-      %{"race_code" => code} -> code
+      %{"race_code" => code} when code in @valid_races -> code
       _ -> nil
     end
   end
 
-  defp winner_player_id(%{"result" => %{"player_id" => id}}), do: id
-  defp winner_player_id(_), do: nil
+  defp player_name(players, index) do
+    case Enum.at(players, index) do
+      %{"name" => name} when is_binary(name) and name != "" -> name
+      _ -> nil
+    end
+  end
+
+  # result is a map for a decided game, or the string "unknown".
+  defp winner_name(%{"player_name" => name}), do: name
+  defp winner_name(_), do: nil
 
   defp opening_tag(classifications, index) do
     case Enum.at(classifications, index) do
@@ -124,36 +231,15 @@ defmodule Broodwar.Replays do
     end
   end
 
-  defp maybe_put_map_id(attrs, nil), do: attrs
+  defp map_id_by_name(nil), do: nil
 
-  defp maybe_put_map_id(attrs, map_name) do
-    alias Broodwar.Maps.Map
-
-    case Repo.one(from(m in Map, where: m.name == ^map_name, limit: 1)) do
-      %{id: id} -> Elixir.Map.put(attrs, :map_id, id)
-      nil -> attrs
-    end
+  defp map_id_by_name(map_name) do
+    Repo.one(from(m in Broodwar.Maps.Map, where: m.name == ^map_name, select: m.id, limit: 1))
   end
 
-  defp maybe_put_player_ids(attrs, nil), do: attrs
-  defp maybe_put_player_ids(attrs, []), do: attrs
+  defp player_id_by_name(nil), do: nil
 
-  defp maybe_put_player_ids(attrs, players) do
-    attrs
-    |> maybe_match_player(:player_a_id, Enum.at(players, 0))
-    |> maybe_match_player(:player_b_id, Enum.at(players, 1))
+  defp player_id_by_name(name) do
+    Repo.one(from(p in Player, where: p.name == ^name, select: p.id, limit: 1))
   end
-
-  defp maybe_match_player(attrs, _key, nil), do: attrs
-
-  defp maybe_match_player(attrs, key, %{"name" => name}) do
-    alias Broodwar.Players.Player
-
-    case Broodwar.Repo.one(from(p in Player, where: p.name == ^name, limit: 1)) do
-      %{id: id} -> Elixir.Map.put(attrs, key, id)
-      nil -> attrs
-    end
-  end
-
-  defp maybe_match_player(attrs, _key, _), do: attrs
 end

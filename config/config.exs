@@ -26,6 +26,17 @@ config :broodwar, Oban,
   peer: false,
   queues: [default: 10, ingestion: 2]
 
+# Per-client-IP rate limits: bucket => {limit, window_ms}.
+config :broodwar, :rate_limits,
+  api: {600, :timer.minutes(1)},
+  uploads: {10, :timer.hours(1)}
+
+# Header carrying the real client IP behind a proxy (set in prod for Fly).
+config :broodwar, :client_ip_header, nil
+
+# Bearer token for /api/admin/* (set ADMIN_API_KEY in runtime.exs/env).
+config :broodwar, :admin_api_key, nil
+
 # Twitch Helix API credentials (override in runtime.exs or env vars).
 config :broodwar, :twitch,
   client_id: System.get_env("TWITCH_CLIENT_ID", ""),

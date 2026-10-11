@@ -9,8 +9,11 @@ defmodule BroodwarWeb.Endpoint do
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
+  # Replay uploads are capped at 5 MiB in Broodwar.Replays; the multipart
+  # limit leaves headroom for form overhead. Other bodies stay small.
   plug Plug.Parsers,
-    parsers: [:urlencoded, :multipart, :json],
+    parsers: [:urlencoded, {:multipart, length: 6_000_000}, :json],
+    length: 1_000_000,
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 

@@ -15,3 +15,10 @@ config :broodwar, Oban, testing: :inline
 config :logger, level: :warning
 
 config :phoenix, :plug_init_mode, :runtime
+
+config :broodwar, :admin_api_key, "test-admin-key"
+
+# Tight upload limit so the rate-limit test is quick; generous API limit.
+config :broodwar, :rate_limits,
+  api: {10_000, :timer.minutes(1)},
+  uploads: {3, :timer.hours(1)}

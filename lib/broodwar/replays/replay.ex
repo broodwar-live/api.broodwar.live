@@ -1,4 +1,8 @@
 defmodule Broodwar.Replays.Replay do
+  @moduledoc """
+  A parsed `.rep` file. `parsed_data` holds the full NIF output; the other
+  columns are denormalized from it for cheap filtering.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -16,6 +20,15 @@ defmodule Broodwar.Replays.Replay do
     field :game_version, :string
     field :played_at, :utc_datetime
     field :parsed_data, :map
+    field :matchup, :string
+    field :map_name_normalized, :string
+    field :player_a_name, :string
+    field :player_b_name, :string
+    field :winner_name, :string
+    field :classification_a, :string
+    field :classification_b, :string
+    field :source, :string, default: "upload"
+    field :rated_at, :utc_datetime
 
     timestamps()
   end
@@ -32,9 +45,22 @@ defmodule Broodwar.Replays.Replay do
     :duration,
     :game_version,
     :played_at,
-    :parsed_data
+    :parsed_data,
+    :matchup,
+    :map_name_normalized,
+    :player_a_name,
+    :player_b_name,
+    :winner_name,
+    :classification_a,
+    :classification_b,
+    :source,
+    :rated_at
   ]
   @valid_races ~w(T P Z R)
+  @valid_sources ~w(upload import admin)
+
+  @doc "All columns except `parsed_data`, for list queries."
+  def summary_fields, do: __schema__(:fields) -- [:parsed_data]
 
   @doc false
   def changeset(replay, attrs) do
@@ -43,6 +69,7 @@ defmodule Broodwar.Replays.Replay do
     |> validate_required(@required_fields)
     |> validate_inclusion(:race_a, @valid_races)
     |> validate_inclusion(:race_b, @valid_races)
+    |> validate_inclusion(:source, @valid_sources)
     |> unique_constraint(:file_hash)
   end
 end

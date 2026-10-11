@@ -59,7 +59,8 @@ defmodule Broodwar.Ingestion.ReplayImport do
   # replays to known players and update ratings.
   defp import_file(path) do
     with {:ok, data} <- File.read(path),
-         {:ok, replay} <- Replays.parse_and_save(data, file_path: path, trusted: true) do
+         {:ok, replay, _status} <- Replays.parse_and_save(data, file_path: path, source: "import"),
+         {:ok, replay} <- Replays.link_and_rate(replay) do
       {:ok, replay.id}
     else
       {:error, reason} -> {:error, path, reason}

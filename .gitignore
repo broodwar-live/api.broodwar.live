@@ -9,3 +9,4 @@
 *.beam
 /tmp/
 /priv/native/
+erl_crash.dump

@@ -37,7 +37,8 @@ What it does:
 - Parses uploaded `.rep` files with a Rust NIF ([replay-core](https://github.com/broodwar-live/bw-engine) via Rustler)
 - Serves players, matches, replays, openings, balance stats, tournaments and maps
 - Polls live streams (Twitch, SOOP/AfreecaTV) every 3 minutes
-- Syncs player and tournament data from Liquipedia (operator-run)
+- Ingests match results (series + per-map games) from Liquipedia (operator-run)
+- Computes Elo ratings, head-to-head records, and map/matchup stats from those games
 
 ## API
 
@@ -47,22 +48,53 @@ All endpoints are under `/api` and follow the [API conventions](https://github.c
 GET  /api/health                     # Liveness + DB check (used by Fly)
 GET  /api/players                    # ?race= &status= &search=
 GET  /api/players/:id
-GET  /api/players/:id/matches
-GET  /api/players/:id/stats          # Tournament record + replay-derived stats
+GET  /api/players/:id/matches        # Series with games + source, paginated
+GET  /api/players/:id/ratings        # Elo history, one point per rated game
+GET  /api/players/:id/stats          # Series record + replay-derived stats
 GET  /api/matches                    # ?tournament_id= &matchup=
+GET  /api/head_to_head               # ?player_a=ID &player_b=ID
+GET  /api/rankings                   # ?min_games= &active_days= (defaults in config)
 GET  /api/replays                    # Summaries only (no parsed_data)
 GET  /api/replays/:id                # Full parsed replay
 POST /api/replays                    # Multipart "file" upload (see below)
 GET  /api/openings                   # ?race=T|P|Z &matchup=TvZ
 GET  /api/builds
 GET  /api/maps
-GET  /api/balance
+GET  /api/maps/:id/stats             # Matchup winrates on a map
+GET  /api/balance                    # Matchup winrates overall + per year, ?map_id=
 GET  /api/streams                    # ?platform= &live=true
 GET  /api/tournaments[/:slug[/:season]]
 
 POST /api/admin/replays              # Bearer ADMIN_API_KEY: upload + link + rate
 POST /api/admin/replays/:id/rate     # Bearer ADMIN_API_KEY: link + rate existing
 ```
+
+Every statistic carries its sample size (`n`), and responses built from match data include `meta.source` (Liquipedia attribution) plus, per series, `source` with the Liquipedia page, URL and revision id.
+
+### Match data and attribution
+
+Match results come from [Liquipedia](https://liquipedia.net/starcraft) and are licensed under [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Every series stores the Liquipedia page and revision it was read from and links back to it in API responses. If you reuse the data, keep that attribution and the license. The wikitext samples under `test/fixtures/liquipedia/` are Liquipedia content under the same license (revision links are in `test/broodwar/ingestion/match2_test.exs`).
+
+Ingestion (`Broodwar.Ingestion.MatchIngest`, parser in `Broodwar.Ingestion.Match2`):
+
+- Reads Match2 wikitext (`{{Matchlist}}`, `{{Bracket}}`, `{{Match}}`, `{{Map}}`) via `action=query&prop=revisions`, never `action=parse`
+- Stores series (`matches`) and games (`games`, one row per map). Walkovers are stored as series with no games. Score-only series (older brackets without per-map results) get `inferred` games with no map, so they count for ratings but not for map stats.
+- Upserts are idempotent on `(source_page, source_match_id)`. Series removed from the page are deleted. A bad series is reported, and the rest of the page is still ingested.
+- `date_precision` records where a date came from: `minute` / `day` (the match itself), `stage` (group table), `inherited` (previous match on the page) or `tournament` (infobox start date)
+- Players are created only from Liquipedia identities. Opponents resolve by Liquipedia page first, then by alias (case-insensitive) among players with no linked page. Anything ambiguous is reported, not merged.
+- Races missing from the page are looked up from the players' Liquipedia pages, 50 per request
+
+Liquipedia API terms are enforced in code (`Broodwar.Ingestion.LiquipediaThrottle`): a descriptive User-Agent, gzip, at most 1 request every 2 s and 1 `action=parse` every 30 s, across the whole node, with no automatic retries. A 403/429 stops the job.
+
+### Ratings
+
+Elo, updated per game (map) in chronological order (date, then position on the Liquipedia page). Everyone starts at 1500, and K is 40 for a player's first 30 games, 24 up to 100 games, and 16 after that. Walkovers don't count. Replay games count only after an admin links the replay to players. `mix broodwar.recompute_ratings` rebuilds everything in one transaction and is deterministic. Ingestion runs it after each batch.
+
+Why Elo and not Glicko-2: Glicko-2 treats the games inside a rating period as simultaneous and depends on two tuning constants (period length, volatility). For this data, exact game order is known, and the per-game K schedule is easy to audit. Glicko's main advantage, uncertainty for inactive or new players, is covered by a high provisional K and by the rankings filter (`config :broodwar, :rankings, min_games: 20, active_days: 365`). See `Broodwar.Ratings` for details.
+
+### Player identity
+
+`player_aliases` maps names to players: Liquipedia page titles, display names, IDs from player profiles, and in-game names an admin has confirmed. The admin replay endpoints resolve in-game names through aliases and never create players. An unknown or ambiguous name returns `422 UNRESOLVED_PLAYERS` with candidates. Retry with `player_a_id` / `player_b_id`, and that name is remembered as an alias.
 
 ### Replay uploads
 
@@ -73,6 +105,7 @@ POST /api/admin/replays/:id/rate     # Bearer ADMIN_API_KEY: link + rate existin
 - 10 uploads per hour per client IP → `429` with `retry-after` (reads: 600/min per IP)
 - Duplicate files (same SHA-256) return the existing replay with `200`
 - Anonymous uploads **never** create players or change Elo. Linking replays to players and rating them happens only through the admin endpoints or the operator batch import (`mix broodwar.import_replays`), and at most once per replay.
+- Parsed output includes `command_warnings` (unknown or truncated commands the parser skipped). `clean: false` means APM and build-order data may be incomplete.
 
 ### Player images
 
@@ -101,9 +134,15 @@ mix test
 Data tasks:
 
 ```bash
-mix broodwar.seed                        # Players + tournaments from Liquipedia
-mix broodwar.import_replays <dir>        # Trusted batch import (links + rates)
+mix broodwar.ingest_matches --tournament "AfreecaTV/StarCraft League Remastered/17"
+mix broodwar.recompute_ratings           # Rebuild Elo from all games
+mix broodwar.seed                        # Player profiles + tournament infoboxes from Liquipedia
+mix broodwar.import_replays <dir>        # Trusted batch import (links via aliases + rates)
 ```
+
+`priv/repo/seeds.exs` is for development only and inserts only a few map names. It contains no players, ratings or matches. All competitive data comes from ingestion.
+
+Backfilling history: run `ingest_matches` page by page, or pass several `--tournament` flags (or `--enqueue` to run through Oban). At the throttle, each page costs one request (~2 s), plus one request per 50 new players for races. Some series split results into subpages, which the task lists as transclusions so they can be ingested too. Don't run unattended bulk scrapes. Stop at the first 403/429.
 
 ### Replay parser NIF
 

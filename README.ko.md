@@ -47,22 +47,32 @@
 GET  /api/health                     # 상태 + DB 확인 (Fly 헬스체크)
 GET  /api/players                    # ?race= &status= &search=
 GET  /api/players/:id
-GET  /api/players/:id/matches
-GET  /api/players/:id/stats          # 대회 전적 + 리플레이 기반 통계
+GET  /api/players/:id/matches        # 시리즈 + 세트 + 출처, 페이지네이션
+GET  /api/players/:id/ratings        # Elo 기록 (경기당 한 점)
+GET  /api/players/:id/stats          # 시리즈 전적 + 리플레이 기반 통계
 GET  /api/matches                    # ?tournament_id= &matchup=
+GET  /api/head_to_head               # ?player_a=ID &player_b=ID
+GET  /api/rankings                   # ?min_games= &active_days=
 GET  /api/replays                    # 요약만 (parsed_data 제외)
 GET  /api/replays/:id                # 전체 파싱 결과
 POST /api/replays                    # multipart "file" 업로드 (아래 참고)
 GET  /api/openings                   # ?race=T|P|Z &matchup=TvZ
 GET  /api/builds
 GET  /api/maps
-GET  /api/balance
+GET  /api/maps/:id/stats             # 맵별 종족전 승률
+GET  /api/balance                    # 종족전 승률 (전체 + 연도별), ?map_id=
 GET  /api/streams                    # ?platform= &live=true
 GET  /api/tournaments[/:slug[/:season]]
 
 POST /api/admin/replays              # Bearer ADMIN_API_KEY: 업로드 + 연결 + 레이팅
 POST /api/admin/replays/:id/rate     # Bearer ADMIN_API_KEY: 기존 리플레이 연결 + 레이팅
 ```
+
+모든 통계에는 표본 크기(`n`)가 포함되며, 경기 데이터 기반 응답에는 `meta.source`(Liquipedia 출처 표기)와 시리즈별 `source`(페이지, URL, 리비전 ID)가 포함됩니다.
+
+### 경기 데이터 출처
+
+경기 결과는 [Liquipedia](https://liquipedia.net/starcraft)에서 가져오며 [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) 라이선스를 따릅니다. 모든 시리즈는 원본 페이지와 리비전을 저장하고 API 응답에서 링크합니다. Elo는 세트(맵) 단위로 시간순 계산합니다 (시작 1500, K = 40 / 24 / 16: 30경기 미만 / 100경기 미만 / 그 이후). 자세한 내용은 영문 README를 참고하세요.
 
 ### 리플레이 업로드
 
@@ -101,6 +111,8 @@ mix test
 데이터 작업:
 
 ```bash
+mix broodwar.ingest_matches --tournament "AfreecaTV/StarCraft League Remastered/17"
+mix broodwar.recompute_ratings           # 전체 경기로 Elo 재계산
 mix broodwar.seed                        # Liquipedia에서 선수 + 대회 동기화
 mix broodwar.import_replays <dir>        # 신뢰된 일괄 가져오기 (연결 + 레이팅)
 ```

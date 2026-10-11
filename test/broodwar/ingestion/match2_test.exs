@@ -214,6 +214,18 @@ defmodule Broodwar.Ingestion.Match2Test do
       assert [%{key: "B_R1M2"}] = result.matches
     end
 
+    test "parse_page/1 skips team opponents instead of reading them as players" do
+      result =
+        page("""
+        {{Matchlist|id=P
+        |M1={{Match|opponent1={{TeamOpponent|kt}}|opponent2={{TeamOpponent|skt}}|map1={{Map|map=X|winner=1}}}}
+        }}
+        """)
+
+      assert result.matches == []
+      assert [%{key: "P_M1", reason: :unsupported_opponent}] = result.skipped
+    end
+
     test "parse_page/1 ignores matches inside HTML comments" do
       result =
         page("""

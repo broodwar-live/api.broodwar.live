@@ -363,28 +363,36 @@ defmodule Broodwar.Ingestion.Match2 do
 
   defp opponent(nil), do: {:error, :missing_opponent}
 
+  # Only 1v1 opponents. Team (Proleague) and 2v2 opponents are skipped
+  # rather than misread as a player named after the team.
+  @solo_opponents ~w(1opponent soloopponent)
+
   defp opponent(value) do
     case Wikitext.parse_template(value) do
       nil ->
         {:error, :unrecognized_opponent}
 
-      t ->
-        name = Wikitext.clean(Wikitext.get_any(t, ["1", "p1", "name"]))
+      %{name: name} = t ->
+        if String.downcase(name) in @solo_opponents,
+          do: solo_opponent(t),
+          else: {:error, :unsupported_opponent}
+    end
+  end
 
-        if name in [nil, ""] or String.downcase(name) in ["tbd", "bye", "tba"] do
-          {:error, :tbd_opponent}
-        else
-          page = Wikitext.get_any(t, ["link", "p1link"]) || name
+  defp solo_opponent(t) do
+    name = Wikitext.clean(Wikitext.get_any(t, ["1", "p1", "name"]))
 
-          {:ok,
-           %{
-             name: name,
-             page: page,
-             race: race(Wikitext.get_any(t, ["race", "p1race", "faction", "p1faction"])),
-             score: Wikitext.get_any(t, ["score"]),
-             win: Wikitext.get_any(t, ["win"])
-           }}
-        end
+    if name in [nil, ""] or String.downcase(name) in ["tbd", "bye", "tba"] do
+      {:error, :tbd_opponent}
+    else
+      {:ok,
+       %{
+         name: name,
+         page: Wikitext.get_any(t, ["link", "p1link"]) || name,
+         race: race(Wikitext.get_any(t, ["race", "p1race", "faction", "p1faction"])),
+         score: Wikitext.get_any(t, ["score"]),
+         win: Wikitext.get_any(t, ["win"])
+       }}
     end
   end
 

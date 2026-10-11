@@ -26,6 +26,9 @@ config :broodwar, Oban,
   peer: false,
   queues: [default: 10, ingestion: 2]
 
+# Base URL of the static site, which hosts player images.
+config :broodwar, :static_site_url, "https://broodwar.live"
+
 # Per-client-IP rate limits: bucket => {limit, window_ms}.
 config :broodwar, :rate_limits,
   api: {600, :timer.minutes(1)},

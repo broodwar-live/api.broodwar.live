@@ -29,7 +29,7 @@ defmodule BroodwarWeb.Api.JSON do
       age: Player.age(p),
       team: p.team,
       status: p.status,
-      image_url: p.image_url
+      image_url: image_url(p.image_url)
     }
   end
 
@@ -138,6 +138,16 @@ defmodule BroodwarWeb.Api.JSON do
       last_seen_at: s.last_seen_at,
       player: maybe_assoc(s.player, &player_summary/1)
     }
+  end
+
+  # Player images are hosted by the static site; stored values are paths
+  # like "/images/players/flash.png" relative to it.
+  defp image_url(nil), do: nil
+  defp image_url("/" <> _ = path), do: static_site_url() <> path
+  defp image_url(url), do: url
+
+  defp static_site_url do
+    Application.get_env(:broodwar, :static_site_url, "https://broodwar.live")
   end
 
   defp matchup_string(nil, _), do: nil

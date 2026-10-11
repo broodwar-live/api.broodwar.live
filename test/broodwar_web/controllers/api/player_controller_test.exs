@@ -76,6 +76,12 @@ defmodule BroodwarWeb.Api.PlayerControllerTest do
       assert data["name"] == "Flash"
     end
 
+    test "show with image path returns absolute static-site URL", %{conn: conn} do
+      player = create_player(%{image_url: "/images/players/flash.png"})
+      data = conn |> get(~p"/api/players/#{player.id}") |> json_response(200) |> Map.get("data")
+      assert data["image_url"] == "https://broodwar.live/images/players/flash.png"
+    end
+
     test "returns 404 for missing player", %{conn: conn} do
       conn = get(conn, ~p"/api/players/999999")
       assert json_response(conn, 404)["error"]["code"] == "NOT_FOUND"

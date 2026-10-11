@@ -48,6 +48,8 @@ defmodule Broodwar.Ingestion.ReplayImport do
 
     Logger.info("[ReplayImport] Complete: #{imported} imported, #{errors} errors, #{total} total")
 
+    if imported > 0, do: Broodwar.Ratings.recompute()
+
     :ok
   end
 
@@ -56,14 +58,17 @@ defmodule Broodwar.Ingestion.ReplayImport do
   end
 
   # Batch import is operator-run (mix task / Oban), so it is trusted to link
-  # replays to known players and update ratings.
+  # replays to known players (resolved through aliases; unknown or ambiguous
+  # names are reported, never created). Ratings are recomputed once at the end.
   defp import_file(path) do
     with {:ok, data} <- File.read(path),
          {:ok, replay, _status} <- Replays.parse_and_save(data, file_path: path, source: "import"),
-         {:ok, replay} <- Replays.link_and_rate(replay) do
+         {:ok, replay} <- Replays.link_and_rate(replay, %{}, recompute: false) do
       {:ok, replay.id}
     else
-      {:error, reason} -> {:error, path, reason}
+      {:error, reason} ->
+        Logger.warning("[ReplayImport] #{path}: #{inspect(reason)}")
+        {:error, path, reason}
     end
   end
 

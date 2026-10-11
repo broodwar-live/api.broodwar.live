@@ -24,11 +24,15 @@ config :broodwar, Oban,
   prefix: false,
   notifier: Oban.Notifiers.PG,
   peer: false,
-  queues: [default: 10, ingestion: 2],
+  queues: [default: 10, ingestion: 1],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
     {Oban.Plugins.Cron, crontab: [{"*/3 * * * *", Broodwar.Ingestion.StreamPoll}]}
   ]
+
+# /api/rankings: players need this many rated games, the last one within
+# `active_days`, to be listed.
+config :broodwar, :rankings, min_games: 20, active_days: 365
 
 # Base URL of the static site, which hosts player images.
 config :broodwar, :static_site_url, "https://broodwar.live"

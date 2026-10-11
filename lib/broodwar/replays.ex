@@ -12,9 +12,11 @@ defmodule Broodwar.Replays do
   """
   import Ecto.Query
 
-  alias Broodwar.Elo
+  alias Broodwar.Matches.Game
   alias Broodwar.Pagination
+  alias Broodwar.Players.Identity
   alias Broodwar.Players.Player
+  alias Broodwar.Ratings
   alias Broodwar.Replays.Replay
   alias Broodwar.Repo
 
@@ -110,40 +112,147 @@ defmodule Broodwar.Replays do
   end
 
   @doc """
-  Trusted-only: link a stored replay to existing player records by name and
-  apply its result to Elo ratings. Idempotent — a replay is rated at most
-  once (tracked via `rated_at`).
+  Trusted-only (admin API, operator import): link a stored replay to
+  existing players and record its result as a rated game.
+
+  In-game names are resolved through player aliases
+  (`Broodwar.Players.Identity.resolve_in_game/1`); players are never
+  created from replay names. `overrides` may pin a slot to a player id
+  (`"player_a_id"` / `"player_b_id"`), which also records the in-game name
+  as an alias of that player for next time.
+
+  Returns `{:error, {:unresolved_players, details}}` when a name is unknown
+  or matches several players, with the candidates in `details`.
+
+  Idempotent: a replay is linked at most once (`rated_at`). Ratings are
+  recomputed afterwards unless `recompute: false` is given (batch imports
+  recompute once at the end).
   """
-  def link_and_rate(%Replay{rated_at: %DateTime{}} = replay), do: {:ok, replay}
+  def link_and_rate(replay, overrides \\ %{}, opts \\ [])
 
-  def link_and_rate(%Replay{} = replay) do
-    Repo.transaction(fn ->
-      # Rate first: Elo may create player records for unknown names, which
-      # the link step below then picks up.
-      with :ok <- apply_rating(replay),
-           {:ok, replay} <- Repo.update(Replay.changeset(replay, link_attrs(replay))) do
-        Broodwar.Cache.invalidate_all()
-        replay
-      else
-        {:error, reason} -> Repo.rollback(reason)
+  def link_and_rate(%Replay{rated_at: %DateTime{}} = replay, _overrides, _opts),
+    do: {:ok, replay}
+
+  def link_and_rate(%Replay{} = replay, overrides, opts) do
+    slots = [
+      {"a", replay.player_a_name, overrides["player_a_id"]},
+      {"b", replay.player_b_name, overrides["player_b_id"]}
+    ]
+
+    resolved = Enum.map(slots, &resolve_slot/1)
+
+    case Enum.filter(resolved, &match?({:error, _}, &1)) do
+      [] ->
+        [{:ok, pa, pin_a}, {:ok, pb, pin_b}] = resolved
+        link(replay, {pa, pin_a}, {pb, pin_b}, opts)
+
+      errors ->
+        {:error, {:unresolved_players, Enum.map(errors, &elem(&1, 1))}}
+    end
+  end
+
+  defp link(_replay, {%Player{id: id}, _}, {%Player{id: id}, _}, _opts),
+    do: {:error, "Both replay slots resolve to the same player"}
+
+  defp link(replay, {pa, pin_a}, {pb, pin_b}, opts) do
+    result =
+      Repo.transaction(fn ->
+        if pin_a, do: Identity.add_alias(pa, replay.player_a_name, "admin")
+        if pin_b, do: Identity.add_alias(pb, replay.player_b_name, "admin")
+
+        attrs = %{
+          player_a_id: pa.id,
+          player_b_id: pb.id,
+          rated_at: DateTime.utc_now() |> DateTime.truncate(:second)
+        }
+
+        with {:ok, replay} <- Repo.update(Replay.changeset(replay, attrs)),
+             :ok <- insert_game(replay, pa, pb) do
+          replay
+        else
+          {:error, reason} -> Repo.rollback(reason)
+        end
+      end)
+
+    with {:ok, replay} <- result do
+      if Keyword.get(opts, :recompute, true), do: Ratings.recompute()
+      Broodwar.Cache.invalidate_all()
+      {:ok, replay}
+    end
+  end
+
+  defp resolve_slot({slot, name, nil}) do
+    variants = [name, name && normalize_player_name(name)["normalized"]]
+
+    case Identity.resolve_in_game(variants) do
+      {:ok, player} -> {:ok, player, false}
+      {:error, {kind, candidates}} -> {:error, unresolved(slot, name, kind, candidates)}
+    end
+  end
+
+  defp resolve_slot({slot, name, id}) do
+    case Repo.get(Player, parse_id(id)) do
+      %Player{} = player -> {:ok, player, true}
+      nil -> {:error, unresolved(slot, name, :unknown_player_id, [])}
+    end
+  end
+
+  defp unresolved(slot, name, kind, candidates) do
+    %{slot: slot, name: name, reason: kind, candidates: candidates}
+  end
+
+  defp parse_id(id) when is_integer(id), do: id
+
+  defp parse_id(id) when is_binary(id) do
+    case Integer.parse(id) do
+      {n, ""} -> n
+      _ -> 0
+    end
+  end
+
+  defp parse_id(_), do: 0
+
+  # A game is recorded only for a decided 1v1 result.
+  defp insert_game(%Replay{winner_name: nil}, _pa, _pb), do: :ok
+
+  defp insert_game(replay, pa, pb) do
+    winner =
+      cond do
+        replay.winner_name == replay.player_a_name -> pa
+        replay.winner_name == replay.player_b_name -> pb
+        true -> nil
       end
-    end)
+
+    if winner do
+      %Game{}
+      |> Game.changeset(%{
+        replay_id: replay.id,
+        map_id: replay.map_id,
+        map_name: replay.map_name_normalized,
+        player_a_id: pa.id,
+        player_b_id: pb.id,
+        winner_id: winner.id,
+        race_a: replay.race_a,
+        race_b: replay.race_b,
+        played_at: replay_played_at(replay),
+        source: "replay"
+      })
+      |> Repo.insert()
+      |> case do
+        {:ok, _game} -> :ok
+        {:error, changeset} -> {:error, changeset}
+      end
+    else
+      :ok
+    end
   end
 
-  defp link_attrs(replay) do
-    %{
-      player_a_id: player_id_by_name(replay.player_a_name),
-      player_b_id: player_id_by_name(replay.player_b_name),
-      rated_at: DateTime.utc_now() |> DateTime.truncate(:second)
-    }
-  end
+  defp replay_played_at(%Replay{played_at: %DateTime{} = at}), do: at
 
-  defp apply_rating(replay) do
-    case Elo.update_from_replay(replay.parsed_data || %{}) do
-      {:ok, _ratings} -> :ok
-      # No decisive result (e.g. both left) — nothing to rate.
-      {:error, reason} when reason in [:no_winner, :insufficient_data] -> :ok
-      {:error, reason} -> {:error, reason}
+  defp replay_played_at(replay) do
+    case get_in(replay.parsed_data || %{}, ["header", "start_time"]) do
+      ts when is_integer(ts) and ts > 0 -> DateTime.from_unix!(ts)
+      _ -> replay.inserted_at && DateTime.from_naive!(replay.inserted_at, "Etc/UTC")
     end
   end
 
@@ -235,11 +344,5 @@ defmodule Broodwar.Replays do
 
   defp map_id_by_name(map_name) do
     Repo.one(from(m in Broodwar.Maps.Map, where: m.name == ^map_name, select: m.id, limit: 1))
-  end
-
-  defp player_id_by_name(nil), do: nil
-
-  defp player_id_by_name(name) do
-    Repo.one(from(p in Player, where: p.name == ^name, select: p.id, limit: 1))
   end
 end

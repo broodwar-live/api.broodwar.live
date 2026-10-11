@@ -5,6 +5,8 @@ defmodule BroodwarWeb.Api.FallbackController do
   """
   use Phoenix.Controller, formats: [:json]
 
+  alias BroodwarWeb.Api.JSON
+
   def call(conn, {:error, :not_found}) do
     error(conn, :not_found, "NOT_FOUND", "Resource not found")
   end
@@ -20,6 +22,31 @@ defmodule BroodwarWeb.Api.FallbackController do
 
   def call(conn, {:error, {:unparseable, reason}}) do
     error(conn, :unprocessable_entity, "INVALID_REPLAY", "Could not parse replay: #{reason}")
+  end
+
+  def call(conn, {:error, {:unresolved_players, replay_id, details}}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> json(%{
+      error: %{
+        code: "UNRESOLVED_PLAYERS",
+        message:
+          "Replay player names could not be matched to exactly one known player. " <>
+            "Retry POST /api/admin/replays/#{replay_id}/rate with player_a_id / player_b_id.",
+        details: %{
+          replay_id: replay_id,
+          players:
+            Enum.map(details, fn d ->
+              %{
+                slot: d.slot,
+                name: d.name,
+                reason: d.reason,
+                candidates: Enum.map(d.candidates, &JSON.player_summary/1)
+              }
+            end)
+        }
+      }
+    })
   end
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do

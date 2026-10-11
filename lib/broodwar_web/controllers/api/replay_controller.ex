@@ -37,27 +37,49 @@ defmodule BroodwarWeb.Api.ReplayController do
 
   @doc """
   POST /api/admin/replays — authenticated upload. Same as `create/2`, then
-  links players and applies Elo.
+  links players (through aliases; optional `player_a_id` / `player_b_id`
+  pin a slot) and records the game for ratings. Unknown or ambiguous names
+  give `422 UNRESOLVED_PLAYERS` with candidates; the replay stays stored
+  and can be linked later via `rate/2`.
   """
   def admin_create(conn, params) do
-    with {:ok, conn, replay} <- do_upload(conn, params, "admin"),
-         {:ok, replay} <- Replays.link_and_rate(replay) do
-      respond(conn, replay)
+    with {:ok, conn, replay} <- do_upload(conn, params, "admin") do
+      case Replays.link_and_rate(replay, overrides(params)) do
+        {:ok, replay} ->
+          respond(conn, replay)
+
+        {:error, {:unresolved_players, details}} ->
+          {:error, {:unresolved_players, replay.id, details}}
+
+        error ->
+          error
+      end
     end
   end
 
   @doc """
   POST /api/admin/replays/:id/rate — link an existing replay to players and
-  apply Elo (idempotent).
+  record its game (idempotent). Accepts `player_a_id` / `player_b_id`.
   """
-  def rate(conn, %{"id" => id}) do
-    with {:ok, replay} <- Replays.link_and_rate(Replays.get_replay!(id)) do
-      json(conn, %{data: JSON.replay_summary(Replays.get_replay!(replay.id))})
+  def rate(conn, %{"id" => id} = params) do
+    replay = Replays.get_replay!(id)
+
+    case Replays.link_and_rate(replay, overrides(params)) do
+      {:ok, replay} ->
+        json(conn, %{data: JSON.replay_summary(Replays.get_replay!(replay.id))})
+
+      {:error, {:unresolved_players, details}} ->
+        {:error, {:unresolved_players, replay.id, details}}
+
+      error ->
+        error
     end
   rescue
     Ecto.NoResultsError ->
       {:error, :not_found}
   end
+
+  defp overrides(params), do: Map.take(params, ["player_a_id", "player_b_id"])
 
   defp upload(conn, params, source) do
     with {:ok, conn, replay} <- do_upload(conn, params, source) do

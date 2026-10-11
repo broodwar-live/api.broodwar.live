@@ -1,6 +1,8 @@
 defmodule BroodwarWeb.Api.ReplayControllerTest do
   use BroodwarWeb.ConnCase
 
+  alias Broodwar.Matches.Game
+  alias Broodwar.Players.Identity
   alias Broodwar.Players.Player
   alias Broodwar.Replays.Replay
   alias Broodwar.Repo
@@ -34,6 +36,13 @@ defmodule BroodwarWeb.Api.ReplayControllerTest do
 
     {:ok, replay} = Repo.insert(Replay.changeset(%Replay{}, Map.merge(default, attrs)))
     replay
+  end
+
+  # A player as match ingestion would create it, plus in-game aliases.
+  defp liquipedia_player(page, in_game_names) do
+    {:ok, player} = Identity.resolve_liquipedia(%{page: page, name: page})
+    Enum.each(in_game_names, &Identity.add_alias(player, &1, "admin"))
+    player
   end
 
   defp upload(path \\ @fixture) do
@@ -180,7 +189,25 @@ defmodule BroodwarWeb.Api.ReplayControllerTest do
       assert json_response(conn, 401)
     end
 
-    test "admin_create with valid token links players and rates", %{conn: conn} do
+    test "admin_create with unknown names returns 422 and creates no players", %{conn: conn} do
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer test-admin-key")
+        |> post(~p"/api/admin/replays", %{"file" => upload()})
+
+      assert %{"error" => %{"code" => "UNRESOLVED_PLAYERS", "details" => details}} =
+               json_response(conn, 422)
+
+      assert [%{"slot" => "a", "reason" => "unknown"}, %{"slot" => "b"}] = details["players"]
+      assert Repo.aggregate(Player, :count) == 0
+      # The replay itself is kept so an admin can link it later.
+      assert %Replay{rated_at: nil} = Repo.get!(Replay, details["replay_id"])
+    end
+
+    test "admin_create with aliased players links them and rates the game", %{conn: conn} do
+      loser = liquipedia_player("SapaPro", ["Moo.Sapa"])
+      winner = liquipedia_player("Rabbit", ["adultrabbit"])
+
       conn =
         conn
         |> put_req_header("authorization", "Bearer test-admin-key")
@@ -190,15 +217,61 @@ defmodule BroodwarWeb.Api.ReplayControllerTest do
       replay = Repo.get!(Replay, data["id"])
       assert replay.source == "admin"
       assert %DateTime{} = replay.rated_at
+      assert replay.player_a_id == loser.id
 
-      winner = Repo.get_by!(Player, name: "adultrabbit")
-      loser = Repo.get_by!(Player, name: "Moo.Sapa")
-      assert winner.rating > 1500
-      assert loser.rating < 1500
-      assert data["player_a"]["name"] == "Moo.Sapa"
+      assert [%Game{source: "replay", winner_id: winner_id}] = Repo.all(Game)
+      assert winner_id == winner.id
+      assert Repo.get!(Player, winner.id).rating > 1500
+      assert Repo.get!(Player, loser.id).rating < 1500
+      assert Repo.aggregate(Player, :count) == 2
+    end
+
+    test "admin_create with an ambiguous name returns 422 with candidates", %{conn: conn} do
+      liquipedia_player("SapaPro", ["Moo.Sapa"])
+      liquipedia_player("Rabbit", ["adultrabbit"])
+      liquipedia_player("Rabbit (Polish player)", ["AdultRabbit"])
+
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer test-admin-key")
+        |> post(~p"/api/admin/replays", %{"file" => upload()})
+
+      assert %{"error" => %{"code" => "UNRESOLVED_PLAYERS", "details" => details}} =
+               json_response(conn, 422)
+
+      assert [%{"slot" => "b", "reason" => "ambiguous", "candidates" => candidates}] =
+               details["players"]
+
+      assert candidates |> Enum.map(& &1["name"]) |> Enum.sort() ==
+               ["Rabbit", "Rabbit (Polish player)"]
+
+      assert Repo.all(Game) == []
+    end
+
+    test "rate with explicit player ids links and remembers the in-game name", %{conn: conn} do
+      a = liquipedia_player("SapaPro", [])
+      b = liquipedia_player("Rabbit", [])
+
+      %{"data" => %{"id" => id}} =
+        conn |> post(~p"/api/replays", %{"file" => upload()}) |> json_response(201)
+
+      authed = put_req_header(conn, "authorization", "Bearer test-admin-key")
+
+      assert authed
+             |> post(~p"/api/admin/replays/#{id}/rate", %{
+               "player_a_id" => a.id,
+               "player_b_id" => b.id
+             })
+             |> json_response(200)
+
+      assert {:ok, %Player{id: a_id}} = Identity.resolve_in_game(["Moo.Sapa"])
+      assert a_id == a.id
     end
 
     test "rate on anonymous upload is idempotent", %{conn: conn} do
+      liquipedia_player("SapaPro", ["Moo.Sapa"])
+      liquipedia_player("Rabbit", ["adultrabbit"])
+
       %{"data" => %{"id" => id}} =
         conn |> post(~p"/api/replays", %{"file" => upload()}) |> json_response(201)
 
@@ -208,6 +281,7 @@ defmodule BroodwarWeb.Api.ReplayControllerTest do
 
       assert authed |> post(~p"/api/admin/replays/#{id}/rate") |> json_response(200)
       assert ratings == Repo.all(Player) |> Enum.map(&{&1.name, &1.rating}) |> Enum.sort()
+      assert Repo.aggregate(Game, :count) == 1
     end
   end
 end

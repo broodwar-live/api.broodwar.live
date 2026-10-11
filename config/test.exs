@@ -22,3 +22,8 @@ config :broodwar, :admin_api_key, "test-admin-key"
 config :broodwar, :rate_limits,
   api: {10_000, :timer.minutes(1)},
   uploads: {3, :timer.hours(1)}
+
+# No network in tests; never wait on the Liquipedia throttle.
+config :broodwar, Broodwar.Ingestion.LiquipediaThrottle,
+  query_interval_ms: 0,
+  parse_interval_ms: 0

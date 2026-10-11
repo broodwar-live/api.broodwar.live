@@ -5,11 +5,61 @@ defmodule Broodwar.Ingestion.Liquipedia do
   Fetches StarCraft: Brood War tournament, player, and match data
   from Liquipedia's public MediaWiki API.
 
-  Rate limited to 1 request per 2 seconds as per Liquipedia's terms.
+  Follows the Liquipedia API terms: a descriptive User-Agent, gzip, and
+  pacing through `Broodwar.Ingestion.LiquipediaThrottle` (1 request / 2 s,
+  `action=parse` 1 / 30 s, node-wide). Requests are never retried
+  automatically; a 403/429 means we are being limited and callers must stop.
+
+  Content is CC-BY-SA 3.0; store the page and revision with anything
+  derived from it (see `get_page_revision/1`).
   """
 
+  alias Broodwar.Ingestion.LiquipediaThrottle
+
   @base_url "https://liquipedia.net/starcraft/api.php"
-  @user_agent "broodwar.live/0.1 (https://github.com/broodwar-live; community@broodwar.live)"
+  @wiki_url "https://liquipedia.net/starcraft/"
+  @user_agent "broodwar.live-bot/1.0 (https://broodwar.live; contact via github.com/broodwar-live)"
+
+  @doc "Public URL of a wiki page."
+  @spec page_url(String.t()) :: String.t()
+  def page_url(title), do: @wiki_url <> URI.encode(String.replace(title, " ", "_"))
+
+  @doc "Permanent URL of a specific page revision."
+  @spec revision_url(integer()) :: String.t()
+  def revision_url(revision_id), do: @wiki_url <> "index.php?oldid=#{revision_id}"
+
+  @doc """
+  Fetches a page's current wikitext with its revision id, following
+  redirects. Returns `{:ok, %{title, revision_id, content}}` where `title`
+  is the canonical page title.
+  """
+  @spec get_page_revision(String.t()) ::
+          {:ok, %{title: String.t(), revision_id: integer(), content: String.t()}}
+          | {:error, term()}
+  def get_page_revision(title) do
+    params = %{
+      action: "query",
+      titles: title,
+      prop: "revisions",
+      rvprop: "content|ids",
+      rvslots: "main",
+      redirects: 1,
+      format: "json"
+    }
+
+    with {:ok, %{"query" => %{"pages" => pages}}} <- api_request(params) do
+      case pages |> Map.values() |> List.first() do
+        %{
+          "title" => canonical,
+          "revisions" => [%{"revid" => revid, "slots" => %{"main" => %{"*" => content}}} | _]
+        } ->
+          {:ok, %{title: canonical, revision_id: revid, content: content}}
+
+        _ ->
+          {:error, :page_not_found}
+      end
+    end
+  end
 
   @doc """
   Fetches raw wikitext content for a page.
@@ -42,7 +92,55 @@ defmodule Broodwar.Ingestion.Liquipedia do
   end
 
   @doc """
-  Fetches parsed HTML for a page (rate limited to 1 req/30s).
+  Fetches the current wikitext of up to 50 pages in ONE request (the
+  MediaWiki limit for `titles`). Returns `{:ok, %{requested_title =>
+  content}}`; missing pages are left out. Redirects are followed.
+  """
+  @spec get_pages([String.t()]) :: {:ok, %{String.t() => String.t()}} | {:error, term()}
+  def get_pages(titles) when length(titles) in 1..50 do
+    params = %{
+      action: "query",
+      titles: Enum.join(titles, "|"),
+      prop: "revisions",
+      rvprop: "content",
+      rvslots: "main",
+      redirects: 1,
+      format: "json"
+    }
+
+    with {:ok, %{"query" => query}} <- api_request(params) do
+      renames =
+        Map.new((query["normalized"] || []) ++ (query["redirects"] || []), fn r ->
+          {r["from"], r["to"]}
+        end)
+
+      contents =
+        for {_id, %{"title" => title, "revisions" => [rev | _]}} <- query["pages"] || %{},
+            into: %{},
+            do: {title, get_in(rev, ["slots", "main", "*"])}
+
+      found =
+        titles
+        |> Enum.map(&{&1, contents[follow(&1, renames, 3)]})
+        |> Enum.filter(fn {_title, content} -> is_binary(content) end)
+        |> Map.new()
+
+      {:ok, found}
+    end
+  end
+
+  defp follow(title, _renames, 0), do: title
+
+  defp follow(title, renames, hops) do
+    case renames[title] do
+      nil -> title
+      next -> follow(next, renames, hops - 1)
+    end
+  end
+
+  @doc """
+  Fetches parsed HTML for a page (throttled to 1 req/30s). Prefer
+  `get_page_revision/1`; parse is expensive for Liquipedia.
   """
   def get_parsed_page(title) do
     params = %{
@@ -417,8 +515,7 @@ defmodule Broodwar.Ingestion.Liquipedia do
   # -- HTTP --
 
   defp api_request(params) do
-    # Rate limit: sleep briefly to respect Liquipedia's 1 req/2s policy
-    Process.sleep(2_100)
+    LiquipediaThrottle.wait(if params[:action] == "parse", do: :parse, else: :query)
 
     case Req.get(@base_url,
            params: params,
@@ -426,10 +523,14 @@ defmodule Broodwar.Ingestion.Liquipedia do
              {"user-agent", @user_agent},
              {"accept-encoding", "gzip"}
            ],
+           retry: false,
            decode_body: :json
          ) do
       {:ok, %Req.Response{status: 200, body: body}} when is_map(body) ->
         {:ok, body}
+
+      {:ok, %Req.Response{status: status}} when status in [403, 429] ->
+        {:error, {:rate_limited, status}}
 
       {:ok, %Req.Response{status: status}} ->
         {:error, {:http_error, status}}

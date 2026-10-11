@@ -68,4 +68,21 @@ defmodule BroodwarWeb.Api.BuildControllerTest do
       assert json_response(conn, 404)["error"]["code"] == "NOT_FOUND"
     end
   end
+
+  describe "GET /api/openings" do
+    test "openings with no replays returns empty list", %{conn: conn} do
+      conn = get(conn, ~p"/api/openings?race=zerg&matchup=pvz")
+      assert json_response(conn, 200) == %{"data" => []}
+    end
+
+    test "openings with invalid race returns 400", %{conn: conn} do
+      conn = get(conn, ~p"/api/openings?race=xyz")
+      assert json_response(conn, 400)["error"]["code"] == "BAD_REQUEST"
+    end
+
+    test "openings with invalid matchup returns 400", %{conn: conn} do
+      conn = get(conn, ~p"/api/openings?matchup=#{String.duplicate("a", 50)}")
+      assert json_response(conn, 400)["error"]["code"] == "BAD_REQUEST"
+    end
+  end
 end

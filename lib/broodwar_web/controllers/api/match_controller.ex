@@ -16,8 +16,7 @@ defmodule BroodwarWeb.Api.MatchController do
     pagination_opts = parse_pagination(params)
 
     matches =
-      Matches.list_matches(opts)
-      |> paginate(pagination_opts)
+      Matches.list_matches(opts ++ pagination_opts)
 
     json(conn, %{
       data: Enum.map(matches, &JSON.match/1),
@@ -53,14 +52,5 @@ defmodule BroodwarWeb.Api.MatchController do
       page: parse_int(params["page"]) || 1,
       per_page: parse_int(params["per_page"]) || 50
     ]
-  end
-
-  defp paginate(list, opts) when is_list(list) do
-    meta = Pagination.pagination_meta(opts)
-    offset = (meta.page - 1) * meta.per_page
-
-    list
-    |> Enum.drop(offset)
-    |> Enum.take(meta.per_page)
   end
 end

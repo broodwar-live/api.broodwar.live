@@ -16,8 +16,7 @@ defmodule BroodwarWeb.Api.BuildController do
     pagination_opts = parse_pagination(params)
 
     builds =
-      BuildsContext.list_builds(opts)
-      |> paginate(pagination_opts)
+      BuildsContext.list_builds(opts ++ pagination_opts)
 
     json(conn, %{
       data: Enum.map(builds, &JSON.build/1),
@@ -39,20 +38,46 @@ defmodule BroodwarWeb.Api.BuildController do
   Query params: ?race=T&matchup=TvZ
   """
   def openings(conn, params) do
-    opts =
-      []
-      |> maybe_put(:race, params["race"])
-      |> maybe_put(:matchup, params["matchup"])
+    # Only whitelisted values reach the cache key, so the key space is
+    # bounded (4 race options x 17 matchup options).
+    with {:ok, race} <- normalize_race(params["race"]),
+         {:ok, matchup} <- normalize_matchup(params["matchup"]) do
+      cache_key = "openings:#{race || "all"}:#{matchup || "all"}"
 
-    cache_key = "openings:#{params["race"] || "all"}:#{params["matchup"] || "all"}"
+      openings =
+        Broodwar.Cache.fetch(cache_key, 300, fn ->
+          BuildsContext.list_openings(race: race, matchup: matchup)
+        end)
 
-    openings =
-      Broodwar.Cache.fetch(cache_key, 300, fn ->
-        BuildsContext.list_openings(opts)
-      end)
-
-    json(conn, %{data: openings})
+      json(conn, %{data: openings})
+    end
   end
+
+  defp normalize_race(nil), do: {:ok, nil}
+  defp normalize_race(""), do: {:ok, nil}
+
+  defp normalize_race(race) when is_binary(race) do
+    case race |> String.trim() |> String.upcase() do
+      r when r in ["T", "TERRAN"] -> {:ok, "T"}
+      r when r in ["P", "PROTOSS"] -> {:ok, "P"}
+      r when r in ["Z", "ZERG"] -> {:ok, "Z"}
+      _ -> {:error, "Invalid race. Use T, P or Z."}
+    end
+  end
+
+  defp normalize_race(_), do: {:error, "Invalid race. Use T, P or Z."}
+
+  defp normalize_matchup(nil), do: {:ok, nil}
+  defp normalize_matchup(""), do: {:ok, nil}
+
+  defp normalize_matchup(matchup) when is_binary(matchup) do
+    case matchup |> String.trim() |> String.upcase() do
+      <<a, "V", b>> when a in ~c"TPZR" and b in ~c"TPZR" -> {:ok, <<a, "v", b>>}
+      _ -> {:error, "Invalid matchup. Use e.g. TvZ."}
+    end
+  end
+
+  defp normalize_matchup(_), do: {:error, "Invalid matchup. Use e.g. TvZ."}
 
   defp maybe_put(opts, _key, nil), do: opts
   defp maybe_put(opts, _key, ""), do: opts
@@ -76,13 +101,4 @@ defmodule BroodwarWeb.Api.BuildController do
 
   defp parse_int(val, _default) when is_integer(val), do: val
   defp parse_int(_, default), do: default
-
-  defp paginate(list, opts) when is_list(list) do
-    meta = Pagination.pagination_meta(opts)
-    offset = (meta.page - 1) * meta.per_page
-
-    list
-    |> Enum.drop(offset)
-    |> Enum.take(meta.per_page)
-  end
 end

@@ -17,8 +17,7 @@ defmodule BroodwarWeb.Api.PlayerController do
     pagination_opts = parse_pagination(params)
 
     players =
-      Players.list_players(opts)
-      |> paginate(pagination_opts)
+      Players.list_players(opts ++ pagination_opts)
 
     json(conn, %{
       data: Enum.map(players, &JSON.player/1),
@@ -82,13 +81,4 @@ defmodule BroodwarWeb.Api.PlayerController do
 
   defp parse_int(val, _default) when is_integer(val), do: val
   defp parse_int(_, default), do: default
-
-  defp paginate(list, opts) when is_list(list) do
-    meta = Pagination.pagination_meta(opts)
-    offset = (meta.page - 1) * meta.per_page
-
-    list
-    |> Enum.drop(offset)
-    |> Enum.take(meta.per_page)
-  end
 end

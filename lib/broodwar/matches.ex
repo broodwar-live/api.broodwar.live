@@ -4,6 +4,7 @@ defmodule Broodwar.Matches do
   """
   import Ecto.Query
   alias Broodwar.Matches.Match
+  alias Broodwar.Pagination
   alias Broodwar.Repo
 
   def list_matches(opts \\ []) do
@@ -12,6 +13,7 @@ defmodule Broodwar.Matches do
     |> maybe_filter_tournament(opts[:tournament_id])
     |> maybe_filter_matchup(opts[:matchup])
     |> preload([:tournament, :player_a, :player_b, :map])
+    |> Pagination.paginate(opts)
     |> Repo.all()
   end
 

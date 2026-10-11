@@ -10,12 +10,16 @@ defmodule Broodwar.Players.Player do
     field :race, :string
     field :country, :string
     field :rating, :integer
+    field :rated_games, :integer, default: 0
+    field :last_played_at, :utc_datetime
     field :birth_date, :string
     field :team, :string
     field :status, :string, default: "active"
     field :image_url, :string
     field :liquipedia_page, :string
     field :liquipedia_data, :map, default: %{}
+
+    has_many :player_aliases, Broodwar.Players.PlayerAlias
 
     timestamps()
   end
@@ -27,7 +31,6 @@ defmodule Broodwar.Players.Player do
     :aliases,
     :race,
     :country,
-    :rating,
     :birth_date,
     :team,
     :status,
@@ -39,6 +42,8 @@ defmodule Broodwar.Players.Player do
 
   @doc false
   def changeset(player, attrs) do
+    # `rating`, `rated_games` and `last_played_at` are derived; only
+    # Broodwar.Ratings writes them.
     player
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)

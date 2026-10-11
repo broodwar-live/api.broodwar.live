@@ -1,8 +1,8 @@
 defmodule BroodwarWeb.Api.MapController do
   use BroodwarWeb, :controller
 
-  alias Broodwar.Repo
   alias Broodwar.Maps.Map, as: GameMap
+  alias Broodwar.Repo
   alias BroodwarWeb.Api.JSON
 
   import Ecto.Query

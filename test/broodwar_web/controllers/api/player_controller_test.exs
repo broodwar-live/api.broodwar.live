@@ -1,8 +1,8 @@
 defmodule BroodwarWeb.Api.PlayerControllerTest do
   use BroodwarWeb.ConnCase
 
-  alias Broodwar.Repo
   alias Broodwar.Players.Player
+  alias Broodwar.Repo
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}

@@ -73,7 +73,12 @@ defmodule Broodwar.Ingestion.TournamentSync do
       series ->
         jobs =
           Enum.map(series.seasons, fn season ->
-            %{page: "#{series.prefix}/#{season}", short_name: series.short_name, type: series.type, season: season}
+            %{
+              page: "#{series.prefix}/#{season}",
+              short_name: series.short_name,
+              type: series.type,
+              season: season
+            }
             |> new()
           end)
 
@@ -90,12 +95,12 @@ defmodule Broodwar.Ingestion.TournamentSync do
     Logger.info("[TournamentSync] Fetching #{page}")
 
     case Liquipedia.fetch_tournament(page) do
-      {:ok, data} when map_size(data) > 0 ->
+      {:ok, %{name: _} = data} ->
         upsert_tournament(data, short_name, season, type, page)
         Logger.info("[TournamentSync] Synced #{page}: #{data[:first_place] || "in progress"}")
         :ok
 
-      {:ok, _empty} ->
+      {:ok, _no_infobox} ->
         Logger.warning("[TournamentSync] No infobox found for #{page}")
         :ok
 
@@ -144,7 +149,10 @@ defmodule Broodwar.Ingestion.TournamentSync do
     }
 
     # Upsert by short_name + season
-    case Repo.one(from t in Tournament, where: t.short_name == ^attrs.short_name and t.season == ^attrs.season) do
+    case Repo.one(
+           from t in Tournament,
+             where: t.short_name == ^attrs.short_name and t.season == ^attrs.season
+         ) do
       nil ->
         %Tournament{}
         |> Tournament.changeset(attrs)

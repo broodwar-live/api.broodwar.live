@@ -5,8 +5,8 @@ defmodule Broodwar.Ingestion.PlayerSync do
   """
 
   alias Broodwar.Ingestion.Liquipedia
-  alias Broodwar.Repo
   alias Broodwar.Players.Player
+  alias Broodwar.Repo
 
   import Ecto.Query
   require Logger
@@ -104,60 +104,58 @@ defmodule Broodwar.Ingestion.PlayerSync do
 
     case Liquipedia.get_page(page) do
       {:ok, wikitext} ->
-        fields = parse_player_infobox(wikitext)
-        image_filename = extract_image(wikitext)
-        team_history = extract_team_history(wikitext)
-
-        # Extract aliases from infobox (|id2=, |id3=, etc.)
-        aliases =
-          1..5
-          |> Enum.map(fn i -> fields["id#{i}"] end)
-          |> Enum.reject(&is_nil/1)
-          |> Enum.reject(&(&1 == ""))
-
-        attrs = %{
-          name: name,
-          race: map_race(fields["race"] || default_race),
-          real_name: fields["name"],
-          real_name_ko: fields["romanized_name"] || fields["hangul"],
-          aliases: aliases,
-          birth_date: fields["birth_date"],
-          country: map_country(fields["country"]),
-          team: fields["team"],
-          status: map_status(fields["status"]),
-          liquipedia_page: page,
-          liquipedia_data: Map.put(fields, "team_history", team_history)
-        }
-
-        # Upsert player
-        player =
-          case Repo.one(from p in Player, where: p.name == ^name) do
-            nil ->
-              %Player{}
-              |> Player.changeset(attrs)
-              |> Repo.insert!()
-
-            existing ->
-              # Only update fields that are nil or empty in existing record
-              update_attrs =
-                attrs
-                |> Enum.reject(fn {k, v} -> is_nil(v) or v == "" or (k in [:name, :rating] and not is_nil(Map.get(existing, k))) end)
-                |> Enum.into(%{})
-
-              existing
-              |> Player.changeset(update_attrs)
-              |> Repo.update!()
-          end
-
-        # Download image if needed
-        if !player.image_url && image_filename do
-          download_player_image(player, image_filename)
-        end
-
+        attrs = player_attrs(name, page, default_race, wikitext)
+        upsert_player(name, attrs)
         Logger.info("[PlayerSync] #{name}: #{attrs.real_name || "?"} (#{attrs.race})")
 
       {:error, reason} ->
         Logger.warning("[PlayerSync] #{name}: page not found (#{inspect(reason)})")
+    end
+  end
+
+  defp player_attrs(name, page, default_race, wikitext) do
+    fields = parse_player_infobox(wikitext)
+    team_history = extract_team_history(wikitext)
+
+    # Extract aliases from infobox (|id1=, |id2=, etc.)
+    aliases =
+      1..5
+      |> Enum.map(fn i -> fields["id#{i}"] end)
+      |> Enum.reject(&(&1 in [nil, ""]))
+
+    %{
+      name: name,
+      race: map_race(fields["race"] || default_race),
+      real_name: fields["name"],
+      real_name_ko: fields["romanized_name"] || fields["hangul"],
+      aliases: aliases,
+      birth_date: fields["birth_date"],
+      country: map_country(fields["country"]),
+      team: fields["team"],
+      status: map_status(fields["status"]),
+      image_url: image_path(name, extract_image(wikitext)),
+      liquipedia_page: page,
+      liquipedia_data: Map.put(fields, "team_history", team_history)
+    }
+  end
+
+  defp upsert_player(name, attrs) do
+    case Repo.one(from p in Player, where: p.name == ^name) do
+      nil ->
+        %Player{}
+        |> Player.changeset(attrs)
+        |> Repo.insert!()
+
+      existing ->
+        # Never overwrite name/rating; skip blank values.
+        update_attrs =
+          attrs
+          |> Enum.reject(fn {k, v} -> v in [nil, ""] or k in [:name, :rating] end)
+          |> Map.new()
+
+        existing
+        |> Player.changeset(update_attrs)
+        |> Repo.update!()
     end
   end
 
@@ -167,17 +165,10 @@ defmodule Broodwar.Ingestion.PlayerSync do
   """
   def extract_team_history(wikitext) do
     # Match {{TeamHistory|...}} blocks or team entries in infobox
-    Regex.scan(~r/\{\{TeamCard\|([^}]+)\}\}/, wikitext)
+    ~r/\{\{TeamCard\|([^}]+)\}\}/
+    |> Regex.scan(wikitext)
     |> Enum.map(fn [_, content] ->
-      fields =
-        content
-        |> String.split("|")
-        |> Enum.reduce(%{}, fn part, acc ->
-          case String.split(part, "=", parts: 2) do
-            [k, v] -> Map.put(acc, String.trim(k), String.trim(v))
-            _ -> acc
-          end
-        end)
+      fields = parse_template_params(content)
 
       %{
         team: fields["team"] || content |> String.split("|") |> List.first() |> String.trim(),
@@ -186,6 +177,18 @@ defmodule Broodwar.Ingestion.PlayerSync do
         role: fields["role"]
       }
     end)
+  end
+
+  defp parse_template_params(content) do
+    content
+    |> String.split("|")
+    |> Enum.flat_map(fn part ->
+      case String.split(part, "=", parts: 2) do
+        [k, v] -> [{String.trim(k), String.trim(v)}]
+        _ -> []
+      end
+    end)
+    |> Map.new()
   end
 
   defp parse_player_infobox(wikitext) do
@@ -209,23 +212,19 @@ defmodule Broodwar.Ingestion.PlayerSync do
     end
   end
 
-  defp download_player_image(player, filename) do
-    slug = player.name |> String.downcase() |> String.replace(~r/[^a-z0-9]/, "-")
-    ext = Path.extname(filename) |> String.downcase()
-    dest = "priv/static/images/players/#{slug}#{ext}"
+  # Player images are hosted by the static site (broodwar.live) under
+  # /images/players/<slug><ext>; the API only records that path.
+  defp image_path(_name, nil), do: nil
 
-    with {:ok, url} <- Liquipedia.get_image_url(filename),
-         {:ok, _} <- Liquipedia.download_image(url, dest) do
-      Repo.update!(Player.changeset(player, %{image_url: "/images/players/#{slug}#{ext}"}))
-      Logger.info("[PlayerSync] Downloaded image for #{player.name}")
-    else
-      {:error, reason} ->
-        Logger.warning("[PlayerSync] Image failed for #{player.name}: #{inspect(reason)}")
-    end
+  defp image_path(name, filename) do
+    slug = name |> String.downcase() |> String.replace(~r/[^a-z0-9]/, "-")
+    ext = filename |> Path.extname() |> String.downcase()
+    "/images/players/#{slug}#{ext}"
   end
 
   defp map_race(race) when is_binary(race) do
     race = String.downcase(race)
+
     cond do
       String.contains?(race, "terran") -> "T"
       String.contains?(race, "protoss") -> "P"
@@ -239,20 +238,25 @@ defmodule Broodwar.Ingestion.PlayerSync do
 
   defp map_country(nil), do: nil
 
+  @countries [
+    {"korea", "KR"},
+    {"poland", "PL"},
+    {"canada", "CA"},
+    {"russia", "RU"},
+    {"ukraine", "UA"},
+    {"czech", "CZ"},
+    {"hungary", "HU"},
+    {"germany", "DE"},
+    {"china", "CN"},
+    {"united states", "US"}
+  ]
+
   defp map_country(country) do
     country = String.downcase(country)
-    cond do
-      String.contains?(country, "korea") -> "KR"
-      String.contains?(country, "poland") -> "PL"
-      String.contains?(country, "canada") -> "CA"
-      String.contains?(country, "russia") -> "RU"
-      String.contains?(country, "ukraine") -> "UA"
-      String.contains?(country, "czech") -> "CZ"
-      String.contains?(country, "hungary") -> "HU"
-      String.contains?(country, "germany") -> "DE"
-      String.contains?(country, "china") -> "CN"
-      String.contains?(country, "united states") -> "US"
-      true -> country |> String.upcase() |> String.slice(0, 2)
+
+    case Enum.find(@countries, fn {needle, _code} -> String.contains?(country, needle) end) do
+      {_needle, code} -> code
+      nil -> country |> String.upcase() |> String.slice(0, 2)
     end
   end
 
@@ -260,6 +264,7 @@ defmodule Broodwar.Ingestion.PlayerSync do
 
   defp map_status(status) do
     status = String.downcase(status)
+
     cond do
       String.contains?(status, "retired") -> "inactive"
       String.contains?(status, "inactive") -> "inactive"

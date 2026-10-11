@@ -1,7 +1,10 @@
 defmodule Broodwar.Players do
+  @moduledoc """
+  Context for player profiles, tournament records and replay-derived stats.
+  """
   import Ecto.Query
-  alias Broodwar.Repo
   alias Broodwar.Players.Player
+  alias Broodwar.Repo
 
   def list_players(opts \\ []) do
     Player
@@ -40,39 +43,45 @@ defmodule Broodwar.Players do
     Repo.all(from t in Tournament, where: not is_nil(t.liquipedia_data))
     |> Enum.flat_map(fn t ->
       (t.liquipedia_data["matches"] || [])
-      |> Enum.filter(fn m ->
-        m["opponent1"] == player_name or m["opponent2"] == player_name
-      end)
-      |> Enum.map(fn m ->
-        is_p1 = m["opponent1"] == player_name
-        opponent = if is_p1, do: m["opponent2"], else: m["opponent1"]
-        [s1, s2] = String.split(m["score"] || "0-0", "-")
-        {my_score, opp_score} = if is_p1, do: {s1, s2}, else: {s2, s1}
-
-        result =
-          cond do
-            m["winner"] == player_name -> :win
-            m["winner"] != nil -> :loss
-            true -> :unknown
-          end
-
-        %{
-          tournament: "#{t.short_name} S#{t.season}",
-          tournament_slug: String.downcase(t.short_name),
-          season: t.season,
-          context: m["context"],
-          date: m["date"],
-          opponent: opponent,
-          my_score: my_score,
-          opp_score: opp_score,
-          score: m["score"],
-          result: result,
-          maps: m["maps"] || []
-        }
-      end)
+      |> Enum.filter(&(&1["opponent1"] == player_name or &1["opponent2"] == player_name))
+      |> Enum.map(&player_match_view(t, &1, player_name))
     end)
     |> Enum.sort_by(fn m -> m.date || "" end, :desc)
   end
+
+  defp player_match_view(tournament, match, player_name) do
+    is_p1 = match["opponent1"] == player_name
+    opponent = if is_p1, do: match["opponent2"], else: match["opponent1"]
+    {s1, s2} = split_score(match["score"])
+    {my_score, opp_score} = if is_p1, do: {s1, s2}, else: {s2, s1}
+
+    %{
+      tournament: "#{tournament.short_name} S#{tournament.season}",
+      tournament_slug: String.downcase(tournament.short_name),
+      season: tournament.season,
+      context: match["context"],
+      date: match["date"],
+      opponent: opponent,
+      my_score: my_score,
+      opp_score: opp_score,
+      score: match["score"],
+      result: match_result(match["winner"], player_name),
+      maps: match["maps"] || []
+    }
+  end
+
+  defp split_score(score) when is_binary(score) do
+    case String.split(score, "-", parts: 2) do
+      [s1, s2] -> {s1, s2}
+      _ -> {"0", "0"}
+    end
+  end
+
+  defp split_score(_), do: {"0", "0"}
+
+  defp match_result(nil, _player_name), do: :unknown
+  defp match_result(player_name, player_name), do: :win
+  defp match_result(_winner, _player_name), do: :loss
 
   @doc """
   Computes win/loss stats for a player from tournament match data.
@@ -100,12 +109,21 @@ defmodule Broodwar.Players do
       tournament_matches
       |> Enum.filter(fn m ->
         ctx = m.context || ""
-        m.result == :win and (String.contains?(ctx, "Finals") or String.contains?(ctx, "Grand Final"))
+
+        m.result == :win and
+          (String.contains?(ctx, "Finals") or String.contains?(ctx, "Grand Final"))
       end)
       |> Enum.map(& &1.tournament)
       |> Enum.uniq()
 
-    %{wins: wins, losses: losses, total: total, winrate: winrate, vs_stats: vs_stats, titles: titles}
+    %{
+      wins: wins,
+      losses: losses,
+      total: total,
+      winrate: winrate,
+      vs_stats: vs_stats,
+      titles: titles
+    }
   end
 
   @doc """

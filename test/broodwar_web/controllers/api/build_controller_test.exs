@@ -1,8 +1,8 @@
 defmodule BroodwarWeb.Api.BuildControllerTest do
   use BroodwarWeb.ConnCase
 
-  alias Broodwar.Repo
   alias Broodwar.Builds.Build
+  alias Broodwar.Repo
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}

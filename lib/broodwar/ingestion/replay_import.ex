@@ -40,30 +40,30 @@ defmodule Broodwar.Ingestion.ReplayImport do
           Logger.info("[ReplayImport] Progress: #{index}/#{total}")
         end
 
-        case File.read(path) do
-          {:ok, data} ->
-            case Replays.parse_and_save(data, file_path: path) do
-              {:ok, replay} -> {:ok, replay.id}
-              {:error, reason} -> {:error, path, reason}
-            end
-
-          {:error, reason} ->
-            {:error, path, reason}
-        end
+        import_file(path)
       end)
 
     imported = Enum.count(results, &match?({:ok, _}, &1))
     errors = Enum.count(results, &match?({:error, _, _}, &1))
 
-    Logger.info(
-      "[ReplayImport] Complete: #{imported} imported, #{errors} errors, #{total} total"
-    )
+    Logger.info("[ReplayImport] Complete: #{imported} imported, #{errors} errors, #{total} total")
 
     :ok
   end
 
   def perform(%Oban.Job{}) do
     {:error, "Missing required \"directory\" argument"}
+  end
+
+  # Batch import is operator-run (mix task / Oban), so it is trusted to link
+  # replays to known players and update ratings.
+  defp import_file(path) do
+    with {:ok, data} <- File.read(path),
+         {:ok, replay} <- Replays.parse_and_save(data, file_path: path, trusted: true) do
+      {:ok, replay.id}
+    else
+      {:error, reason} -> {:error, path, reason}
+    end
   end
 
   defp find_rep_files(directory, recursive) do

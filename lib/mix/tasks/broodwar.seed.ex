@@ -13,6 +13,8 @@ defmodule Mix.Tasks.Broodwar.Seed do
   """
   use Mix.Task
 
+  alias Broodwar.Ingestion.{PlayerSync, TournamentSync}
+
   @shortdoc "Seed players and tournaments from Liquipedia"
 
   @impl Mix.Task
@@ -36,12 +38,12 @@ defmodule Mix.Tasks.Broodwar.Seed do
 
   defp seed_players do
     Mix.shell().info("Syncing player profiles from Liquipedia...")
-    Broodwar.Ingestion.PlayerSync.sync_all()
+    PlayerSync.sync_all()
   end
 
   defp seed_tournaments do
     Mix.shell().info("Syncing tournament data from Liquipedia...")
-    Broodwar.Ingestion.TournamentSync.sync_all_series()
+    TournamentSync.sync_all_series()
     Mix.shell().info("Tournament sync jobs enqueued. They will run in the :ingestion queue.")
   end
 end

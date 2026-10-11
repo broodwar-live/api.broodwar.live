@@ -1,8 +1,8 @@
 defmodule BroodwarWeb.Api.PlayerController do
   use BroodwarWeb, :controller
 
-  alias Broodwar.Players
   alias Broodwar.Pagination
+  alias Broodwar.Players
   alias BroodwarWeb.Api.JSON
 
   action_fallback BroodwarWeb.Api.FallbackController
@@ -72,12 +72,14 @@ defmodule BroodwarWeb.Api.PlayerController do
   end
 
   defp parse_int(nil, default), do: default
+
   defp parse_int(val, default) when is_binary(val) do
     case Integer.parse(val) do
       {n, _} -> n
       :error -> default
     end
   end
+
   defp parse_int(val, _default) when is_integer(val), do: val
   defp parse_int(_, default), do: default
 

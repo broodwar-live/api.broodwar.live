@@ -18,7 +18,9 @@ defmodule BroodwarWeb.Api.TournamentControllerTest do
       liquipedia_data: %{"first_place" => "Flash"}
     }
 
-    {:ok, tournament} = Repo.insert(Tournament.changeset(%Tournament{}, Map.merge(default, attrs)))
+    {:ok, tournament} =
+      Repo.insert(Tournament.changeset(%Tournament{}, Map.merge(default, attrs)))
+
     tournament
   end
 

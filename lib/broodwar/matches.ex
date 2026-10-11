@@ -1,7 +1,10 @@
 defmodule Broodwar.Matches do
+  @moduledoc """
+  Context for individual tournament matches.
+  """
   import Ecto.Query
-  alias Broodwar.Repo
   alias Broodwar.Matches.Match
+  alias Broodwar.Repo
 
   def list_matches(opts \\ []) do
     Match

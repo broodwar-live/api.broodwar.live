@@ -18,8 +18,8 @@ defmodule Broodwar.Elo do
   """
 
   import Ecto.Query
-  alias Broodwar.Repo
   alias Broodwar.Players.Player
+  alias Broodwar.Repo
 
   @default_rating 1500
   @k_new 40
@@ -102,8 +102,9 @@ defmodule Broodwar.Elo do
 
   # -- Private --
 
-  defp k_factor(%Player{rating: rating}) when is_integer(rating) and rating > @high_rating_threshold,
-    do: @k_high
+  defp k_factor(%Player{rating: rating})
+       when is_integer(rating) and rating > @high_rating_threshold,
+       do: @k_high
 
   defp k_factor(%Player{} = player) do
     # Count games played (approximate from replay count).

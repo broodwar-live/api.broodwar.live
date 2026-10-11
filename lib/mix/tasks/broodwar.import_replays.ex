@@ -13,6 +13,8 @@ defmodule Mix.Tasks.Broodwar.ImportReplays do
   """
   use Mix.Task
 
+  alias Broodwar.Ingestion.ReplayImport
+
   @shortdoc "Import replay files from a directory"
 
   @impl Mix.Task
@@ -28,7 +30,7 @@ defmodule Mix.Tasks.Broodwar.ImportReplays do
           Mix.shell().info("Enqueuing replay import for: #{directory}")
 
           %{"directory" => directory, "recursive" => recursive}
-          |> Broodwar.Ingestion.ReplayImport.new()
+          |> ReplayImport.new()
           |> Oban.insert!()
 
           Mix.shell().info("Import job enqueued. Watch logs for progress.")

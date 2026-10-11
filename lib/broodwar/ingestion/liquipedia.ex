@@ -145,8 +145,7 @@ defmodule Broodwar.Ingestion.Liquipedia do
           maps:
             1..7
             |> Enum.map(fn i -> fields["map#{i}"] end)
-            |> Enum.reject(&is_nil/1)
-            |> Enum.reject(&(&1 == "")),
+            |> Enum.reject(&(&1 in [nil, ""])),
           previous: fields["previous"],
           next: fields["next"],
           participants: extract_participants(wikitext),
@@ -200,64 +199,53 @@ defmodule Broodwar.Ingestion.Liquipedia do
   end
 
   defp extract_match_blocks(wikitext) do
-    # Track current context (group name, round) as we scan
-    lines = String.split(wikitext, "\n")
-
     {matches, _ctx} =
-      Enum.reduce(lines, {[], %{section: nil, round: nil}}, fn line, {acc, ctx} ->
+      wikitext
+      |> String.split("\n")
+      |> Enum.reduce({[], %{section: nil, round: nil}}, fn line, {acc, ctx} ->
         trimmed = String.trim(line)
-
-        # Track section headers (===Group A===, ===Bracket===)
-        ctx =
-          case Regex.run(~r/^===+\s*(.+?)\s*===+$/, trimmed) do
-            [_, section] -> %{ctx | section: section}
-            _ -> ctx
-          end
-
-        # Track matchlist titles
-        ctx =
-          case Regex.run(~r/\{\{Matchlist\|.*?title=([^|}]+)/, trimmed) do
-            [_, title] -> %{ctx | section: String.trim(title)}
-            _ -> ctx
-          end
-
-        # Track round headers (R1M1header=Quarterfinals)
-        ctx =
-          case Regex.run(~r/\|(?:M\d+header|R\d+M\d+header)=(.+)$/, trimmed) do
-            [_, round] -> %{ctx | round: String.trim(round)}
-            _ -> ctx
-          end
-
-        # Track bracket round headers
-        ctx =
-          case Regex.run(~r/\|R\d+M\d+header=(.+)$/, trimmed) do
-            [_, round] -> %{ctx | round: String.trim(round)}
-            _ -> ctx
-          end
-
-        # Detect match start
-        if String.contains?(trimmed, "={{Match") do
-          context = [ctx.section, ctx.round] |> Enum.reject(&is_nil/1) |> Enum.join(" — ")
-          # Collect the match block content
-          {[{context, ""} | acc], ctx}
-        else
-          # Append line to current match block if we're in one
-          case acc do
-            [{context, block} | rest] when block != nil ->
-              if String.starts_with?(trimmed, "}}") and not String.contains?(block, "opponent1") do
-                # Empty/incomplete block, skip
-                {rest, ctx}
-              else
-                {[{context, block <> "\n" <> line} | rest], ctx}
-              end
-
-            _ ->
-              {acc, ctx}
-          end
-        end
+        ctx = update_match_context(ctx, trimmed)
+        {accumulate_match_line(acc, ctx, line, trimmed), ctx}
       end)
 
     Enum.reverse(matches)
+  end
+
+  # Track the current section (===Group A===, Matchlist titles) and round
+  # (R1M1header=Quarterfinals) so each match knows where it was played.
+  defp update_match_context(ctx, trimmed) do
+    ctx
+    |> put_context_match(:section, ~r/^===+\s*(.+?)\s*===+$/, trimmed)
+    |> put_context_match(:section, ~r/\{\{Matchlist\|.*?title=([^|}]+)/, trimmed)
+    |> put_context_match(:round, ~r/\|(?:M\d+header|R\d+M\d+header)=(.+)$/, trimmed)
+  end
+
+  defp put_context_match(ctx, key, regex, trimmed) do
+    case Regex.run(regex, trimmed) do
+      [_, value] -> Map.put(ctx, key, String.trim(value))
+      _ -> ctx
+    end
+  end
+
+  defp accumulate_match_line(acc, ctx, line, trimmed) do
+    cond do
+      String.contains?(trimmed, "={{Match") ->
+        context = [ctx.section, ctx.round] |> Enum.reject(&is_nil/1) |> Enum.join(" — ")
+        [{context, ""} | acc]
+
+      acc == [] ->
+        acc
+
+      true ->
+        [{context, block} | rest] = acc
+
+        # Drop empty/incomplete blocks once they close.
+        if String.starts_with?(trimmed, "}}") and not String.contains?(block, "opponent1") do
+          rest
+        else
+          [{context, block <> "\n" <> line} | rest]
+        end
+    end
   end
 
   defp clean_date(nil), do: nil
@@ -272,45 +260,46 @@ defmodule Broodwar.Ingestion.Liquipedia do
 
   @doc false
   def extract_bracket_placements(wikitext) do
-    # Find the highest round number in the bracket (finals)
-    rounds = Regex.scan(~r/\|R(\d+)M1=\{\{Match/, wikitext)
-    max_round = rounds |> Enum.map(fn [_, r] -> String.to_integer(r) end) |> Enum.max(fn -> 0 end)
+    # The highest round number in the bracket is the final.
+    max_round =
+      ~r/\|R(\d+)M1=\{\{Match/
+      |> Regex.scan(wikitext)
+      |> Enum.map(fn [_, r] -> String.to_integer(r) end)
+      |> Enum.max(fn -> 0 end)
 
-    if max_round > 0 do
-      # Extract the finals match block by splitting from R{max}M1 marker
-      marker = "|R#{max_round}M1={{Match"
-
-      case String.split(wikitext, marker, parts: 2) do
-        [_, rest] ->
-          # Take content until the next bracket marker or end of bracket
-          match_block = rest |> String.split(~r/\n\|R\d+M\d+=|\n\}\}\n/, parts: 2) |> List.first("")
-
-          # Extract opponents
-          opponents = Regex.scan(~r/\{\{1Opponent\|([^}|]+)/, match_block)
-          # Extract map winners
-          map_wins = Regex.scan(~r/\{\{Map\|winner=(\d)/, match_block)
-                     |> Enum.map(fn [_, w] -> String.to_integer(w) end)
-
-          case opponents do
-            [[_, p1], [_, p2] | _] ->
-              p1_wins = Enum.count(map_wins, &(&1 == 1))
-              p2_wins = Enum.count(map_wins, &(&1 == 2))
-
-              if p1_wins >= p2_wins do
-                %{first: String.trim(p1), second: String.trim(p2)}
-              else
-                %{first: String.trim(p2), second: String.trim(p1)}
-              end
-
-            _ ->
-              %{}
-          end
-
-        _ ->
-          %{}
-      end
+    with true <- max_round > 0,
+         [_, rest] <- String.split(wikitext, "|R#{max_round}M1={{Match", parts: 2) do
+      # Take content until the next bracket marker or end of bracket.
+      rest
+      |> String.split(~r/\n\|R\d+M\d+=|\n\}\}\n/, parts: 2)
+      |> List.first("")
+      |> final_placements()
     else
-      %{}
+      _ -> %{}
+    end
+  end
+
+  defp final_placements(match_block) do
+    opponents = Regex.scan(~r/\{\{1Opponent\|([^}|]+)/, match_block)
+
+    map_wins =
+      ~r/\{\{Map\|winner=(\d)/
+      |> Regex.scan(match_block)
+      |> Enum.map(fn [_, w] -> String.to_integer(w) end)
+
+    case opponents do
+      [[_, p1], [_, p2] | _] ->
+        p1_wins = Enum.count(map_wins, &(&1 == 1))
+        p2_wins = Enum.count(map_wins, &(&1 == 2))
+
+        if p1_wins >= p2_wins do
+          %{first: String.trim(p1), second: String.trim(p2)}
+        else
+          %{first: String.trim(p2), second: String.trim(p1)}
+        end
+
+      _ ->
+        %{}
     end
   end
 
@@ -337,10 +326,17 @@ defmodule Broodwar.Ingestion.Liquipedia do
     end
   end
 
-  defp find_balanced_end(<<"}}", rest::binary>>, 1, acc), do: acc
-  defp find_balanced_end(<<"}}", rest::binary>>, depth, acc), do: find_balanced_end(rest, depth - 1, acc <> "}}")
-  defp find_balanced_end(<<"{{", rest::binary>>, depth, acc), do: find_balanced_end(rest, depth + 1, acc <> "{{")
-  defp find_balanced_end(<<c::utf8, rest::binary>>, depth, acc), do: find_balanced_end(rest, depth, acc <> <<c::utf8>>)
+  defp find_balanced_end(<<"}}", _rest::binary>>, 1, acc), do: acc
+
+  defp find_balanced_end(<<"}}", rest::binary>>, depth, acc),
+    do: find_balanced_end(rest, depth - 1, acc <> "}}")
+
+  defp find_balanced_end(<<"{{", rest::binary>>, depth, acc),
+    do: find_balanced_end(rest, depth + 1, acc <> "{{")
+
+  defp find_balanced_end(<<c::utf8, rest::binary>>, depth, acc),
+    do: find_balanced_end(rest, depth, acc <> <<c::utf8>>)
+
   defp find_balanced_end("", _depth, acc), do: acc
 
   defp parse_template_fields(content) do
@@ -416,68 +412,6 @@ defmodule Broodwar.Ingestion.Liquipedia do
     Regex.scan(~r/\[\[(#{Regex.escape(series_prefix)}[^\]]+)\]\]/, wikitext)
     |> Enum.map(fn [_, link] -> link |> String.split("|") |> List.first() end)
     |> Enum.uniq()
-  end
-
-  @doc """
-  Fetches the image filename from a player's Liquipedia page infobox.
-  """
-  def fetch_player_image_filename(page_title) do
-    with {:ok, wikitext} <- get_page(page_title) do
-      case Regex.run(~r/\|image\s*=\s*(.+)$/m, wikitext) do
-        [_, filename] -> {:ok, String.trim(filename)}
-        _ -> {:error, :no_image}
-      end
-    end
-  end
-
-  @doc """
-  Gets the actual URL for a Liquipedia image file.
-  """
-  def get_image_url(filename) do
-    params = %{
-      action: "query",
-      titles: "File:#{filename}",
-      prop: "imageinfo",
-      iiprop: "url",
-      format: "json"
-    }
-
-    case api_request(params) do
-      {:ok, %{"query" => %{"pages" => pages}}} ->
-        page = pages |> Map.values() |> List.first()
-
-        case get_in(page, ["imageinfo", Access.at(0), "url"]) do
-          nil -> {:error, :no_url}
-          url -> {:ok, url}
-        end
-
-      {:error, reason} ->
-        {:error, reason}
-    end
-  end
-
-  @doc """
-  Downloads an image from a URL and saves it to the given path.
-  """
-  def download_image(url, dest_path) do
-    case Req.get(url,
-           headers: [
-             {"user-agent", @user_agent}
-           ],
-           max_redirects: 5,
-           decode_body: false
-         ) do
-      {:ok, %Req.Response{status: 200, body: body}} ->
-        File.mkdir_p!(Path.dirname(dest_path))
-        File.write!(dest_path, body)
-        {:ok, dest_path}
-
-      {:ok, %Req.Response{status: status}} ->
-        {:error, {:http_error, status}}
-
-      {:error, reason} ->
-        {:error, reason}
-    end
   end
 
   # -- HTTP --

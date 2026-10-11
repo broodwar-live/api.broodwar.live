@@ -3,8 +3,8 @@ defmodule Broodwar.Replays do
   Context for replay parsing, storage, and retrieval.
   """
   import Ecto.Query
-  alias Broodwar.Repo
   alias Broodwar.Replays.Replay
+  alias Broodwar.Repo
 
   def list_replays do
     Replay

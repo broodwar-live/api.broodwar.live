@@ -162,6 +162,7 @@ defmodule Broodwar.Ingestion.StreamPoll do
 
   defp parse_viewer_count(nil), do: 0
   defp parse_viewer_count(n) when is_integer(n), do: n
+
   defp parse_viewer_count(s) when is_binary(s) do
     case Integer.parse(s) do
       {n, _} -> n

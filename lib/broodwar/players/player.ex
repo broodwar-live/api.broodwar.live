@@ -22,8 +22,18 @@ defmodule Broodwar.Players.Player do
 
   @required_fields [:name]
   @optional_fields [
-    :real_name, :real_name_ko, :aliases, :race, :country, :rating,
-    :birth_date, :team, :status, :image_url, :liquipedia_page, :liquipedia_data
+    :real_name,
+    :real_name_ko,
+    :aliases,
+    :race,
+    :country,
+    :rating,
+    :birth_date,
+    :team,
+    :status,
+    :image_url,
+    :liquipedia_page,
+    :liquipedia_data
   ]
   @valid_races ~w(T P Z R)
 
@@ -43,7 +53,10 @@ defmodule Broodwar.Players.Player do
       {:ok, birth} ->
         today = Date.utc_today()
         years = today.year - birth.year
-        if Date.compare(Date.new!(today.year, birth.month, birth.day), today) == :gt, do: years - 1, else: years
+
+        if Date.compare(Date.new!(today.year, birth.month, birth.day), today) == :gt,
+          do: years - 1,
+          else: years
 
       _ ->
         nil

@@ -45,9 +45,12 @@ defmodule BroodwarWeb.Api.BuildController do
       |> maybe_put(:matchup, params["matchup"])
 
     cache_key = "openings:#{params["race"] || "all"}:#{params["matchup"] || "all"}"
-    openings = Broodwar.Cache.fetch(cache_key, 300, fn ->
-      BuildsContext.list_openings(opts)
-    end)
+
+    openings =
+      Broodwar.Cache.fetch(cache_key, 300, fn ->
+        BuildsContext.list_openings(opts)
+      end)
+
     json(conn, %{data: openings})
   end
 
@@ -63,12 +66,14 @@ defmodule BroodwarWeb.Api.BuildController do
   end
 
   defp parse_int(nil, default), do: default
+
   defp parse_int(val, default) when is_binary(val) do
     case Integer.parse(val) do
       {n, _} -> n
       :error -> default
     end
   end
+
   defp parse_int(val, _default) when is_integer(val), do: val
   defp parse_int(_, default), do: default
 

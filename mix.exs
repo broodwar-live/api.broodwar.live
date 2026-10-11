@@ -38,7 +38,8 @@ defmodule Broodwar.MixProject do
       {:bandit, "~> 1.5"},
       {:rustler, "~> 0.36.0"},
       {:req, "~> 0.5"},
-      {:oban, "~> 2.19"}
+      {:oban, "~> 2.19"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 

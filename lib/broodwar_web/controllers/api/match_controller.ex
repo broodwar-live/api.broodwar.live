@@ -37,12 +37,14 @@ defmodule BroodwarWeb.Api.MatchController do
   defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 
   defp parse_int(nil), do: nil
+
   defp parse_int(val) when is_binary(val) do
     case Integer.parse(val) do
       {n, _} -> n
       :error -> nil
     end
   end
+
   defp parse_int(val) when is_integer(val), do: val
   defp parse_int(_), do: nil
 

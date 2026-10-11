@@ -1,7 +1,10 @@
 defmodule Broodwar.BuildsContext do
+  @moduledoc """
+  Context for curated build orders and replay-derived opening statistics.
+  """
   import Ecto.Query
-  alias Broodwar.Repo
   alias Broodwar.Builds.Build
+  alias Broodwar.Repo
 
   def list_builds(opts \\ []) do
     Build
@@ -61,8 +64,22 @@ defmodule Broodwar.BuildsContext do
         players = get_in(r.parsed_data || %{}, ["header", "players"]) || []
 
         [
-          build_entry(r.classification_a, Enum.at(classifications, 0), r.race_a, r.matchup, Enum.at(players, 0), winner_name),
-          build_entry(r.classification_b, Enum.at(classifications, 1), r.race_b, r.matchup, Enum.at(players, 1), winner_name)
+          build_entry(
+            r.classification_a,
+            Enum.at(classifications, 0),
+            r.race_a,
+            r.matchup,
+            Enum.at(players, 0),
+            winner_name
+          ),
+          build_entry(
+            r.classification_b,
+            Enum.at(classifications, 1),
+            r.race_b,
+            r.matchup,
+            Enum.at(players, 1),
+            winner_name
+          )
         ]
         |> Enum.reject(&is_nil/1)
       end)
@@ -77,16 +94,27 @@ defmodule Broodwar.BuildsContext do
       wins = Enum.count(group, & &1.won)
       winrate = if total > 0, do: Float.round(wins / total * 100, 1), else: 0.0
       matchups = group |> Enum.map(& &1.matchup) |> Enum.reject(&is_nil/1) |> Enum.frequencies()
-      %{tag: tag, name: name, race: race, games: total, wins: wins, winrate: winrate, matchups: matchups}
+
+      %{
+        tag: tag,
+        name: name,
+        race: race,
+        games: total,
+        wins: wins,
+        winrate: winrate,
+        matchups: matchups
+      }
     end)
     |> Enum.sort_by(& &1.games, :desc)
   end
 
   defp build_entry(tag, classification, race, matchup, player, winner_name) do
     tag = tag || (classification && classification["tag"])
+
     return_nil_if_empty(tag, fn ->
       name = (classification && classification["name"]) || tag
       player_name = player && player["name"]
+
       %{
         tag: tag,
         name: name,

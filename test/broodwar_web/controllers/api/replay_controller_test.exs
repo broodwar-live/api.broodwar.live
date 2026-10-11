@@ -1,8 +1,8 @@
 defmodule BroodwarWeb.Api.ReplayControllerTest do
   use BroodwarWeb.ConnCase
 
-  alias Broodwar.Repo
   alias Broodwar.Replays.Replay
+  alias Broodwar.Repo
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}

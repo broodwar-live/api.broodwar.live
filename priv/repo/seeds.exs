@@ -65,7 +65,7 @@ players_data = [
   %{name: "Sziky", aliases: [], race: "P", country: "HU", rating: 2580},
   %{name: "Scan", aliases: [], race: "T", country: "PL", rating: 2560},
   %{name: "Bonyth", aliases: [], race: "P", country: "PL", rating: 2550},
-  %{name: "Trutacz", aliases: [], race: "Z", country: "PL", rating: 2520},
+  %{name: "Trutacz", aliases: [], race: "Z", country: "PL", rating: 2520}
 ]
 
 players =
@@ -97,7 +97,7 @@ maps_data = [
   %{name: "La Mancha", width: 128, height: 128, tileset: "Desert"},
   %{name: "Eclipse", width: 128, height: 128, tileset: "Twilight"},
   %{name: "Transistor", width: 128, height: 128, tileset: "Twilight"},
-  %{name: "Python", width: 128, height: 128, tileset: "Jungle"},
+  %{name: "Python", width: 128, height: 128, tileset: "Jungle"}
 ]
 
 maps =
@@ -121,7 +121,7 @@ tournaments_data = [
   %{name: "BSL Season 17", short_name: "BSL S17", type: "individual", year: 2024, season: 17},
   %{name: "BSL Season 18", short_name: "BSL S18", type: "individual", year: 2024, season: 18},
   %{name: "BSL Season 19", short_name: "BSL S19", type: "individual", year: 2024, season: 19},
-  %{name: "BSL Season 20", short_name: "BSL S20", type: "individual", year: 2025, season: 20},
+  %{name: "BSL Season 20", short_name: "BSL S20", type: "individual", year: 2025, season: 20}
 ]
 
 tournaments =
@@ -145,34 +145,83 @@ IO.puts("  #{map_size(tournaments)} tournaments seeded")
 IO.puts("Seeding matches...")
 
 finals_data = [
-  %{tournament: "ASL Season 13", round: "Finals",
-    player_a: "Snow", race_a: "P", score_a: 4,
-    player_b: "Soulkey", race_b: "Z", score_b: 2,
-    played_at: ~U[2023-12-10 11:00:00Z]},
-  %{tournament: "ASL Season 14", round: "Finals",
-    player_a: "Soulkey", race_a: "Z", score_a: 4,
-    player_b: "Snow", race_b: "P", score_b: 1,
-    played_at: ~U[2024-04-14 11:00:00Z]},
-  %{tournament: "ASL Season 15", round: "Finals",
-    player_a: "Rain", race_a: "P", score_a: 4,
-    player_b: "Flash", race_b: "T", score_b: 2,
-    played_at: ~U[2024-08-11 11:00:00Z]},
-  %{tournament: "ASL Season 16", round: "Finals",
-    player_a: "Snow", race_a: "P", score_a: 4,
-    player_b: "Rain", race_b: "P", score_b: 3,
-    played_at: ~U[2024-12-08 11:00:00Z]},
-  %{tournament: "BSL Season 18", round: "Finals",
-    player_a: "Dewalt", race_a: "Z", score_a: 4,
-    player_b: "Scan", race_b: "T", score_b: 1,
-    played_at: ~U[2024-06-15 18:00:00Z]},
-  %{tournament: "BSL Season 19", round: "Finals",
-    player_a: "Dewalt", race_a: "Z", score_a: 4,
-    player_b: "Sziky", race_b: "P", score_b: 2,
-    played_at: ~U[2024-10-20 18:00:00Z]},
-  %{tournament: "BSL Season 20", round: "Finals",
-    player_a: "Dewalt", race_a: "Z", score_a: 4,
-    player_b: "Bonyth", race_b: "P", score_b: 2,
-    played_at: ~U[2025-02-16 18:00:00Z]},
+  %{
+    tournament: "ASL Season 13",
+    round: "Finals",
+    player_a: "Snow",
+    race_a: "P",
+    score_a: 4,
+    player_b: "Soulkey",
+    race_b: "Z",
+    score_b: 2,
+    played_at: ~U[2023-12-10 11:00:00Z]
+  },
+  %{
+    tournament: "ASL Season 14",
+    round: "Finals",
+    player_a: "Soulkey",
+    race_a: "Z",
+    score_a: 4,
+    player_b: "Snow",
+    race_b: "P",
+    score_b: 1,
+    played_at: ~U[2024-04-14 11:00:00Z]
+  },
+  %{
+    tournament: "ASL Season 15",
+    round: "Finals",
+    player_a: "Rain",
+    race_a: "P",
+    score_a: 4,
+    player_b: "Flash",
+    race_b: "T",
+    score_b: 2,
+    played_at: ~U[2024-08-11 11:00:00Z]
+  },
+  %{
+    tournament: "ASL Season 16",
+    round: "Finals",
+    player_a: "Snow",
+    race_a: "P",
+    score_a: 4,
+    player_b: "Rain",
+    race_b: "P",
+    score_b: 3,
+    played_at: ~U[2024-12-08 11:00:00Z]
+  },
+  %{
+    tournament: "BSL Season 18",
+    round: "Finals",
+    player_a: "Dewalt",
+    race_a: "Z",
+    score_a: 4,
+    player_b: "Scan",
+    race_b: "T",
+    score_b: 1,
+    played_at: ~U[2024-06-15 18:00:00Z]
+  },
+  %{
+    tournament: "BSL Season 19",
+    round: "Finals",
+    player_a: "Dewalt",
+    race_a: "Z",
+    score_a: 4,
+    player_b: "Sziky",
+    race_b: "P",
+    score_b: 2,
+    played_at: ~U[2024-10-20 18:00:00Z]
+  },
+  %{
+    tournament: "BSL Season 20",
+    round: "Finals",
+    player_a: "Dewalt",
+    race_a: "Z",
+    score_a: 4,
+    player_b: "Bonyth",
+    race_b: "P",
+    score_b: 2,
+    played_at: ~U[2025-02-16 18:00:00Z]
+  }
 ]
 
 match_count =
@@ -220,36 +269,102 @@ IO.puts("  #{match_count} matches seeded")
 IO.puts("Seeding builds...")
 
 builds_data = [
-  %{name: "2 Factory Vulture", race: "T", matchup: "TvZ",
-    description: "Fast expand into 2 factory vulture harass. Strong map control and transition into mech.",
-    tags: ["mech", "harass", "economic"], games: 342, winrate: 56},
-  %{name: "Bisu Build", race: "P", matchup: "PvZ",
-    description: "Corsair into Dark Templar opening. Aggressive tech path that pressures Zerg's third.",
-    tags: ["aggressive", "tech", "corsair"], games: 287, winrate: 53},
-  %{name: "3 Hatch Lurker", race: "Z", matchup: "ZvT",
-    description: "Economic 3 hatch opening into fast lurker tech. Defends early aggression and scales well.",
-    tags: ["economic", "lurker", "defensive"], games: 256, winrate: 51},
-  %{name: "1 Gate FE", race: "P", matchup: "PvT",
+  %{
+    name: "2 Factory Vulture",
+    race: "T",
+    matchup: "TvZ",
+    description:
+      "Fast expand into 2 factory vulture harass. Strong map control and transition into mech.",
+    tags: ["mech", "harass", "economic"],
+    games: 342,
+    winrate: 56
+  },
+  %{
+    name: "Bisu Build",
+    race: "P",
+    matchup: "PvZ",
+    description:
+      "Corsair into Dark Templar opening. Aggressive tech path that pressures Zerg's third.",
+    tags: ["aggressive", "tech", "corsair"],
+    games: 287,
+    winrate: 53
+  },
+  %{
+    name: "3 Hatch Lurker",
+    race: "Z",
+    matchup: "ZvT",
+    description:
+      "Economic 3 hatch opening into fast lurker tech. Defends early aggression and scales well.",
+    tags: ["economic", "lurker", "defensive"],
+    games: 256,
+    winrate: 51
+  },
+  %{
+    name: "1 Gate FE",
+    race: "P",
+    matchup: "PvT",
     description: "Single gateway expand. Standard safe opening against Terran with fast economy.",
-    tags: ["standard", "economic", "safe"], games: 412, winrate: 50},
-  %{name: "2 Rax Academy", race: "T", matchup: "TvP",
+    tags: ["standard", "economic", "safe"],
+    games: 412,
+    winrate: 50
+  },
+  %{
+    name: "2 Rax Academy",
+    race: "T",
+    matchup: "TvP",
     description: "Two barracks with academy for medics. Early pressure into bio timing push.",
-    tags: ["bio", "pressure", "timing"], games: 198, winrate: 52},
-  %{name: "12 Hatch", race: "Z", matchup: "ZvP",
+    tags: ["bio", "pressure", "timing"],
+    games: 198,
+    winrate: 52
+  },
+  %{
+    name: "12 Hatch",
+    race: "Z",
+    matchup: "ZvP",
     description: "12 supply hatchery before spawning pool. Greedy economic opening.",
-    tags: ["economic", "greedy", "macro"], games: 367, winrate: 49},
-  %{name: "5 Rax Reaver Drop", race: "P", matchup: "PvT",
-    description: "Aggressive shuttle reaver drop off one base. High risk, high reward timing attack.",
-    tags: ["aggressive", "timing", "all-in"], games: 156, winrate: 54},
-  %{name: "Mech (FD Style)", race: "T", matchup: "TvP",
-    description: "Flash-style mech play. Siege tank contain with vulture flanks, transitioning to late game.",
-    tags: ["mech", "contain", "late-game"], games: 289, winrate: 55},
-  %{name: "5 Pool", race: "Z", matchup: "ZvZ",
-    description: "Extremely early spawning pool for zergling rush. Cheese build, weak if scouted.",
-    tags: ["cheese", "rush", "all-in"], games: 134, winrate: 48},
-  %{name: "Fast DT", race: "P", matchup: "PvP",
+    tags: ["economic", "greedy", "macro"],
+    games: 367,
+    winrate: 49
+  },
+  %{
+    name: "5 Rax Reaver Drop",
+    race: "P",
+    matchup: "PvT",
+    description:
+      "Aggressive shuttle reaver drop off one base. High risk, high reward timing attack.",
+    tags: ["aggressive", "timing", "all-in"],
+    games: 156,
+    winrate: 54
+  },
+  %{
+    name: "Mech (FD Style)",
+    race: "T",
+    matchup: "TvP",
+    description:
+      "Flash-style mech play. Siege tank contain with vulture flanks, transitioning to late game.",
+    tags: ["mech", "contain", "late-game"],
+    games: 289,
+    winrate: 55
+  },
+  %{
+    name: "5 Pool",
+    race: "Z",
+    matchup: "ZvZ",
+    description:
+      "Extremely early spawning pool for zergling rush. Cheese build, weak if scouted.",
+    tags: ["cheese", "rush", "all-in"],
+    games: 134,
+    winrate: 48
+  },
+  %{
+    name: "Fast DT",
+    race: "P",
+    matchup: "PvP",
     description: "Rush to dark templar archives. Wins if opponent has no detection.",
-    tags: ["aggressive", "tech", "dark-templar"], games: 178, winrate: 51},
+    tags: ["aggressive", "tech", "dark-templar"],
+    games: 178,
+    winrate: 51
+  }
 ]
 
 build_count =
@@ -278,7 +393,7 @@ streams_data = [
   %{channel_id: "soulkey_bw", platform: "afreeca", player: "Soulkey"},
   %{channel_id: "last_bw", platform: "afreeca", player: "Last"},
   %{channel_id: "larva_bw", platform: "afreeca", player: "Larva"},
-  %{channel_id: "bisu_bw", platform: "afreeca", player: "Bisu"},
+  %{channel_id: "bisu_bw", platform: "afreeca", player: "Bisu"}
 ]
 
 stream_count =

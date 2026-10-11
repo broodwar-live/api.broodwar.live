@@ -3,13 +3,13 @@ defmodule BroodwarWeb.Api.JSON do
   Serialization helpers for converting Ecto schemas to JSON-friendly maps.
   """
 
-  alias Broodwar.Players.Player
-  alias Broodwar.Matches.Match
-  alias Broodwar.Replays.Replay
   alias Broodwar.Builds.Build
-  alias Broodwar.Tournaments.Tournament
   alias Broodwar.Maps.Map, as: GameMap
+  alias Broodwar.Matches.Match
+  alias Broodwar.Players.Player
+  alias Broodwar.Replays.Replay
   alias Broodwar.Streams.Stream
+  alias Broodwar.Tournaments.Tournament
 
   @race_names %{"T" => "terran", "P" => "protoss", "Z" => "zerg", "R" => "random"}
 
